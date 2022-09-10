@@ -1,0 +1,6 @@
+{{- if and (not .ephemeral) (not .headless) -}}
+github.com:
+    user: rubyroobs
+    oauth_token: {{ (index (onepassword "zjdj3udugbc5jbltkumbqvg23e").fields 6).value }}
+    git_protocol: https
+{{- end }}

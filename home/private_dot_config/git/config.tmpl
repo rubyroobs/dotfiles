@@ -1,0 +1,82 @@
+[user]
+  name = Ruby Nealon
+  email = ruby@ruby.sh
+{{- if eq .chezmoi.os "darwin" }}
+  signingkey = DC8ACFF3AD1C6D3F007EECE5610C353FE280661B
+[gpg]
+  program = gpg
+[commit]
+  gpgsign = true
+[credential]
+  helper = store
+{{- end }}
+[advice]
+  addEmptyPathspec = false
+  pushNonFastForward = false
+  statusHints = false
+[alias]
+  a = add
+  ap = add -p
+  amc = am --continue
+  b = branch
+  bm = branch --merged
+  bnm = branch --no-merged
+  c = clone
+  ca = commit --amend
+  cane = commit --amend --no-edit
+  cf = commit --fixup
+  cm = commit --message
+  co = checkout
+  cob = checkout -b
+  cp = cherry-pick
+  d = diff
+  dc = diff --cached
+  fo = fetch origin
+  g = grep --line-number
+  mff = merge --ff-only
+  ol = log --pretty=oneline
+  l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  p = push
+  pf = push --force
+  prb = pull --rebase
+  r = restore
+  ra = rebase --abort
+  rc = rebase --continue
+  ri = rebase --interactive
+  rl = reflog
+  s = status -sb
+  su = submodule update
+  wd = diff --patience --word-diff
+[color]
+  ui = auto
+[core]
+  editor = code --wait
+  whitespace = trailing-space,space-before-tab
+[diff]
+  algorithm = histogram
+  renamelimit = 8192
+  renames = copies
+[fetch]
+  fsckobjects = false
+  prune = true
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+[init]
+  defaultBranch = "main"
+[pager]
+  branch = false
+  grep = false
+[push]
+  default = current
+[rebase]
+  autosquash = true
+  autostash = true
+[receive]
+  fsckobjects = true
+[status]
+  submoduleSummary = true
+[transfer]
+  fsckobjects = true

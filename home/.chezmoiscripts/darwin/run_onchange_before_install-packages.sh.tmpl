@@ -1,0 +1,73 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $brews := list
+     "cmake"
+     "dockutil"
+     "ffmpeg"
+     "gh"
+     "git"
+     "git-lfs"
+     "gnu-units"
+     "gnupg"
+     "go"
+     "jq"
+     "libsodium"
+     "node"
+     "openjdk"
+     "pinentry-mac"
+     "python"
+     "rclone"
+     "ripgrep"
+     "rbenv"
+     "ruby-build"
+     "tmux"
+     "wget"
+     "xz" -}}
+{{ $casks := list
+     "1password"
+     "1password-cli"
+     "alfred"
+     "bartender"
+     "burp-suite-professional"
+     "google-chrome"
+     "jetbrains-toolbox"
+     "kitty"
+     "lunar"
+     "slack"
+     "sublime-text"
+     "transmit"
+     "visual-studio-code" -}}
+
+{{ if .personal -}}
+{{   $brews = concat $brews (list
+       "yt-dlp") -}}
+{{   $casks = concat $casks (list
+       "adobe-creative-cloud"
+       "discord"
+       "downie"
+       "iina"
+       "keybase"
+       "mullvadvpn"
+       "notion"
+       "parallels"
+       "permute"
+       "signal"
+       "steam"
+       "transmission-remote-gui"
+       "vlc"
+       "whatsapp"
+       "zoom") -}}
+{{ end -}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF
+{{ end -}}
