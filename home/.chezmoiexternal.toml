@@ -2,19 +2,6 @@
     type = "git-repo"
     url = "https://github.com/asdf-vm/asdf.git"
     refreshPeriod = "168h"
-[".oh-my-zsh"]
-    type = "git-repo"
-    url = "https://github.com/ohmyzsh/ohmyzsh.git"
-    refreshPeriod = "168h"
-[".oh-my-zsh/plugins/zsh-syntax-highlighting"]
-    type = "git-repo"
-    url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-    refreshPeriod = "168h"
-[".oh-my-zsh/themes"]
-    type = "archive"
-    url = "https://github.com/ahmadawais/Shades-of-Purple-iTerm2/archive/refs/tags/2.2.0.tar.gz"
-    exact = true
-    stripComponents = 1
 {{- if and (not .ephemeral) (not .headless) }}
 {{-   $fontDir := "" }}
 {{-   if eq .chezmoi.os "darwin" }}

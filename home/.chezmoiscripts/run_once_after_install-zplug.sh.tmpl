@@ -1,0 +1,10 @@
+#!/bin/zsh
+{{ if eq .chezmoi.os "linux" -}}
+sudo apt install thefuck autojump
+{{ else if eq .chezmoi.os "darwin" -}}
+brew install thefuck autojump
+{{ end -}}
+if [ ! -d ~/.zplug ]
+then
+    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+fi
