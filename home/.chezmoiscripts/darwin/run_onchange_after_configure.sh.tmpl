@@ -12,22 +12,25 @@ defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array en ja
 defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
-for dockItemLabel in \
-	Safari \
-	FaceTime \
-	Maps \
-	Photos \
-	Contacts \
-	Calendar \
-	Reminders \
-	Podcasts \
-	TV \
-	News \
-	Numbers \
-	Keynote \
-	Pages ; do
-	dockutil --find "$dockItemLabel" >/dev/null && dockutil --no-restart --remove "$dockItemLabel"
-done
+# Temporarily disabled until dockutil 3.0.2 available through homebrew
+# https://github.com/Homebrew/homebrew-core/pull/97394
+#
+# for dockItemLabel in \
+# 	Safari \
+# 	FaceTime \
+# 	Maps \
+# 	Photos \
+# 	Contacts \
+# 	Calendar \
+# 	Reminders \
+# 	Podcasts \
+# 	TV \
+# 	News \
+# 	Numbers \
+# 	Keynote \
+# 	Pages ; do
+# 	dockutil --find "$dockItemLabel" >/dev/null && dockutil --no-restart --remove "$dockItemLabel"
+# done
 
 killall Dock
 
