@@ -9,74 +9,20 @@
 {{-   else if eq .chezmoi.os "linux" }}
 {{-     $fontDir = ".local/share/fonts" }}
 {{-   end }}
-["{{ $fontDir }}/Inconsolata for Powerline.otf"]
+["{{ $fontDir }}/MesloLGS NF Regular.ttf"]
     type = "file"
-    url = "https://github.com/powerline/fonts/raw/master/Inconsolata/Inconsolata%20for%20Powerline.otf"
-["{{ $fontDir }}/Inconsolata Bold for Powerline.ttf"]
-    type = "file"
-    url = "https://github.com/powerline/fonts/raw/master/Inconsolata/Inconsolata%20Bold%20for%20Powerline.ttf"
-["{{ $fontDir }}/IBMPlexMono-Bold.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Bold.ttf"
+    url = "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf"
     refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-BoldItalic.ttf"]
+["{{ $fontDir }}/MesloLGS NF Bold.ttf"]
     type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-BoldItalic.ttf"
+    url = "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf"
     refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-ExtraLight.ttf"]
+["{{ $fontDir }}/MesloLGS NF Italic.ttf"]
     type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-ExtraLight.ttf"
+    url = "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf"
     refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-ExtraLightItalic.ttf"]
+["{{ $fontDir }}/MesloLGS NF Bold Italic.ttf"]
     type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-ExtraLightItalic.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-Italic.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Italic.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-Light.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Light.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-LightItalic.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-LightItalic.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-Medium.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Medium.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-MediumItalic.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-MediumItalic.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-Regular.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Regular.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-SemiBold.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-SemiBold.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-SemiBoldItalic.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-SemiBoldItalic.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-Text.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Text.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-TextItalic.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-TextItalic.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-Thin.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-Thin.ttf"
-    refreshPeriod = "168h"
-["{{ $fontDir }}/IBMPlexMono-ThinItalic.ttf"]
-    type = "file"
-    url = "https://github.com/IBM/plex/raw/master/IBM-Plex-Mono/fonts/complete/ttf/IBMPlexMono-ThinItalic.ttf"
+    url = "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf"
     refreshPeriod = "168h"
 {{- end }}

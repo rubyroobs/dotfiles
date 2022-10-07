@@ -1,0 +1,11 @@
+{
+  "workbench.colorTheme": "Monokai Pro (Filter Octagon)",
+  "editor.tabSize": 2,
+  "terminal.integrated.fontFamily": "MesloLGS NF, monospace",
+  "terminal.integrated.fontSize": 14,
+  "rubyTestExplorer.rspecCommand": "RAILS_ENV=test bundle exec rspec",
+  "rubyTestExplorer.minitestCommand": "RAILS_ENV=test bundle exec rake",
+  "git.autofetch": true,
+  "workbench.settings.editor": "json",
+  "workbench.iconTheme": "Monokai Pro (Filter Octagon) Icons"
+}
