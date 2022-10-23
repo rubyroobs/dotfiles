@@ -1,5 +1,5 @@
 {
-  "workbench.colorTheme": "Monokai Pro (Filter Octagon)",
+  "workbench.colorTheme": "SynthWave '84",
   "editor.tabSize": 2,
   "terminal.integrated.fontFamily": "MesloLGS NF, monospace",
   "terminal.integrated.fontSize": 14,
@@ -7,5 +7,7 @@
   "rubyTestExplorer.minitestCommand": "RAILS_ENV=test bundle exec rake",
   "git.autofetch": true,
   "workbench.settings.editor": "json",
-  "workbench.iconTheme": "Monokai Pro (Filter Octagon) Icons"
+  "workbench.iconTheme": "material-icon-theme",
+  "synthwave84.disableGlow": true,
+  "go.toolsManagement.autoUpdate": true
 }
