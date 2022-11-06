@@ -9,5 +9,7 @@
   "workbench.settings.editor": "json",
   "workbench.iconTheme": "material-icon-theme",
   "synthwave84.disableGlow": true,
-  "go.toolsManagement.autoUpdate": true
+  "go.toolsManagement.autoUpdate": true,
+  "editor.fontFamily": "MesloLGS NF, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 14
 }
