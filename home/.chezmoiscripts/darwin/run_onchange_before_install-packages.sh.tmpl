@@ -24,45 +24,40 @@ set -eufo pipefail
      "ruby-build"
      "tmux"
      "wget"
-     "xz" -}}
+     "xz"
+     "yt-dlp" -}}
 {{ $casks := list
      "1password"
      "1password-cli"
+     "adobe-creative-cloud"
      "alfred"
      "bartender"
      "burp-suite-professional"
+     "discord"
+     "downie"
      "google-chrome"
+     "iina"
      "jetbrains-toolbox"
      "keybase"
      "kitty"
      "lunar"
      "miniconda"
      "mullvadvpn"
+     "notion"
+     "parallels"
+     "permute"
+     "signal"
      "slack"
+     "steam"
      "sublime-text"
+     "transmission-remote-gui"
      "transmit"
-     "visual-studio-code" 
+     "visual-studio-code"
+     "vlc"
+     "whatsapp"
      "zoom" -}}
 
-{{ if .personal -}}
-{{   $brews = concat $brews (list
-       "yt-dlp") -}}
-{{   $casks = concat $casks (list
-       "adobe-creative-cloud"
-       "discord"
-       "downie"
-       "iina"
-       "notion"
-       "parallels"
-       "permute"
-       "signal"
-       "steam"
-       "transmission-remote-gui"
-       "vlc"
-       "whatsapp") -}}
-{{ end -}}
-
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --verbose --no-lock --file=/dev/stdin <<EOF
 {{ range ($brews | sortAlpha | uniq) -}}
 brew "{{ . }}"
 {{ end -}}

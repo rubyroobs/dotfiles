@@ -1,5 +1,3 @@
-{{- if not .work -}}
-{{-   range (gitHubKeys "rubyroobs") -}}
-{{-     .Key -}}
-{{-   end -}}
+{{- range (gitHubKeys "rubyroobs") -}}
+{{-   .Key -}}
 {{- end -}}

@@ -1,8 +1,6 @@
 {{/* boolean feature tags */}}
 {{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $headless := false -}}{{/* true if this machine does not have a screen and keyboard */}}
-{{- $personal := false -}}{{/* true if this machine should have personal secrets and keys */}}
-{{- $work := false -}}{{/* true if this machine should have work specific config */}}
 {{- $docker := false -}}{{/* true if this machine should have docker installed */}}
 {{- "" -}}
 
@@ -38,15 +36,12 @@
 {{-   $pacUrl := output "scutil" "--proxy" | regexFind "ProxyAutoConfigURLString\\s*:.*" | splitList ":" | last | trim -}}
 {{-   if eq $hostname "iruru" -}}
 {{-     $docker = true -}}
-{{-     $personal = true -}}
 {{-   else if eq $hostname "i" -}}
 {{-     $docker = true -}}
-{{-     $personal = true -}}
 {{-     $headless = true -}}
 {{-   else if stdinIsATTY -}}
 {{-     $headless = promptBoolOnce . "headless" "headless" -}}
 {{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" -}}
-{{-     $work = promptBoolOnce . "work" "work" -}}
 {{-     if not $ephemeral -}}
 {{-       $docker = promptBoolOnce . "docker" "docker" -}}
 {{-     end -}}
@@ -60,8 +55,6 @@
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
     hostname = {{ $hostname | quote }}
-    personal = {{ $personal }}
-    work = {{ $work }}
     docker = {{ $docker }}
     osid = {{ $osID | quote }}
 [diff]
