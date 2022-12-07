@@ -12,6 +12,32 @@ defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array en ja
 defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
+if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
+  echo '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.gitlab1.ifconfig</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>Nice</key>
+    <integer>10</integer>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/sbin/ifconfig</string>
+      <string>lo0</string>
+      <string>alias</string>
+      <string>172.16.123.1</string>
+    </array>
+</dict>
+</plist>
+' | sudo tee /Library/LaunchDaemons/org.gitlab1.ifconfig.plist >/dev/null
+  sudo chmod 0644 /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
+  sudo chown root:wheel /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
+  sudo launchctl load /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
+fi
+
 # Temporarily disabled until dockutil 3.0.2 available through homebrew
 # https://github.com/Homebrew/homebrew-core/pull/97394
 #
