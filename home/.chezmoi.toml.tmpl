@@ -1,7 +1,7 @@
 {{/* boolean feature tags */}}
+{{- $gitlab := false -}}{{/* true if this machine is gitlab, false if personal */}}
 {{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $headless := false -}}{{/* true if this machine does not have a screen and keyboard */}}
-{{- $docker := false -}}{{/* true if this machine should have docker installed */}}
 {{- "" -}}
 
 {{- $osID := .chezmoi.os -}}
@@ -33,29 +33,29 @@
 {{- end -}}
 
 {{- if not $ephemeral -}}
-{{-   $pacUrl := output "scutil" "--proxy" | regexFind "ProxyAutoConfigURLString\\s*:.*" | splitList ":" | last | trim -}}
 {{-   if eq $hostname "iruru" -}}
-{{-     $docker = true -}}
+{{-     $gitlab = false -}}
+{{-   else if eq $hostname "tanuki" -}}
+{{-     $gitlab = true -}}
 {{-   else if eq $hostname "i" -}}
-{{-     $docker = true -}}
 {{-     $headless = true -}}
+{{-     $gitlab = false -}}
 {{-   else if stdinIsATTY -}}
+{{-     $gitlab = promptBoolOnce . "gitlab" "gitlab" -}}
 {{-     $headless = promptBoolOnce . "headless" "headless" -}}
 {{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" -}}
-{{-     if not $ephemeral -}}
-{{-       $docker = promptBoolOnce . "docker" "docker" -}}
-{{-     end -}}
 {{-   else -}}
+{{-     $gitlab = false -}}
 {{-     $ephemeral = true -}}
 {{-     $headless = true -}}
 {{-   end -}}
 {{- end -}}
 
 [data]
+    gitlab = {{ $gitlab }}
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
     hostname = {{ $hostname | quote }}
-    docker = {{ $docker }}
     osid = {{ $osID | quote }}
 [diff]
     exclude = ["externals"]

@@ -1,0 +1,3 @@
+{{- if .gitlab -}}
+{{ (index (onepassword "phqlj6ep2xnbopzbgayfhnvgeq" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab").fields 1).value }}
+{{- end -}}

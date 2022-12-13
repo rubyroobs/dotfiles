@@ -2,13 +2,18 @@
   name = Ruby Nealon
   email = ruby@ruby.sh
 {{- if eq .chezmoi.os "darwin" }}
-  signingkey = DC8ACFF3AD1C6D3F007EECE5610C353FE280661B
+[user]
+{{- if .gitlab }}
+  signingkey = {{ (index (onepassword "phqlj6ep2xnbopzbgayfhnvgeq" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab").fields 1).value }}
+{{- else }}
+  signingkey = {{ (index (onepassword "4kipjibjqsdlq2riih7f3kzv6m" "recjl2iol2fdpaoh3anxlfucsi" "my").fields 1).value }}
+{{- end }}
 [gpg]
-  program = gpg
+  format = ssh
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [commit]
   gpgsign = true
-[credential]
-  helper = store
 {{- end }}
 [advice]
   addEmptyPathspec = false
