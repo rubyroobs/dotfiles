@@ -11,5 +11,32 @@
   "synthwave84.disableGlow": true,
   "go.toolsManagement.autoUpdate": true,
   "editor.fontFamily": "MesloLGS NF, Menlo, Monaco, 'Courier New', monospace",
-  "editor.fontSize": 14
+  "editor.fontSize": 14,
+  "security.workspace.trust.untrustedFiles": "open",
+  "ruby.rubocop.useBundler": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "git.openRepositoryInParentFolders": "never",
+  "gitlab.aiAssistedCodeSuggestions.enabled": true,
+  "vs-kubernetes": {
+    "vscode-kubernetes.minikube-path-mac": "/Users/ruby/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
+  }
 }
