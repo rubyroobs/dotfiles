@@ -38,25 +38,22 @@ if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
   sudo launchctl load /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
 fi
 
-# Temporarily disabled until dockutil 3.0.2 available through homebrew
-# https://github.com/Homebrew/homebrew-core/pull/97394
-#
-# for dockItemLabel in \
-# 	Safari \
-# 	FaceTime \
-# 	Maps \
-# 	Photos \
-# 	Contacts \
-# 	Calendar \
-# 	Reminders \
-# 	Podcasts \
-# 	TV \
-# 	News \
-# 	Numbers \
-# 	Keynote \
-# 	Pages ; do
-# 	dockutil --find "$dockItemLabel" >/dev/null && dockutil --no-restart --remove "$dockItemLabel"
-# done
+for dockItemLabel in \
+	Safari \
+	FaceTime \
+	Maps \
+	Photos \
+	Contacts \
+	Calendar \
+	Reminders \
+	Podcasts \
+	TV \
+	News \
+	Numbers \
+	Keynote \
+	Pages ; do
+	dockutil --find "$dockItemLabel" >/dev/null && dockutil --no-restart --remove "$dockItemLabel"
+done
 
 killall Dock
 
