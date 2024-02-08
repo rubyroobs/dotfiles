@@ -4,9 +4,9 @@
 {{- if eq .chezmoi.os "darwin" }}
 [user]
 {{- if .gitlab }}
-  signingkey = {{ (index (onepassword "phqlj6ep2xnbopzbgayfhnvgeq" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab").fields 1).value }}
+  signingkey = {{ (index (onepassword "phqlj6ep2xnbopzbgayfhnvgeq" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab").fields 0).value }}
 {{- else }}
-  signingkey = {{ (index (onepassword "4kipjibjqsdlq2riih7f3kzv6m" "recjl2iol2fdpaoh3anxlfucsi" "my").fields 1).value }}
+  signingkey = {{ (index (onepassword "4kipjibjqsdlq2riih7f3kzv6m" "recjl2iol2fdpaoh3anxlfucsi" "my").fields 0).value }}
 {{- end }}
 [gpg]
   format = ssh
