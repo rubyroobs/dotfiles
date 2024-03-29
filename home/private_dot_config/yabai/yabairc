@@ -1,55 +1,41 @@
 #!/usr/bin/env sh
 
-#
-# for this to work you must configure sudo such that
-# it will be able to run the command without password
-#
-# see this wiki page for information:
-#  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
-#
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
-#
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
-# global settings
-yabai -m config \
-	mouse_follows_focus on \
-	focus_follows_mouse autofocus \
-	window_origin_display default \
-	window_placement second_child \
-	window_shadow off \
-	window_animation_duration 0.1 \
-	window_opacity_duration 0.0 \
-	active_window_opacity 1.0 \
-	normal_window_opacity 1.0 \
-	window_opacity on \
-	split_ratio 0.50 \
-	split_type auto \
-	auto_balance off \
-	top_padding 12 \
-	bottom_padding 12 \
-	left_padding 12 \
-	right_padding 12 \
-	window_gap 06 \
-	layout bsp \
-	mouse_modifier fn \
-	mouse_action1 move \
-	mouse_action2 resize \
-	mouse_drop_action swap \
-	external_bar all:35:0
+yabai -m config external_bar               all:35:0       \
+                mouse_follows_focus        on             \
+                focus_follows_mouse        autofocus      \
+                window_zoom_persist        off            \
+                window_placement           second_child   \
+                window_shadow              float          \
+                window_opacity             on             \
+                window_opacity_duration    0.2            \
+                active_window_opacity      1.0            \
+                normal_window_opacity      0.8            \
+                window_animation_duration  0.5            \
+                window_animation_easing    ease_out_quint \
+                insert_feedback_color      0xff9dd274     \
+                split_ratio                0.50           \
+                auto_balance               off            \
+                mouse_modifier             fn             \
+                mouse_action1              move           \
+                mouse_action2              resize         \
+                mouse_drop_action          swap           \
+                top_padding                8              \
+                bottom_padding             8              \
+                left_padding               8              \
+                right_padding              8              \
+                window_gap                 10
 
-yabai -m rule --add app="^System Settings$" sticky=on manage=off
-yabai -m rule --add app="^Finder$" sticky=on manage=off
-yabai -m rule --add app="^Disk Utility$" sticky=on manage=off
-yabai -m rule --add app="^System Information$" sticky=on manage=off
-yabai -m rule --add app="^Activity Monitor$" sticky=on manage=off
-yabai -m rule --add app="^console$" manage=off
-yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on manage=off
-yabai -m rule --add app="Alfred 5" sticky=on manage=off
+# Exclude problematic apps from being managed:
+yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 
-yabai -m config --space 9 layout float
+yabai -m config layout bsp
 
 borders active_color="gradient(top_left=0xffff9e64,bottom_right=0xffbb9af7)" inactive_color="gradient(top_left=0x40ff9e64,bottom_right=0x40bb9af7)" width=5 2>/dev/null 1>&2 &
-# borders active_color="gradient(top_left=0xffff9e64,bottom_right=0xffbb9af7)" inactive_color=0x80565f89 width=5 2>/dev/null 1>&2 &
 
 echo "yabai configuration loaded.."

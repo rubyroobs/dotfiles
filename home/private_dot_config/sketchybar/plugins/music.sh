@@ -5,7 +5,7 @@
 # quit the app before the next osascript command is called. I assume 
 # com.apple.iTunes.playerInfo fires off an event when the player quits
 # so it imediately runs before the process is killed
-sleep 0.1
+sleep 1
 
 APP_STATE=$(pgrep -x Music)
 if [[ ! $APP_STATE ]]; then 
@@ -35,12 +35,12 @@ if [[ $PLAYER_STATE == "playing" ]]; then
     icon=""
 fi
 
-if [[ ${#title} -gt 25 ]]; then
-TITLE=$(printf "$(echo $title | cut -c 1-25)…")
+if [[ ${#title} -gt 12 ]]; then
+title=$(printf "$(echo $title | cut -c 1-12)…")
 fi
 
-if [[ ${#artist} -gt 25 ]]; then
-ARTIST=$(printf "$(echo $artist | cut -c 1-25)…")
+if [[ ${#artist} -gt 12 ]]; then
+artist=$(printf "$(echo $artist | cut -c 1-12)…")
 fi
 
 # if [[ ${#ALBUM} -gt 25 ]]; then

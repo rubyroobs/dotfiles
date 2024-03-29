@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 source "$HOME/.config/sketchybar/variables.sh" # Loads all defined colors
 
