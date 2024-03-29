@@ -1,4 +1,4 @@
-{{- if (eq .chezmoi.os "darwin") -}}
+{{- if and (eq .chezmoi.os "darwin") (not (stat "/Applications/kitty.app/Contents/MacOS/kitty"))  -}}
 #!/bin/bash
 
 set -eufo pipefail
@@ -17,6 +17,8 @@ set -eufo pipefail
      "gnupg"
      "grep"
      "jq"
+     "koekeishiya/formulae/skhd"
+     "koekeishiya/formulae/yabai"
      "libsodium"
      "marked"
      "openjdk"
@@ -30,13 +32,13 @@ set -eufo pipefail
      "xz"
      "yt-dlp" -}}
 {{ $casks := list
-     "1password"
      "1password-cli"
      "alfred"
      "bartender"
      "dropbox"
      "google-chrome"
      "google-cloud-sdk"
+     "homebrew/cask-fonts/font-hack-nerd-font"
      "jetbrains-toolbox"
      "keybase"
      "kitty"
@@ -52,7 +54,7 @@ set -eufo pipefail
      "vlc"
      "zoom" -}}
 
-brew bundle --verbose --no-lock --file=/dev/stdin <<EOF
+brew bundle --verbose --no-lock --file=/dev/stdin <<EOF || true
 {{ range ($brews | sortAlpha | uniq) -}}
 brew "{{ . }}"
 {{ end -}}
