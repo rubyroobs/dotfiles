@@ -9,7 +9,7 @@ yabai -m config external_bar               all:35:0       \
                 window_zoom_persist        off            \
                 window_placement           second_child   \
                 window_shadow              float          \
-                window_opacity             on             \
+                window_opacity             off            \
                 window_opacity_duration    0.2            \
                 active_window_opacity      1.0            \
                 normal_window_opacity      0.8            \
