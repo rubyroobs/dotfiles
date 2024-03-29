@@ -41,6 +41,9 @@ fi
 # gcloud
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 
+# fvm
+PATH="$PATH:$HOME/fvm/default/bin"
+
 MAGIC_ENTER_GIT_COMMAND='git status -u .'
 MAGIC_ENTER_OTHER_COMMAND='ll'
 

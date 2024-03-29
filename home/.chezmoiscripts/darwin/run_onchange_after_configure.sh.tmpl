@@ -12,6 +12,7 @@ defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array en ja
 defaults write NSGlobalDomain _HIHideMenuBar -bool true
 defaults write com.apple.dock "autohide" -bool true
 defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.finder CreateDesktop false
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
 if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
@@ -58,5 +59,6 @@ for dockItemLabel in \
 done
 
 killall Dock
+killall Finder
 
 {{ end -}}
