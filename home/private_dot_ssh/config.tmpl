@@ -1,7 +1,11 @@
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if eq .chezmoi.os "darwin" }}
 Host *
   IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   {{- if .gitlab }}
   IdentityFile ~/.ssh/ruby_gitlab_ed25519.pub
   {{- end }}
-{{- end -}}
+{{- end }}
+
+{{- if .gitlab }}
+{{ onepasswordDocument "w6r5gb6bdhzd5pirjwurueulwu" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab" }}
+{{- end }}
