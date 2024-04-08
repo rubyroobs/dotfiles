@@ -38,6 +38,10 @@ if [ -d "$(brew --prefix)/opt/grep/libexec/gnubin" ]; then
     PATH="$(brew --prefix)/opt/grep/libexec/gnubin:$PATH"
 fi
 
+if [ -d "$(brew --prefix)/opt/openssh/bin" ]; then
+    PATH="$(brew --prefix)/opt/openssh/bin:$PATH"
+fi
+
 # gcloud
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 

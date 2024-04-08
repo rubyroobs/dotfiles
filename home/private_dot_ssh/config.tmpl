@@ -5,7 +5,6 @@ Host *
   IdentityFile ~/.ssh/ruby_gitlab_ed25519.pub
   {{- end }}
 {{- end }}
-
-{{- if .gitlab }}
+{{ if .gitlab }}
 {{ onepasswordDocument "w6r5gb6bdhzd5pirjwurueulwu" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab" }}
-{{- end }}
+{{ end }}
