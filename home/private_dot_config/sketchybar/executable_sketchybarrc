@@ -45,7 +45,7 @@ source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"
 # temp disabling as noisy and too big
 # source "$ITEM_DIR/cpu.sh"
-source "$ITEM_DIR/music.sh"
+source "$ITEM_DIR/media_ctrl.sh"
 
 #################### Finalizing Setup ####################
 
