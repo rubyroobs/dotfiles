@@ -4,7 +4,7 @@ sudo yabai --load-sa
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
 yabai -m config external_bar                   all:40:0       \
-                mouse_follows_focus            on             \
+                mouse_follows_focus            off            \
                 focus_follows_mouse            autofocus      \
                 window_zoom_persist            off            \
                 window_placement               second_child   \
@@ -33,6 +33,12 @@ yabai -m config external_bar                   all:40:0       \
 
 # Allowlist approach to managed apps (manage = off for everything except these apps)
 yabai -m rule --add app!="^(Code|Fantastical|Google Chrome|KakaoTalk|kitty|LINE|Messages|Notes|Notion|Signal|Sonos|Spotify|Sublime Text|Superhuman|Todoist|WhatsApp|Xcode)$" manage=off
+
+yabai -m space 1 --label org
+yabai -m rule --add app="^Fantastical$" space=org
+yabai -m rule --add app="^Superhuman$" space=org
+yabai -m rule --add app="^Todoist$" space=org
+
 
 borders active_color="gradient(top_left=0xffff9e64,bottom_right=0xffbb9af7)" inactive_color="gradient(top_left=0x40ff9e64,bottom_right=0x40bb9af7)" width=4 2>/dev/null 1>&2 &
 
