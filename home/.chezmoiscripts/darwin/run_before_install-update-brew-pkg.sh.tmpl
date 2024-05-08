@@ -1,15 +1,18 @@
-{{- if and (eq .chezmoi.os "darwin") (not (stat "/Applications/kitty.app/Contents/MacOS/kitty"))  -}}
+{{ if (eq .chezmoi.os "darwin") -}}
+
 #!/bin/bash
 
 set -eufo pipefail
 
 {{ $brews := list
+     "autojump"
      "bat"
      "cmake"
      "coreutils"
      "dockutil"
      "eza"
      "fd"
+     "FelixKratz/formulae/borders"
      "FelixKratz/formulae/sketchybar"
      "ffmpeg"
      "gh"
@@ -33,34 +36,16 @@ set -eufo pipefail
      "rclone"
      "ripgrep"
      "ruby-build"
+     "thefuck"
      "tmux"
      "wget"
      "xz"
      "yt-dlp" -}}
 {{ $casks := list
      "1password-cli"
-     "alfred"
-     "bartender"
-     "dropbox"
-     "FelixKratz/formulae/borders"
-     "google-chrome"
      "google-cloud-sdk"
      "homebrew/cask-fonts/font-hack-nerd-font"
-     "jetbrains-toolbox"
-     "keybase"
-     "kitty"
-     "miniconda"
-     "mullvadvpn"
-     "notion"
-     "slack"
-     "spotify"
-     "sublime-text"
-     "superhuman"
-     "todoist"
-     "transmit"
-     "visual-studio-code"
-     "vlc"
-     "zoom" -}}
+     "kitty" -}}
 
 brew bundle --verbose --no-lock --file=/dev/stdin <<EOF || true
 {{ range ($brews | sortAlpha | uniq) -}}

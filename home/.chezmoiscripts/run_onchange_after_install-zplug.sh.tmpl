@@ -1,8 +1,6 @@
 #!/bin/zsh
 {{ if eq .chezmoi.os "linux" -}}
 sudo apt install thefuck autojump
-{{ else if eq .chezmoi.os "darwin" -}}
-brew install thefuck autojump
 {{ end -}}
 if [ ! -d ~/.zplug ]
 then

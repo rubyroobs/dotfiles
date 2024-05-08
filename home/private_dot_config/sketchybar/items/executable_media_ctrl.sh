@@ -9,18 +9,13 @@ update_freq=1
 script="$PLUGIN_DIR/media_ctrl.sh"
 click_script="$POPUP_SCRIPT"
 icon.color="$COLOR"
-icon.padding_left=10
+icon.padding_right=0
 label.color="$COLOR"
-label.padding_right=10
+label.padding_left="$ICON_LABEL_PADDING"
 popup.horizontal=on
 popup.align=center
 popup.height=150
-background.height=26
-background.corner_radius="$CORNER_RADIUS"
-background.padding_right=5
-background.border_width="$BORDER_WIDTH"
 background.border_color="$COLOR"
-background.color="$BAR_COLOR"
 background.drawing=on
 label.max_chars=40
 )
@@ -114,7 +109,7 @@ y_offset=-45
 media_ctrl_controls=(
 background.color=$COLOR
 background.corner_radius=11
-background.drawing=on
+background.drawing=off
 y_offset=-45
 )
 
