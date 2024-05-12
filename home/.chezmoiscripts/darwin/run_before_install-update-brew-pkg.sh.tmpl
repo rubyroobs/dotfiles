@@ -47,7 +47,10 @@ set -eufo pipefail
      "google-cloud-sdk"
      "hammerspoon"
      "homebrew/cask-fonts/font-jetbrains-mono-nerd-font"
-     "kitty" -}}
+     "homebrew/cask-fonts/font-sf-mono"
+     "homebrew/cask-fonts/font-sf-pro"
+     "kitty"
+     "sf-symbols" -}}
 
 brew bundle --verbose --no-lock --file=/dev/stdin <<EOF || true
 {{ range ($brews | sortAlpha | uniq) -}}
@@ -57,5 +60,8 @@ brew "{{ . }}"
 cask "{{ . }}"
 {{ end -}}
 EOF
-
 {{ end -}}
+
+{{- if and (eq .chezmoi.os "darwin") (not (stat (joinPath .chezmoi.homeDir ".local" "share" "sketchybar_lua" "sketchybar.so"))) -}}
+(git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
+{{- end -}}

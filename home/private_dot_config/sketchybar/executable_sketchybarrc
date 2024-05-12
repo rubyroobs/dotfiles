@@ -54,3 +54,8 @@ sketchybar --hotload true
 sketchybar --update
 
 echo "sketchybar configuration loaded.."
+
+##### FOR LUA
+# #!/usr/bin/env lua
+
+# require("init")
