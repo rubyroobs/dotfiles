@@ -2,7 +2,8 @@ require("hs.ipc")
 
 
 --# constants
-super = "⌃⌥"
+super = {"alt"}
+superShift = {"alt", "shift"}
 empty_table = {}
 windowCornerRadius = 10
 stackItemHeight = 32.0
@@ -100,10 +101,9 @@ end):choices({
 --# bindings
 
 --# reload config
-hs.hotkey.bind(super, hs.keycodes.map["return"], nil, function() hs.reload() end)
---# open main chooser
-hs.hotkey.bind(super, hs.keycodes.map["space"], nil, function() mainChooser:show() end)
-
+hs.hotkey.bind(superShift, hs.keycodes.map["r"], nil, function() hs.reload() end)
+--# open main chooser (not using rn)
+-- hs.hotkey.bind(super, hs.keycodes.map["space"], nil, function() mainChooser:show() end)
 
 --# Space navigation (1 to 9: space by index)
 local spaceIcons = {
@@ -120,26 +120,25 @@ local spaceIcons = {
 
 for i, toastStr in ipairs(spaceIcons) do
   local spaceIdx = i .. ""
-  hs.hotkey.bind(super, hs.keycodes.map[spaceIdx], function() yabai({"-m", "space", "mouse", "--focus", spaceIdx}, function() toast(toastStr) end) end)
+  hs.hotkey.bind(super, hs.keycodes.map[spaceIdx], function() yabai({"-m", "space", "--focus", spaceIdx}, function() return true end) end)
+  hs.hotkey.bind(superShift, hs.keycodes.map[spaceIdx], function() yabai({"-m", "window", "--space", spaceIdx}, function() return true end) end)
 end
 
---# Special: alt + enter for kitty
--- TODO: make this not be owned by the hammerspoon process??? so they dont all die when reloading hammerspoon
-hs.hotkey.bind("⌥", hs.keycodes.map["return"], function() hs.task.new("/Applications/kitty.app/Contents/MacOS/kitty", nil, function() end, {"--single-instance", "-d", "~"}):start() end, "test")
+--# Open terminal
+hs.hotkey.bind(super, hs.keycodes.map["return"], function() hs.task.new("/Applications/kitty.app/Contents/MacOS/kitty", nil, function() end, {"--single-instance", "-d", "~"}):start() end, "test")
 
---# Set layout under mouse (Q: bsp, W: stack, E: float)
-hs.hotkey.bind(super, hs.keycodes.map["q"], function() yabai({"-m", "space", "mouse", "--layout", "bsp"}, function() toast("🖖") end) end)
-hs.hotkey.bind(super, hs.keycodes.map["w"], function() yabai({"-m", "space", "mouse", "--layout", "stack"}, function() toast("📚") end) end)
-hs.hotkey.bind(super, hs.keycodes.map["e"], function() yabai({"-m", "space", "mouse", "--layout", "float"}, function() toast("☁️") end) end)
+--# Set layout under mouse
+hs.hotkey.bind(super, hs.keycodes.map["q"], function() yabai({"-m", "space", "mouse", "--layout", "bsp"}, function() toast("bsp") end) end)
+hs.hotkey.bind(super, hs.keycodes.map["w"], function() yabai({"-m", "space", "mouse", "--layout", "stack"}, function() toast("stack") end) end)
 
---# Set bsp ratio (U: 1/3, I: 1/2, O: 2/3, P: balance)
-hs.hotkey.bind(super, hs.keycodes.map["u"], function() yabai({"-m", "window", "--ratio", "abs:0.38"}) toast("🔲⅓") end)
-hs.hotkey.bind(super, hs.keycodes.map["i"], function() yabai({"-m", "window", "--ratio", "abs:0.5"}) toast("🔲½") end)
-hs.hotkey.bind(super, hs.keycodes.map["o"], function() yabai({"-m", "window", "--ratio", "abs:0.62"}) toast("🔲⅔") end)
-hs.hotkey.bind(super, hs.keycodes.map["p"], function() yabai({"-m", "space", "--balance"}) toast("🔲⚖️") end)
+--# Balance bsp
+hs.hotkey.bind(super, hs.keycodes.map["e"], function() yabai({"-m", "space", "--balance"}) toast("bsp balanced") end)
 
---# Focus fullscreen (F: fullscreen)
+--# Focus fullscreen
 hs.hotkey.bind(super, hs.keycodes.map["f"], function() yabai({"-m", "window", "--toggle", "zoom-fullscreen"}) end)
+
+--# Toggle gaps yabai -m space --toggle gap
+hs.hotkey.bind(super, hs.keycodes.map["g"], function() yabai({"-m", "space", "--toggle", "gap"}) end)
 
 --# Window focus navigation
 hs.hotkey.bind(super, hs.keycodes.map["h"], function() yabai({"-m", "window", "--focus", "west"}) end)
@@ -147,31 +146,27 @@ hs.hotkey.bind(super, hs.keycodes.map["j"], function() yabai({"-m", "window", "-
 hs.hotkey.bind(super, hs.keycodes.map["k"], function() yabai({"-m", "window", "--focus", "south"}) end)
 hs.hotkey.bind(super, hs.keycodes.map["l"], function() yabai({"-m", "window", "--focus", "east"}) end)
 
---# Rotate windows in space (.: rotate)
-hs.hotkey.bind(super, hs.keycodes.map["."], function() yabai({"-m", "space", "--rotate", "270"}, function() toast("🔲🔁") end) end)  --["."]
+--# Move focused window navigation
+hs.hotkey.bind(superShift, hs.keycodes.map["h"], function() yabai({"-m", "window", "--warp", "west"}) end)
+hs.hotkey.bind(superShift, hs.keycodes.map["j"], function() yabai({"-m", "window", "--warp", "north"}) end)
+hs.hotkey.bind(superShift, hs.keycodes.map["k"], function() yabai({"-m", "window", "--warp", "south"}) end)
+hs.hotkey.bind(superShift, hs.keycodes.map["l"], function() yabai({"-m", "window", "--warp", "east"}) end)
 
---# Toggle float for window (/: toggle)
-hs.hotkey.bind(super, hs.keycodes.map["/"], function() yabai({"-m", "window", "--toggle", "float"}) toast("🎚☁️") end)
+--# Toggle float for window
+hs.hotkey.bind(superShift, hs.keycodes.map["space"], function() yabai({"-m", "window", "--toggle", "float"}) return true end)
 
 --# modals and overlays
-
-local insert_window_modal = hs.hotkey.modal.new(super, hs.keycodes.map["tab"])
 local resize_window_modal = hs.hotkey.modal.new(super, hs.keycodes.map["r"])
 local stackNavigateAction = require("stackNavigateAction")
-stack_navigate_prev = stackNavigateAction.new(super, hs.keycodes.map["t"], "prev", hs.keycodes.map["b"], "next")
-stack_navigate_next = stackNavigateAction.new(super, hs.keycodes.map["b"], "next", hs.keycodes.map["t"], "prev")
+stack_navigate_prev = stackNavigateAction.new(super, hs.keycodes.map["d"], "prev", hs.keycodes.map["c"], "next")
+stack_navigate_next = stackNavigateAction.new(super, hs.keycodes.map["c"], "next", hs.keycodes.map["d"], "prev")
 local windowAction = require("windowAction")
-window_action_swap = windowAction.new(super, hs.keycodes.map["y"], "swap", images.swap) 
-window_action_warp = windowAction.new(super, hs.keycodes.map["n"], "warp", images.warp)
 window_action_stack = windowAction.new(super, hs.keycodes.map["s"], "stack", images.stack)
 
 function closeModals()
-  if insert_window_modal ~= nil then insert_window_modal:exit() end
   if resize_window_modal ~= nil then resize_window_modal:exit() end
   if stack_navigate_prev ~= nil then stack_navigate_prev.modal:exit() end
   if stack_navigate_next ~= nil then stack_navigate_next.modal:exit() end
-  if window_action_swap ~= nil then window_action_swap.modal:exit() end
-  if window_action_warp ~= nil then window_action_warp.modal:exit() end
   if window_action_stack ~= nil then window_action_stack.modal:exit() end
 end
 
@@ -180,21 +175,6 @@ function redrawModals()
   if stack_navigate_prev ~= nil then stack_navigate_prev:updateCanvas() end
 end
 
---# insert window rule
---# insert window rule functions
-function insert_window_modal:entered()
-  toast("🔲🌱", true, { name = "modal" })
-end
-function insert_window_modal:exited()
-  killToast({ name = "modal" })
-end
-insert_window_modal:bind("", hs.keycodes.map["escape"], function() insert_window_modal:exit() end)
-insert_window_modal:bind(super, hs.keycodes.map["h"], function() yabai({"-m", "window", "--insert", "west"}) end)
-insert_window_modal:bind(super, hs.keycodes.map["j"], function() yabai({"-m", "window", "--insert", "north"}) end)
-insert_window_modal:bind(super, hs.keycodes.map["k"], function() yabai({"-m", "window", "--insert", "south"}) end)
-insert_window_modal:bind(super, hs.keycodes.map["l"], function() yabai({"-m", "window", "--insert", "east"}) end)
-insert_window_modal:bind(super, hs.keycodes.map[";"], function() yabai({"-m", "window", "--insert", "stack"}) end)
-
 --# resize window
 local resize_window = {
   size = 20,
@@ -202,7 +182,7 @@ local resize_window = {
   verticalEdge = nil -- 1 is for bottom, -1 is for top
 }
 function resize_window_modal:entered()
-  toast("🔲↔️", true, { name = "resize_window" })
+  toast("resize", true, { name = "resize_window" })
 end
 function resize_window_modal:exited()
   resize_window.horizontalEdge = nil
@@ -257,7 +237,7 @@ resize_window_modal:bind(super, hs.keycodes.map["l"], function()
     yabai({"-m", "window", "--resize", "left:"..resize_window.size..":0"}, function(out, err) return true end)
   end
 end)
-resize_window_modal:bind("", hs.keycodes.map["escape"], function() resize_window_modal:exit() end)  --["escape"]
+resize_window_modal:bind("", hs.keycodes.map["escape"], function() resize_window_modal:exit() end)
 
 hs.ipc.cliInstall()
 
