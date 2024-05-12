@@ -9,10 +9,10 @@ yabai -m config external_bar                   all:40:0       \
                 window_zoom_persist            off            \
                 window_placement               second_child   \
                 window_shadow                  on             \
-                window_opacity                 off            \
+                window_opacity                 on             \
                 window_opacity_duration        0.0            \
-                active_window_opacity          1.0            \
-                normal_window_opacity          0.8            \
+                active_window_opacity          0.99           \
+                normal_window_opacity          0.95           \
                 window_animation_duration      0.0            \
                 window_animation_frame_rate    120            \
                 window_animation_easing        ease_out_quint \
@@ -31,14 +31,29 @@ yabai -m config external_bar                   all:40:0       \
                 right_padding                  10             \
                 window_gap                     10
 
-# Allowlist approach to managed apps (manage = off for everything except these apps)
-yabai -m rule --add app!="^(Code|Fantastical|Google Chrome|KakaoTalk|kitty|LINE|Messages|Notes|Notion|Signal|Sonos|Spotify|Sublime Text|Superhuman|Todoist|WhatsApp|Xcode)$" manage=off
+# Rules: Management
+yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 
+# Rules: Layout
 yabai -m space 1 --label org
 yabai -m rule --add app="^Fantastical$" space=org
 yabai -m rule --add app="^Superhuman$" space=org
 yabai -m rule --add app="^Todoist$" space=org
 
+yabai -m rule --add app="^Google Chrome$" opacity=1.0
+
+# Signals
+yabai -m signal --add event=window_focused action="hs -c \"yabaidirectcall.window_focused(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=application_activated action="hs -c \"yabaidirectcall.application_activated(\`printenv YABAI_PROCESS_ID\`)\""
+yabai -m signal --add event=window_resized action="hs -c \"yabaidirectcall.window_resized(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=window_moved action="hs -c \"yabaidirectcall.window_moved(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=window_destroyed action="hs -c \"yabaidirectcall.window_destroyed(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=space_changed action="hs -c \"yabaidirectcall.space_changed(\`printenv YABAI_SPACE_ID\`)\""
+yabai -m signal --add event=display_changed action="hs -c \"yabaidirectcall.display_changed(\`printenv YABAI_DISPLAY_ID\`)\""
+yabai -m signal --add event=mission_control_enter action="hs -c \"yabaidirectcall.mission_control_enter()\""
 
 borders active_color="gradient(top_left=0xffff9e64,bottom_right=0xffbb9af7)" inactive_color="gradient(top_left=0x40ff9e64,bottom_right=0x40bb9af7)" width=4 2>/dev/null 1>&2 &
 

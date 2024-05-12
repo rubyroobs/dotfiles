@@ -38,13 +38,13 @@
   [[ $ZSH_VERSION == (5.<1->*|<6->.*) ]] || return
 
   # Prompt colors.
-  local grey='242'
-  local red='#FF5C57'
-  local yellow='#F3F99D'
-  local blue='#57C7FF'
-  local magenta='#FF6AC1'
-  local cyan='#9AEDFE'
-  local white='#F1F1F0'
+  local grey='#51576D'
+  local red='#E78284'
+  local yellow='#E5C890'
+  local blue='#8CAAEE'
+  local magenta='#F4B8E4'
+  local cyan='#81C8BE'
+  local white='#B5BFE2'
 
   # Left prompt segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(

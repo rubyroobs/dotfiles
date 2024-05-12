@@ -15,6 +15,7 @@ set -eufo pipefail
      "FelixKratz/formulae/borders"
      "FelixKratz/formulae/sketchybar"
      "ffmpeg"
+     "fzf"
      "gh"
      "git"
      "git-lfs"
@@ -44,7 +45,8 @@ set -eufo pipefail
 {{ $casks := list
      "1password-cli"
      "google-cloud-sdk"
-     "homebrew/cask-fonts/font-hack-nerd-font"
+     "hammerspoon"
+     "homebrew/cask-fonts/font-jetbrains-mono-nerd-font"
      "kitty" -}}
 
 brew bundle --verbose --no-lock --file=/dev/stdin <<EOF || true
