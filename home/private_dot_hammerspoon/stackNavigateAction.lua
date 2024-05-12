@@ -6,12 +6,15 @@ local stackNavigateAction = {
     new = function(modKeys, pressedKey, pressedDirection, oppositeKey, oppositeDirection)
         local a = {
             pressedDirection = pressedDirection,
-            selected = nil
+            selected = nil,
+            visible = false,
+            redrawing = false,
+            navigating = false,
         }
         a.modal = hs.hotkey.modal.new(modKeys, pressedKey)
         a.modalCloseTimer = hs.timer.new(0, function () a.modal:exit() end)
         function a:resetModalCloseTimer()
-          a.modalCloseTimer:setNextTrigger(3)
+          a.modalCloseTimer:setNextTrigger(stackItemTimeoutSeconds)
         end
         function a.modal:entered()
             yabai({"-m", "query", "--windows", "--window"}, function(out)
@@ -19,7 +22,6 @@ local stackNavigateAction = {
                 if window ~= nil then
                     a:yabaiNavigate(a.pressedDirection)
                     a.selected = window
-                    a:updateCanvas()
                     a:showOverlay()
                     a:resetModalCloseTimer()
                 else
@@ -43,6 +45,8 @@ local stackNavigateAction = {
             a.modal:exit()
         end)
         function a:yabaiNavigate(direction)
+          if self.navigating then return end
+          self.navigating = true
           local fallback = "last"
           if direction == "next" then
             fallback = "first"
@@ -50,8 +54,14 @@ local stackNavigateAction = {
 
           yabai({"-m", "window", "--focus", "stack." .. direction}, function(stdout, stderr)
             if stderr ~= "" then
-              self:updateCanvas()
-              yabai({"-m", "window", "--focus", "stack." .. fallback}, function() return true end)
+                yabai({"-m", "window", "--focus", "stack." .. fallback}, function()
+                    self.navigating = false
+                    a:updateCanvas()
+                    return true
+                end)
+            else
+                self.navigating = false
+                a:updateCanvas()
             end
             return true
           end)
@@ -63,6 +73,10 @@ local stackNavigateAction = {
             h = 100
         })
         function a:updateCanvas()
+          if self.visible == false then return end
+          if self.selected == nil then return end
+          if self.redrawing then return end
+          self.redrawing = true
           yabai({"-m", "query", "--windows", "--space"}, function(out)
             if out ~= nil or type(out) == "string" and string.len(out) ~= 0 then
               out = string.gsub(out, ":inf,", ":0.0,")
@@ -71,51 +85,93 @@ local stackNavigateAction = {
               if json_obj ~= nil then
                 local split_type_child_windows = {}
                 local stack_windows = {}
+                local focused_stack_group = nil
 
-                for _, window in pairs(json_obj.windows)
-                  print(window)
+                for _, window in pairs(json_obj.windows) do
+                    local window_stack_group = window["split-type"] .. ":" .. window["split-child"]
+                    if window["has-focus"] == true then
+                        focused_stack_group = window_stack_group
+                    end
+                    if split_type_child_windows[window_stack_group] == nil then
+                        split_type_child_windows[window_stack_group] = {}
+                    end
+                    table.insert(split_type_child_windows[window_stack_group], window)
                 end
 
-                -- TODO: group by split-type/split-child and note the split-type/split-child of focused window
-                -- then get rid of remaining windows that aren't in the same split-type/split-child as focused window
-                -- then sort by stack-index
+                local stack_window_indexes = {}
+                for _, window in pairs(split_type_child_windows[focused_stack_group]) do
+                    stack_windows[window["stack-index"]] = window
+                    table.insert(stack_window_indexes, window["stack-index"])
+                end
+                table.sort(stack_window_indexes)
 
+                local elements = {}
+                for _, idx in ipairs(stack_window_indexes) do
+                    local window = stack_windows[idx]
+                    table.insert(
+                        elements,
+                        {
+                            type = "rectangle",
+                            strokeColor = {
+                                red = (window["has-focus"] and {0.9059} or {0.7098})[1],
+                                green = (window["has-focus"] and {0.5098} or {0.7490})[1],
+                                blue = (window["has-focus"] and {0.5176} or {0.8863})[1],
+                            },
+                            fillColor = {
+                                red = 0.1882,
+                                green = 0.2039,
+                                blue = 0.2745,
+                            },
+                            frame = {
+                                x = stackItemMargin,
+                                y = stackItemMargin + ((idx - 1) * stackItemHeight * stackItemVerticalSpace),
+                                h = stackItemHeight,
+                                w = self.selected.frame.w - (stackItemMargin * 2),
+                            },
+                            roundedRectRadii = {
+                                xRadius = windowCornerRadius,
+                                yRadius = windowCornerRadius
+                            },
+                        }
+                    )
+                    local appText = hs.styledtext.new(window["app"] .. " - " .. window["title"], {
+                        color = {
+                            red = (window["has-focus"] and {0.9059} or {0.7098})[1],
+                            green = (window["has-focus"] and {0.5098} or {0.7490})[1],
+                            blue = (window["has-focus"] and {0.5176} or {0.8863})[1],
+                        },
+                        font = {
+                            name = "JetBrainsMono NF",
+                            size = 13.0,
+                        },
+                        paragraphStyle = {
+                            alignment = "center",
+                        }
+                    })
+                    local appTextSize = hs.drawing.getTextDrawingSize(appText)
+                    table.insert(
+                        elements,
+                        {
+                            type = "text",
+                            text = appText,
+                            frame = {
+                                x = stackItemMargin,
+                                y = stackItemMargin + ((idx - 1) * stackItemHeight * stackItemVerticalSpace) + ((stackItemHeight / 2) - (appTextSize.h / 2)),
+                                h = appTextSize.h,
+                                w = self.selected.frame.w - (stackItemMargin * 2),
+                            },
+                        }
+                    )
+                end
+                self.canvas:replaceElements(table.unpack(elements))
               end
             end
+
+            self.redrawing = false
           end)
-          self.canvas:replaceElements({
-              type = "rectangle",
-              action = "fill",
-              fillColor = {
-                  red = 1,
-                  alpha = 0.66
-              },
-              frame = {
-                x = "0%",
-                y = "10%",
-                h = "10%",
-                w = "100%",
-              },
-              roundedRectRadii = {
-                  xRadius = windowCornerRadius,
-                  yRadius = windowCornerRadius
-              },
-              compositeRule = "plusDarker",
-          }, {
-              type = "rectangle",
-              action = "fill",
-              fillColor = {
-                  white = 1,
-                  alpha = 0.66
-              },
-              roundedRectRadii = {
-                  xRadius = windowCornerRadius,
-                  yRadius = windowCornerRadius
-              },
-              compositeRule = "plusDarker"
-          })
         end
         function a:showOverlay()
+            self.visible = true
             self.canvas:topLeft({
                 x = self.selected.frame.x,
                 y = self.selected.frame.y
@@ -125,6 +181,7 @@ local stackNavigateAction = {
             }):show()
         end
         function a:hideOverlay()
+            self.visible = false
             self.canvas:hide()
         end
         return a

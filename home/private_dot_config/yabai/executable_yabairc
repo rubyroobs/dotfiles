@@ -46,14 +46,14 @@ yabai -m rule --add app="^Todoist$" space=org
 yabai -m rule --add app="^Google Chrome$" opacity=1.0
 
 # Signals
-yabai -m signal --add event=window_focused action="hs -c \"yabaidirectcall.window_focused(\`printenv YABAI_WINDOW_ID\`)\""
-yabai -m signal --add event=application_activated action="hs -c \"yabaidirectcall.application_activated(\`printenv YABAI_PROCESS_ID\`)\""
-yabai -m signal --add event=window_resized action="hs -c \"yabaidirectcall.window_resized(\`printenv YABAI_WINDOW_ID\`)\""
-yabai -m signal --add event=window_moved action="hs -c \"yabaidirectcall.window_moved(\`printenv YABAI_WINDOW_ID\`)\""
-yabai -m signal --add event=window_destroyed action="hs -c \"yabaidirectcall.window_destroyed(\`printenv YABAI_WINDOW_ID\`)\""
-yabai -m signal --add event=space_changed action="hs -c \"yabaidirectcall.space_changed(\`printenv YABAI_SPACE_ID\`)\""
-yabai -m signal --add event=display_changed action="hs -c \"yabaidirectcall.display_changed(\`printenv YABAI_DISPLAY_ID\`)\""
-yabai -m signal --add event=mission_control_enter action="hs -c \"yabaidirectcall.mission_control_enter()\""
+yabai -m signal --add event=window_focused action="hs -c \"return yabaidirectcall.window_focused(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=application_activated action="hs -c \"return yabaidirectcall.application_activated(\`printenv YABAI_PROCESS_ID\`)\""
+yabai -m signal --add event=window_resized action="hs -c \"return yabaidirectcall.window_resized(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=window_moved action="hs -c \"return yabaidirectcall.window_moved(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=window_destroyed action="hs -c \"return yabaidirectcall.window_destroyed(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=space_changed action="hs -c \"return yabaidirectcall.space_changed(\`printenv YABAI_SPACE_ID\`)\""
+yabai -m signal --add event=display_changed action="hs -c \"return yabaidirectcall.display_changed(\`printenv YABAI_DISPLAY_ID\`)\""
+yabai -m signal --add event=mission_control_enter action="hs -c \"return yabaidirectcall.mission_control_enter()\""
 
 borders active_color="gradient(top_left=0xffff9e64,bottom_right=0xffbb9af7)" inactive_color="gradient(top_left=0x40ff9e64,bottom_right=0x40bb9af7)" width=4 2>/dev/null 1>&2 &
 

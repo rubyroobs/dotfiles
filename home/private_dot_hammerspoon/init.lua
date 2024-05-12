@@ -5,7 +5,10 @@ require("hs.ipc")
 super = "⌃⌥"
 empty_table = {}
 windowCornerRadius = 10
-
+stackItemHeight = 32.0
+stackItemVerticalSpace = 1.2
+stackItemMargin = 4.0
+stackItemTimeoutSeconds = 1.0
 
 --# images
 local images = require("images")
@@ -25,9 +28,7 @@ local focus_ = {
 function yabai(args, completion)
   local yabai_output = ""
   local yabai_error = ""
-  -- Runs in background very fast
-  local yabai_task = hs.task.new("/opt/homebrew/bin/yabai",nil, function(task, stdout, stderr)
-    --print("stdout:"..stdout, "stderr:"..stderr)
+  local yabai_task = hs.task.new("/opt/homebrew/bin/yabai", nil, function(task, stdout, stderr)
     if stdout ~= nil then yabai_output = yabai_output..stdout end
     if stderr ~= nil then yabai_error = yabai_error..stderr end
     return true
@@ -165,13 +166,18 @@ window_action_warp = windowAction.new(super, hs.keycodes.map["n"], "warp", image
 window_action_stack = windowAction.new(super, hs.keycodes.map["s"], "stack", images.stack)
 
 function closeModals()
-  insert_window_modal:exit()
-  resize_window_modal:exit()
-  stack_navigate_prev.modal:exit()
-  stack_navigate_next.modal:exit()
-  window_action_swap.modal:exit()
-  window_action_warp.modal:exit()
-  window_action_stack.modal:exit()
+  if insert_window_modal ~= nil then insert_window_modal:exit() end
+  if resize_window_modal ~= nil then resize_window_modal:exit() end
+  if stack_navigate_prev ~= nil then stack_navigate_prev.modal:exit() end
+  if stack_navigate_next ~= nil then stack_navigate_next.modal:exit() end
+  if window_action_swap ~= nil then window_action_swap.modal:exit() end
+  if window_action_warp ~= nil then window_action_warp.modal:exit() end
+  if window_action_stack ~= nil then window_action_stack.modal:exit() end
+end
+
+function redrawModals()
+  if stack_navigate_next ~= nil then stack_navigate_next:updateCanvas() end
+  if stack_navigate_prev ~= nil then stack_navigate_prev:updateCanvas() end
 end
 
 --# insert window rule
@@ -209,12 +215,10 @@ resize_window_modal:bind(super, hs.keycodes.map["h"], function()
   end
   if resize_window.horizontalEdge == 1 then
     -- shrink from right
-    print("shrink from right")
-    yabai({"-m", "window", "--resize", "right:-"..resize_window.size..":0"}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "right:-"..resize_window.size..":0"}, function(out, err) return true end)
   else
     -- grow from left
-    print("grow from left")
-    yabai({"-m", "window", "--resize", "left:-"..resize_window.size..":0"}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "left:-"..resize_window.size..":0"}, function(out, err) return true end)
   end
 end)
 resize_window_modal:bind(super, hs.keycodes.map["j"], function()
@@ -223,12 +227,10 @@ resize_window_modal:bind(super, hs.keycodes.map["j"], function()
   end
   if resize_window.verticalEdge == 1 then
     -- grow from bottom
-    print("grow from bottom")
-    yabai({"-m", "window", "--resize", "bottom:0:"..resize_window.size}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "bottom:0:"..resize_window.size}, function(out, err) return true end)
   else
-    -- shrink from top¬
-    print("shrink from top")
-    yabai({"-m", "window", "--resize", "top:0:"..resize_window.size}, function(out, err) print(out, err) end)
+    -- shrink from top
+    yabai({"-m", "window", "--resize", "top:0:"..resize_window.size}, function(out, err) return true end)
   end
 end)
 resize_window_modal:bind(super, hs.keycodes.map["k"], function()
@@ -237,12 +239,10 @@ resize_window_modal:bind(super, hs.keycodes.map["k"], function()
   end
   if resize_window.verticalEdge == 1 then
     -- shrink from bottom
-    print("shrink from bottom")
-    yabai({"-m", "window", "--resize", "bottom:0:-"..resize_window.size}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "bottom:0:-"..resize_window.size}, function(out, err) return true end)
   else
     -- grow from top
-    print("grow from top")
-    yabai({"-m", "window", "--resize", "top:0:-"..resize_window.size}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "top:0:-"..resize_window.size}, function(out, err) return true end)
   end
 end)
 resize_window_modal:bind(super, hs.keycodes.map["l"], function()
@@ -251,148 +251,28 @@ resize_window_modal:bind(super, hs.keycodes.map["l"], function()
   end
   if resize_window.horizontalEdge == 1 then
     -- grow from right
-    print("grow from right")
-    yabai({"-m", "window", "--resize", "right:"..resize_window.size..":0"}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "right:"..resize_window.size..":0"}, function(out, err) return true end)
   else
     -- shrink from left
-    print("shrink from left")
-    yabai({"-m", "window", "--resize", "left:"..resize_window.size..":0"}, function(out, err) print(out, err) end)
+    yabai({"-m", "window", "--resize", "left:"..resize_window.size..":0"}, function(out, err) return true end)
   end
 end)
 resize_window_modal:bind("", hs.keycodes.map["escape"], function() resize_window_modal:exit() end)  --["escape"]
-
-
---# debug
-hs.hotkey.bind(super, hs.keycodes.map["§"], function() yabai({"-m", "query", "--windows", "--window"}, function(out) print(out) end) toast("🐞") end)  --["§"]
-
-
---# window focus listener
-currentFocus = nil
-function onWindowFocusChanged(window_id)
-  getFocusedWindow(function(win)
-    if win ~= nil then
-      if currentFocus == nil or currentFocus.id ~= win.id then
-        currentFocus = win
-        --deleteBorder()
-        --createBorder(win)
-      end
-    else
-      currentFocus = nil
-      --deleteBorder()
-    end
-  end)
-end
-
-
-function onWindowResized(window_id)
-  if currentFocus ~= nil and currentFocus.id == window_id then
-    getWindow(currentFocus.id,
-      function(win)
-        --deleteBorder()
-        --createBorder(win)
-      end
-    )
-  end
-end
-
-
-function onWindowMoved(window_id)
-  if currentFocus ~= nil and currentFocus.id == window_id then
-    getWindow(currentFocus.id,
-      function(win)
-        --deleteBorder()
-        --createBorder(win)
-      end
-    )
-  end 
-end
-
-
-function createBorder(win)
-  if win == nil or canvases.winFocusRect == nil then
-    return 
-  end
-  canvases.winFocusRect:topLeft({ x = win.frame.x - 2, y = win.frame.y - 2 })
-  canvases.winFocusRect:size({ w = win.frame.w + 4, h = win.frame.h + 4 })
-  local borderColor = { red = 0.8, green = 0.8, blue = 0.2 , alpha = 0.6 }
-  local zoomed = win["zoom-fullscreen"] == 1
-  if zoomed then
-    borderColor = { red = 0.8, green = 0.2, blue = 0.2 , alpha = 0.6 }
-  end
-  canvases.winFocusRect:replaceElements({
-    type = "rectangle",
-    action = "stroke",
-    strokeColor = borderColor,
-    strokeWidth = 4,
-    --strokeDashPattern = { 60, 40 },
-    roundedRectRadii = { xRadius = windowCornerRadius, yRadius = windowCornerRadius },
-    padding = 2
-  })
-  canvases.winFocusRect:show()
-end
-function deleteBorder(fadeTime)
-  canvases.winFocusRect:hide()
-end
-
-
---# query
-function getFocusedWindow(callback)
-  yabai({"-m", "query", "--windows"},
-    function(out, err)
-      if out == nil or type(out) ~= "string" or string.len(out) == 0 then
-        callback(nil)
-      else
-        out = string.gsub(out, ":inf,", ":0.0,")
-        local json = "{\"windows\":"..out.."}"
-        --print(json)
-        local json_obj = hs.json.decode(json)
-        if json_obj ~= nil then
-          local windows = json_obj.windows
-          for i, win in ipairs(windows) do
-            if win.focused == 1 then
-              callback(win)
-              return
-            end
-          end
-          callback(nil)
-        else
-          getFocusedWindow(callback)
-        end
-      end
-    end
-  )
-end
-
-
-function getWindow(window_id, callback)
-  yabai({"-m", "query", "--windows", "--window", tostring(window_id)},
-    function(out, err)
-      if out == nil or string.len(out) == 0 then
-        callback(nil)
-      else
-        --print("json|"..out.."|len"..string.len(out))
-        print("getwindow")
-        local win = hs.json.decode(out)
-        callback(win)
-      end
-    end
-  )
-end
 
 hs.ipc.cliInstall()
 
 yabaidirectcall = {
   window_focused = function(window_id) -- called when another window from the current app is focused
-    onWindowFocusChanged(window_id)
+    redrawModals()
   end,
   application_activated = function(process_id) -- called when a window from a different app is focused. Doesn’t exclude a window_focused call.
-    onWindowFocusChanged(window_id)
+    redrawModals()
   end,
   window_resized = function(window_id) -- called when a window changes dimensions
-    onWindowResized(window_id)
+    redrawModals()
   end,
   window_moved = function(window_id) -- called when a window is moved
-    onWindowMoved(window_id)
+    redrawModals()
   end,
   space_changed = function(space_id)
     closeModals()
@@ -404,7 +284,3 @@ yabaidirectcall = {
     closeModals()
   end
 }
-
---toast("Hello world", 1)
-
-onWindowFocusChanged(nil) -- show borders of focused window at startup
