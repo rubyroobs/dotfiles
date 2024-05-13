@@ -3,8 +3,8 @@ local colors = require("colors")
 -- Equivalent to the --bar domain
 sbar.bar({
   topmost = "window",
-  height = 40,
-  color = colors.mantle,
-  padding_right = 2,
-  padding_left = 2,
+  height = 36,
+  color = colors.crust,
+  padding_right = 10,
+  padding_left = 10,
 })

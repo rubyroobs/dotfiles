@@ -3,6 +3,9 @@ local icons = require("icons")
 local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 
+-- Probably not needed if using the Apple log again?
+sbar.add("item", { width = 4 })
+
 local spaces = {}
 
 for i = 1, 10, 1 do
@@ -11,40 +14,26 @@ for i = 1, 10, 1 do
     icon = {
       font = { family = settings.font.numbers },
       string = i,
-      padding_left = 15,
-      padding_right = 8,
+      padding_left = 10,
+      padding_right = 4,
       color = colors.text,
-      highlight_color = colors.red,
+      highlight_color = colors.crust,
     },
     label = {
-      padding_right = 20,
-      color = colors.surface2,
-      highlight_color = colors.text,
-      font = "sketchybar-app-font:Regular:16.0",
+      padding_right = 14,
+      color = colors.text,
+      highlight_color = colors.crust,
+      font = "sketchybar-app-font:Regular:13.5",
       y_offset = -1,
     },
     padding_right = 1,
     padding_left = 1,
     background = {
-      color = colors.surface1,
-      border_width = 1,
-      height = 26,
-      border_color = colors.surface0,
+      color = colors.mantle,
     },
-    popup = { background = { border_width = 5, border_color = colors.surface0 } }
   })
 
   spaces[i] = space
-
-  -- Single item bracket for space items to achieve double border on highlight
-  local space_bracket = sbar.add("bracket", { space.name }, {
-    background = {
-      color = colors.transparent,
-      border_color = colors.surface2,
-      height = 28,
-      border_width = 2
-    }
-  })
 
   -- Padding space
   sbar.add("space", "space.padding." .. i, {
@@ -68,14 +57,10 @@ for i = 1, 10, 1 do
 
   space:subscribe("space_change", function(env)
     local selected = env.SELECTED == "true"
-    local color = selected and colors.surface1 or colors.surface2
     space:set({
       icon = { highlight = selected, },
       label = { highlight = selected },
-      background = { border_color = selected and colors.surface0 or colors.surface2 }
-    })
-    space_bracket:set({
-      background = { border_color = selected and colors.surface1 or colors.surface2 }
+      background = { color = selected and colors.red or colors.surface1 }
     })
   end)
 
@@ -99,28 +84,6 @@ local space_window_observer = sbar.add("item", {
   updates = true,
 })
 
-local spaces_indicator = sbar.add("item", {
-  padding_left = -3,
-  padding_right = 0,
-  icon = {
-    padding_left = 8,
-    padding_right = 9,
-    color = colors.surface1,
-    string = icons.switch.on,
-  },
-  label = {
-    width = 0,
-    padding_left = 0,
-    padding_right = 8,
-    string = "Spaces",
-    color = colors.surface1,
-  },
-  background = {
-    color = colors.with_alpha(colors.surface1, 0.0),
-    border_color = colors.with_alpha(colors.surface1, 0.0),
-  }
-})
-
 space_window_observer:subscribe("space_windows_change", function(env)
   local icon_line = ""
   local no_app = true
@@ -132,46 +95,68 @@ space_window_observer:subscribe("space_windows_change", function(env)
   end
 
   if (no_app) then
-    icon_line = " —"
+    icon_line = "—"
   end
   sbar.animate("tanh", 10, function()
     spaces[env.INFO.space]:set({ label = icon_line })
   end)
 end)
 
-spaces_indicator:subscribe("swap_menus_and_spaces", function(env)
-  local currently_on = spaces_indicator:query().icon.value == icons.switch.on
-  spaces_indicator:set({
-    icon = currently_on and icons.switch.off or icons.switch.on
-  })
-end)
+-- local spaces_indicator = sbar.add("item", {
+--   padding_left = -3,
+--   padding_right = 0,
+--   icon = {
+--     padding_left = 8,
+--     padding_right = 9,
+--     color = colors.surface1,
+--     string = icons.switch.on,
+--   },
+--   label = {
+--     width = 0,
+--     padding_left = 0,
+--     padding_right = 8,
+--     string = "Spaces",
+--     color = colors.surface1,
+--   },
+--   background = {
+--     color = colors.with_alpha(colors.surface1, 0.0),
+--     border_color = colors.with_alpha(colors.surface1, 0.0),
+--   }
+-- })
 
-spaces_indicator:subscribe("mouse.entered", function(env)
-  sbar.animate("tanh", 30, function()
-    spaces_indicator:set({
-      background = {
-        color = { alpha = 1.0 },
-        border_color = { alpha = 1.0 },
-      },
-      icon = { color = colors.surface1 },
-      label = { width = "dynamic" }
-    })
-  end)
-end)
+-- spaces_indicator:subscribe("swap_menus_and_spaces", function(env)
+--   local currently_on = spaces_indicator:query().icon.value == icons.switch.on
+--   spaces_indicator:set({
+--     icon = currently_on and icons.switch.off or icons.switch.on
+--   })
+-- end)
 
-spaces_indicator:subscribe("mouse.exited", function(env)
-  sbar.animate("tanh", 30, function()
-    spaces_indicator:set({
-      background = {
-        color = { alpha = 0.0 },
-        border_color = { alpha = 0.0 },
-      },
-      icon = { color = colors.surface1 },
-      label = { width = 0, }
-    })
-  end)
-end)
+-- spaces_indicator:subscribe("mouse.entered", function(env)
+--   sbar.animate("tanh", 30, function()
+--     spaces_indicator:set({
+--       background = {
+--         color = { alpha = 1.0 },
+--         border_color = { alpha = 1.0 },
+--       },
+--       icon = { color = colors.surface1 },
+--       label = { width = "dynamic" }
+--     })
+--   end)
+-- end)
 
-spaces_indicator:subscribe("mouse.clicked", function(env)
-  sbar.trigger("swap_menus_and_spaces")
-end)
+-- spaces_indicator:subscribe("mouse.exited", function(env)
+--   sbar.animate("tanh", 30, function()
+--     spaces_indicator:set({
+--       background = {
+--         color = { alpha = 0.0 },
+--         border_color = { alpha = 0.0 },
+--       },
+--       icon = { color = colors.surface1 },
+--       label = { width = 0, }
+--     })
+--   end)
+-- end)
+
+-- spaces_indicator:subscribe("mouse.clicked", function(env)
+--   sbar.trigger("swap_menus_and_spaces")
+-- end)

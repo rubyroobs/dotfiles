@@ -8,7 +8,7 @@ sbar.default({
     font = {
       family = settings.font.text,
       style = settings.font.style_map["Bold"],
-      size = 14.0
+      size = 13.0
     },
     color = colors.text,
     padding_left = settings.paddings,
@@ -19,28 +19,24 @@ sbar.default({
     font = {
       family = settings.font.text,
       style = settings.font.style_map["Semibold"],
-      size = 13.0
+      size = 12.0
     },
     color = colors.text,
     padding_left = settings.paddings,
     padding_right = settings.paddings,
   },
   background = {
-    height = 28,
-    corner_radius = 9,
-    border_width = 2,
-    border_color = colors.surface2,
+    height = 24,
+    corner_radius = 10,
     image = {
-      corner_radius = 9,
-      border_color = colors.surface1,
-      border_width = 1
+      corner_radius = 6,
     }
   },
   popup = {
     background = {
       border_width = 2,
       corner_radius = 9,
-      border_color = colors.base,
+      border_color = colors.surface1,
       color = colors.crust,
       shadow = { drawing = true },
     },
