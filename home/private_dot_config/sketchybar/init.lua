@@ -1,5 +1,4 @@
 -- Require the sketchybar module
-package.cpath = package.cpath .. ";/Users/" .. os.getenv("USER") .. "/.local/share/sketchybar_lua/?.so"
 sbar = require("sketchybar")
 
 -- Set the bar name, if you are using another bar instance than sketchybar
