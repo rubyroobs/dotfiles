@@ -1,7 +1,8 @@
 {{ if (eq .chezmoi.os "darwin") -}}
 #!/bin/zsh
 
-hs -c "hs.reload()"
+# hs -c "hs.reload()"
+skhd --reload
 sketchybar --reload
 
 {{ end -}}
