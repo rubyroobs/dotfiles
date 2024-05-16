@@ -1,5 +1,4 @@
 {{ if and (eq .chezmoi.os "darwin") (env "NO_BREW_UPDATE" | not) -}}
-
 #!/bin/bash
 
 set -eufo pipefail
@@ -28,6 +27,7 @@ set -eufo pipefail
      "koekeishiya/formulae/skhd"
      "koekeishiya/formulae/yabai"
      "libsodium"
+     "luarocks"
      "marked"
      "neofetch"
      "neovim"
@@ -35,6 +35,7 @@ set -eufo pipefail
      "openjdk"
      "openssh"
      "pinentry-mac"
+     "pipx"
      "python"
      "rclone"
      "ripgrep"
@@ -53,9 +54,10 @@ set -eufo pipefail
      "homebrew/cask-fonts/font-sf-mono"
      "homebrew/cask-fonts/font-sf-pro"
      "kitty"
+     "neovide"
      "sf-symbols" -}}
 
-brew bundle --verbose --no-lock --file=/dev/stdin <<EOF || true
+brew bundle install --verbose --no-lock --file=/dev/stdin <<EOF || true
 {{ range ($brews | sortAlpha | uniq) -}}
 brew "{{ . }}"
 {{ end -}}
@@ -64,6 +66,7 @@ cask "{{ . }}"
 {{ end -}}
 EOF
 {{ end -}}
+brew upgrade
 
 {{- if and (eq .chezmoi.os "darwin") (not (stat (joinPath .chezmoi.homeDir ".local" "share" "sketchybar_lua" "sketchybar.so"))) -}}
 (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)

@@ -1,0 +1,8 @@
+{{- if (not (stat (joinPath .chezmoi.homeDir ".cargo" "bin" "rustup")))  -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+{{ end -}}
+
