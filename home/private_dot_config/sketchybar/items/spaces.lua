@@ -1,7 +1,7 @@
 local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
-local app_icons = require("helpers.app_icons")
+local icon_map = require("helpers.icon_map")
 
 -- Probably not needed if using the Apple log again?
 sbar.add("item", { width = 4 })
@@ -89,8 +89,8 @@ space_window_observer:subscribe("space_windows_change", function(env)
   local no_app = true
   for app, count in pairs(env.INFO.apps) do
     no_app = false
-    local lookup = app_icons[app]
-    local icon = ((lookup == nil) and app_icons["default"] or lookup)
+    local lookup = icon_map[app]
+    local icon = ((lookup == nil) and icon_map["default"] or lookup)
     icon_line = icon_line .. " " .. icon
   end
 
