@@ -68,6 +68,6 @@ EOF
 {{ end -}}
 brew upgrade
 
-{{- if and (eq .chezmoi.os "darwin") (not (stat (joinPath .chezmoi.homeDir ".local" "share" "sketchybar_lua" "sketchybar.so"))) -}}
-(git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
-{{- end -}}
+{{if and (eq .chezmoi.os "darwin") (not (stat (joinPath .chezmoi.homeDir ".local" "share" "sketchybar_lua" "sketchybar.so"))) -}}
+git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/
+{{end -}}
