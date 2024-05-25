@@ -2,6 +2,10 @@
     type = "git-repo"
     url = "https://github.com/asdf-vm/asdf.git"
     refreshPeriod = "168h"
+[".antidote"]
+    type = "git-repo"
+    url = "https://github.com/mattmc3/antidote.git"
+    refreshPeriod = "168h"
 {{- if and (not .ephemeral) (not .headless) }}
 {{-   $fontDir := "" }}
 {{-   if eq .chezmoi.os "darwin" }}
@@ -11,6 +15,10 @@
 {{-   end }}
 ["{{ $fontDir }}/sketchybar-app-font.ttf"]
     type = "file"
-    url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v2.0.5/sketchybar-app-font.ttf"
+    url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf"
+    refreshPeriod = "168h"
+[".config/sketchybar/helpers/icon_map.lua"]
+    type = "file"
+    url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/icon_map.lua"
     refreshPeriod = "168h"
 {{- end -}}

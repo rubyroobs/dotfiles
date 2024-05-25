@@ -45,6 +45,7 @@ yabai -m rule --add app="^Fantastical$" space=org
 yabai -m rule --add app="^Superhuman$" space=org
 yabai -m rule --add app="^Todoist$" space=org
 yabai -m rule --add app="^Google Chrome$" opacity=1.0
+yabai -m rule --add app="^zoom.us$" opacity=1.0
 
 # Signals
 # yabai -m signal --add event=window_focused action="hs -c \"return yabaidirectcall.window_focused(\`printenv YABAI_WINDOW_ID\`)\""
