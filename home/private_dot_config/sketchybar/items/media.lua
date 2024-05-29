@@ -1,7 +1,8 @@
 local icons = require("icons")
 local colors = require("colors")
 
-local whitelist = { ["Spotify"] = true,
+local allowlist = { ["Sonos"] = true,
+                    ["Spotify"] = true,
                     ["Music"] = true    };
 
 local media_cover = sbar.add("item", {
@@ -84,7 +85,7 @@ local function animate_detail(detail)
 end
 
 media_cover:subscribe("media_change", function(env)
-  if whitelist[env.INFO.app] then
+  if allowlist[env.INFO.app] then
     local drawing = (env.INFO.state == "playing")
     media_artist:set({ drawing = drawing, label = env.INFO.artist, })
     media_title:set({ drawing = drawing, label = env.INFO.title, })
