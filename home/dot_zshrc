@@ -33,6 +33,8 @@ bindkey '^[OB' history-substring-search-down
 bindkey "^R" history-incremental-search-backward
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
-source <(fzf --zsh)
+function zvm_after_init() {
+  source <(fzf --zsh)
+}
 
 eval "$(starship init zsh)"
