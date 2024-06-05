@@ -20,6 +20,9 @@ __git_files () {
     _wanted files expl 'local files' _files  
 }
 
+autoload -Uz compinit
+compinit
+
 source ~/.antidote/antidote.zsh
 antidote load
 
