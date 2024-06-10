@@ -1,4 +1,4 @@
-{{- if (not (stat (joinPath .chezmoi.homeDir ".cargo" "bin" "rustup")))  -}}
+{{- if and (eq .chezmoi.os "darwin") (not (stat (joinPath .chezmoi.homeDir ".cargo" "bin" "rustup")))  -}}
 #!/bin/bash
 
 set -eufo pipefail

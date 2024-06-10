@@ -1,5 +1,5 @@
 {{/* boolean feature tags */}}
-{{- $gitlab := false -}}{{/* true if this machine is gitlab, false if personal */}}
+{{- $corp := false -}}{{/* true if this machine is corp/work, false if personal */}}
 {{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $headless := false -}}{{/* true if this machine does not have a screen and keyboard */}}
 {{- "" -}}
@@ -34,20 +34,20 @@
 
 {{- if not $ephemeral -}}
 {{-   if eq $hostname "tanuki" -}}
-{{-     $gitlab = true -}}
+{{-     $corp = true -}}
 {{-   else if stdinIsATTY -}}
-{{-     $gitlab = promptBoolOnce . "gitlab" "gitlab" -}}
+{{-     $corp = promptBoolOnce . "corp" "corp" -}}
 {{-     $headless = promptBoolOnce . "headless" "headless" -}}
 {{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" -}}
 {{-   else -}}
-{{-     $gitlab = false -}}
+{{-     $corp = false -}}
 {{-     $ephemeral = true -}}
 {{-     $headless = true -}}
 {{-   end -}}
 {{- end -}}
 
 [data]
-    gitlab = {{ $gitlab }}
+    corp = {{ $corp }}
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
     hostname = {{ $hostname | quote }}

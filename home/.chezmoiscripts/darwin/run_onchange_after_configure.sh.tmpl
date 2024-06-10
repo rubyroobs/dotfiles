@@ -18,6 +18,7 @@ defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
+{{- if .corp }}
 if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
   echo '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -43,6 +44,7 @@ if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
   sudo chown root:wheel /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
   sudo launchctl load /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
 fi
+{{- end }}
 
 for dockItemLabel in \
 	Safari \

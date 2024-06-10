@@ -11,10 +11,15 @@ setopt print_eight_bit
 MAGIC_ENTER_GIT_COMMAND='git status -u .'
 MAGIC_ENTER_OTHER_COMMAND='ll'
 
-alias vimdiff='nvim -d'
-alias vi='nvim'
-alias vim='nvim'
+if command -v nvim &> /dev/null; then
+  alias vimdiff='nvim -d'
+  alias vi='nvim'
+  alias vim='nvim'
+fi
+
+{{ if eq .chezmoi.os "darwin" -}}
 alias neovide='open --new -b com.neovide.neovide --args ${PWD}'
+{{ end -}}
 
 __git_files () {
     _wanted files expl 'local files' _files  
@@ -34,7 +39,11 @@ bindkey "^R" history-incremental-search-backward
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
 function zvm_after_init() {
-  source <(fzf --zsh)
+  if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+  fi
 }
 
-eval "$(starship init zsh)"
+if command -v starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
