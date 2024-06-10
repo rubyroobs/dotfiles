@@ -33,8 +33,8 @@
     # os_icon               # os identifier
     context                 # user@hostname
     dir                     # current directory
-    # vcs                   # git status
-    # prompt_char           # prompt symbol
+    vcs_joined              # git status
+    prompt_char             # prompt symbol
   )
 
   # The list of segments shown on the right. Fill it with less important segments.
@@ -42,8 +42,7 @@
   # automatically hidden when the input line reaches it. Right prompt above the
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-    status                  # exit code of the last command
-    vcs                     # git status
+    # status                # exit code of the last command
     command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
@@ -93,7 +92,7 @@
     midnight_commander      # midnight commander shell (https://midnight-commander.org/)
     nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
     chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
-    vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
+    # vi_mode               # vi mode (you don't need this if you've enabled prompt_char)
     # vpn_ip                # virtual private network indicator
     # load                  # CPU load
     # disk_usage            # disk usage
@@ -163,7 +162,7 @@
   fi
 
   # Separator between same-color segments on the left.
-  typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR='|'
+  typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=''
   # Separator between same-color segments on the right.
   typeset -g POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR='|'
   # Separator between different-color segments on the left.
@@ -195,9 +194,9 @@
   # Transparent background.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=
   # Green prompt symbol if the last command succeeded.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=76
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND="#a6d189"
   # Red prompt symbol if the last command failed.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=196
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND="#e78284"
   # Default prompt symbol.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='>'
   # Prompt symbol in command vi mode.
@@ -212,25 +211,26 @@
   # No line introducer if prompt_char is the first segment.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
   # No surrounding whitespace.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_{LEFT,RIGHT}_WHITESPACE=
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_LEFT_WHITESPACE=
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_RIGHT_WHITESPACE=
 
   ##################################[ dir: current directory ]##################################
   # Current directory background color.
-  typeset -g POWERLEVEL9K_DIR_BACKGROUND="#414559"
+  typeset -g POWERLEVEL9K_DIR_BACKGROUND="#303446"
   # Default current directory foreground color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND="#949cbb"
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND="#babbf1"
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   # Replace removed segment suffixes with this symbol.
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   # Color of the shortened directory segments.
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND="#949cbb"
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND="#babbf1"
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND="#949cbb"
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND="#babbf1"
   # Display anchor directory segments in bold.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=false
   # Don't shorten directories that contain any of these files. They are anchors.
   local anchor_files=(
     .bzr
@@ -355,11 +355,11 @@
 
   #####################################[ vcs: git status ]######################################
   # Version control background colors.
-  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND="#e5c890"
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="#ef9f76"
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND="#e5c890"
-  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND="#ef9f76"
-  typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND="#414559"
+  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND="#303446"
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="#303446"
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND="#303446"
+  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND="#303446"
+  typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND="#303446"
 
   # Branch icon. Set this parameter to '\UE0A0 ' for the popular Powerline branch icon.
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON=
@@ -387,10 +387,10 @@
     fi
 
     # Styling for different parts of Git status.
-    local       meta="%F{#414559}"
-    local      clean="%F{#51576d}"
-    local   modified="%F{#51576d}"
-    local  untracked="%F{#51576d}"
+    local       meta="%F{#ea999c}"
+    local      clean="%F{#ea999c}"
+    local   modified="%F{#ef9f76}"
+    local  untracked="%F{#a5adce}"
     local conflicted="%F{#e78284}"
 
     local res
@@ -966,21 +966,21 @@
 
   ##################################[ context: user@hostname ]##################################
   # Context color when running with privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND="#ca9ee6"
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND="#292c3c"
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND="#e78284"
   # Context color in SSH without privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND="#e78284"
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND="#292c3c"
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND="#81c8be"
   # Default context color (no privileges, no SSH).
-  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND="#292c3c"
   typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND="#ca9ee6"
 
   # Context format when running with privileges: user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n'
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n@%m'
   # Context format when in SSH without privileges: user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%n@%m'
   # Default context format (no privileges, no SSH): user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n'
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n@%m'
 
   # Don't show context unless running with privileges or in SSH.
   # Tip: Remove the next line to always show context.
