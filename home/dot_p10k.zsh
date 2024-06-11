@@ -25,6 +25,34 @@
   # restarting zsh. Edit ~/.p10k.zsh and type `source ~/.p10k.zsh`.
   unset -m '(POWERLEVEL9K_*|DEFAULT_USER)~POWERLEVEL9K_GITSTATUS_DIR'
 
+  # Catppuccin Frappe
+ 	local COLOR_ROSEWATER="#f2d5cf"
+	local COLOR_FLAMINGO="#eebebe"
+	local COLOR_PINK="#f4b8e4"
+	local COLOR_MAUVE="#ca9ee6"
+	local COLOR_RED="#e78284"
+	local COLOR_MAROON="#ea999c"
+	local COLOR_PEACH="#ef9f76"
+	local COLOR_YELLOW="#e5c890"
+	local COLOR_GREEN="#a6d189"
+	local COLOR_TEAL="#81c8be"
+	local COLOR_SKY="#99d1db"
+	local COLOR_SAPPHIRE="#85c1dc"
+	local COLOR_BLUE="#8caaee"
+	local COLOR_LAVENDER="#babbf1"
+	local COLOR_TEXT="#c6d0f5"
+	local COLOR_SUBTEXT1="#b5bfe2"
+	local COLOR_SUBTEXT0="#a5adce"
+	local COLOR_OVERLAY2="#949cbb"
+	local COLOR_OVERLAY1="#838ba7"
+	local COLOR_OVERLAY0="#737994"
+	local COLOR_SURFACE2="#626880"
+	local COLOR_SURFACE1="#51576d"
+	local COLOR_SURFACE0="#414559"
+	local COLOR_BASE="#303446"
+	local COLOR_MANTLE="#292c3c"
+	local COLOR_CRUST="#232634"
+
   # Zsh >= 5.1 is required.
   [[ $ZSH_VERSION == (5.<1->*|<6->.*) ]] || return
 
@@ -194,9 +222,9 @@
   # Transparent background.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=
   # Green prompt symbol if the last command succeeded.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND="#a6d189"
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=$COLOR_GREEN
   # Red prompt symbol if the last command failed.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND="#e78284"
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=$COLOR_RED
   # Default prompt symbol.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='>'
   # Prompt symbol in command vi mode.
@@ -216,19 +244,19 @@
 
   ##################################[ dir: current directory ]##################################
   # Current directory background color.
-  typeset -g POWERLEVEL9K_DIR_BACKGROUND="#303446"
+  typeset -g POWERLEVEL9K_DIR_BACKGROUND=$COLOR_BASE
   # Default current directory foreground color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND="#babbf1"
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND=$COLOR_LAVENDER
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   # Replace removed segment suffixes with this symbol.
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   # Color of the shortened directory segments.
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND="#babbf1"
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=$COLOR_LAVENDER
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND="#babbf1"
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=$COLOR_LAVENDER
   # Display anchor directory segments in bold.
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=false
   # Don't shorten directories that contain any of these files. They are anchors.
@@ -355,11 +383,11 @@
 
   #####################################[ vcs: git status ]######################################
   # Version control background colors.
-  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND="#303446"
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="#303446"
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND="#303446"
-  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND="#303446"
-  typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND="#303446"
+  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=$COLOR_BASE
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=$COLOR_BASE
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=$COLOR_BASE
+  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=$COLOR_BASE
+  typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=$COLOR_BASE
 
   # Branch icon. Set this parameter to '\UE0A0 ' for the popular Powerline branch icon.
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON=
@@ -387,11 +415,11 @@
     fi
 
     # Styling for different parts of Git status.
-    local       meta="%F{#ea999c}"
-    local      clean="%F{#ea999c}"
-    local   modified="%F{#ef9f76}"
-    local  untracked="%F{#a5adce}"
-    local conflicted="%F{#e78284}"
+    local       meta="%F{$COLOR_MAROON}"
+    local      clean="%F{$COLOR_MAROON}"
+    local   modified="%F{$COLOR_PEACH}"
+    local  untracked="%F{$COLOR_SUBTEXT0}"
+    local conflicted="%F{$COLOR_RED}"
 
     local res
 
@@ -513,42 +541,42 @@
   # it will signify success by turning green.
   typeset -g POWERLEVEL9K_STATUS_OK=true
   typeset -g POWERLEVEL9K_STATUS_OK_VISUAL_IDENTIFIER_EXPANSION='ok'
-  typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_STATUS_OK_BACKGROUND="#a6d189"
+  typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND=$COLOR_SURFACE0
+  typeset -g POWERLEVEL9K_STATUS_OK_BACKGROUND=$COLOR_GREEN
 
   # Status when some part of a pipe command fails but the overall exit status is zero. It may look
   # like this: 1|0.
   typeset -g POWERLEVEL9K_STATUS_OK_PIPE=true
   typeset -g POWERLEVEL9K_STATUS_OK_PIPE_VISUAL_IDENTIFIER_EXPANSION='ok'
-  typeset -g POWERLEVEL9K_STATUS_OK_PIPE_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_STATUS_OK_PIPE_BACKGROUND="#e5c890"
+  typeset -g POWERLEVEL9K_STATUS_OK_PIPE_FOREGROUND=$COLOR_SURFACE0
+  typeset -g POWERLEVEL9K_STATUS_OK_PIPE_BACKGROUND=$COLOR_YELLOW
 
   # Status when it's just an error code (e.g., '1'). No need to show it if prompt_char is enabled as
   # it will signify error by turning red.
   typeset -g POWERLEVEL9K_STATUS_ERROR=true
   typeset -g POWERLEVEL9K_STATUS_ERROR_VISUAL_IDENTIFIER_EXPANSION='err'
-  typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_STATUS_ERROR_BACKGROUND="#e78284"
+  typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND=$COLOR_SURFACE0
+  typeset -g POWERLEVEL9K_STATUS_ERROR_BACKGROUND=$COLOR_RED
 
   # Status when the last command was terminated by a signal.
   typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL=true
   # Use terse signal names: "INT" instead of "SIGINT(2)".
   typeset -g POWERLEVEL9K_STATUS_VERBOSE_SIGNAME=false
   typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_VISUAL_IDENTIFIER_EXPANSION=
-  typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_BACKGROUND="#e78284"
+  typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_FOREGROUND=$COLOR_SURFACE0
+  typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_BACKGROUND=$COLOR_RED
 
   # Status when some part of a pipe command fails and the overall exit status is also non-zero.
   # It may look like this: 1|0.
   typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE=true
   typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_VISUAL_IDENTIFIER_EXPANSION='err'
-  typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_BACKGROUND="#e78284"
+  typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_FOREGROUND=$COLOR_SURFACE0
+  typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_BACKGROUND=$COLOR_RED
 
   ###################[ command_execution_time: duration of the last command ]###################
   # Execution time color.
-  typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="#414559"
-  typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="#babbf1"
+  typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=$COLOR_SURFACE0
+  typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=$COLOR_LAVENDER
   # Show duration of the last command if takes at least this many seconds.
   typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=1
   # Show this many fractional digits. Zero means round to seconds.
@@ -580,7 +608,7 @@
   # Default asdf color. Only used to display tools for which there is no color override (see below).
   # Tip:  Override these parameters for ${TOOL} with POWERLEVEL9K_ASDF_${TOOL}_FOREGROUND and
   # POWERLEVEL9K_ASDF_${TOOL}_BACKGROUND.
-  typeset -g POWERLEVEL9K_ASDF_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_BACKGROUND=7
 
   # There are four parameters that can be used to hide asdf tools. Each parameter describes
@@ -639,49 +667,49 @@
   typeset -g POWERLEVEL9K_ASDF_SHOW_ON_UPGLOB=
 
   # Ruby version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_RUBY_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_RUBY_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_RUBY_BACKGROUND=1
   # typeset -g POWERLEVEL9K_ASDF_RUBY_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_RUBY_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Python version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_PYTHON_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_PYTHON_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_PYTHON_BACKGROUND=4
   # typeset -g POWERLEVEL9K_ASDF_PYTHON_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_PYTHON_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Go version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_GOLANG_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_GOLANG_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_GOLANG_BACKGROUND=4
   # typeset -g POWERLEVEL9K_ASDF_GOLANG_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_GOLANG_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Node.js version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_NODEJS_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_NODEJS_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_NODEJS_BACKGROUND=2
   # typeset -g POWERLEVEL9K_ASDF_NODEJS_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_NODEJS_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Rust version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_RUST_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_RUST_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_RUST_BACKGROUND=208
   # typeset -g POWERLEVEL9K_ASDF_RUST_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_RUST_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # .NET Core version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_DOTNET_CORE_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_DOTNET_CORE_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_DOTNET_CORE_BACKGROUND=5
   # typeset -g POWERLEVEL9K_ASDF_DOTNET_CORE_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_DOTNET_CORE_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Flutter version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_FLUTTER_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_FLUTTER_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_FLUTTER_BACKGROUND=4
   # typeset -g POWERLEVEL9K_ASDF_FLUTTER_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_FLUTTER_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Lua version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_LUA_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_LUA_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_LUA_BACKGROUND=4
   # typeset -g POWERLEVEL9K_ASDF_LUA_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_LUA_SHOW_ON_UPGLOB='*.foo|*.bar'
@@ -693,43 +721,43 @@
   # typeset -g POWERLEVEL9K_ASDF_JAVA_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Perl version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_PERL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_PERL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_PERL_BACKGROUND=4
   # typeset -g POWERLEVEL9K_ASDF_PERL_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_PERL_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Erlang version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_ERLANG_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_ERLANG_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_ERLANG_BACKGROUND=1
   # typeset -g POWERLEVEL9K_ASDF_ERLANG_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_ERLANG_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Elixir version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_ELIXIR_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_ELIXIR_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_ELIXIR_BACKGROUND=5
   # typeset -g POWERLEVEL9K_ASDF_ELIXIR_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_ELIXIR_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Postgres version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_POSTGRES_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_POSTGRES_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_POSTGRES_BACKGROUND=6
   # typeset -g POWERLEVEL9K_ASDF_POSTGRES_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_POSTGRES_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # PHP version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_PHP_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_PHP_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_PHP_BACKGROUND=5
   # typeset -g POWERLEVEL9K_ASDF_PHP_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_PHP_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Haskell version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_HASKELL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_HASKELL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_HASKELL_BACKGROUND=3
   # typeset -g POWERLEVEL9K_ASDF_HASKELL_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_HASKELL_SHOW_ON_UPGLOB='*.foo|*.bar'
 
   # Julia version from asdf.
-  typeset -g POWERLEVEL9K_ASDF_JULIA_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ASDF_JULIA_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ASDF_JULIA_BACKGROUND=2
   # typeset -g POWERLEVEL9K_ASDF_JULIA_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # typeset -g POWERLEVEL9K_ASDF_JULIA_SHOW_ON_UPGLOB='*.foo|*.bar'
@@ -760,28 +788,28 @@
   
   ######################[ nnn: nnn shell (https://github.com/jarun/nnn) ]#######################
   # Nnn shell color.
-  typeset -g POWERLEVEL9K_NNN_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_NNN_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_NNN_BACKGROUND=6
   # Custom icon.
   # typeset -g POWERLEVEL9K_NNN_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ######################[ lf: lf shell (https://github.com/gokcehan/lf) ]#######################
   # lf shell color.
-  typeset -g POWERLEVEL9K_LF_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_LF_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_LF_BACKGROUND=6
   # Custom icon.
   # typeset -g POWERLEVEL9K_LF_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ##################[ xplr: xplr shell (https://github.com/sayanarijit/xplr) ]##################
   # xplr shell color.
-  typeset -g POWERLEVEL9K_XPLR_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_XPLR_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_XPLR_BACKGROUND=6
   # Custom icon.
   # typeset -g POWERLEVEL9K_XPLR_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ###########################[ vim_shell: vim shell indicator (:sh) ]###########################
   # Vim shell indicator color.
-  typeset -g POWERLEVEL9K_VIM_SHELL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_VIM_SHELL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_VIM_SHELL_BACKGROUND=2
   # Custom icon.
   # typeset -g POWERLEVEL9K_VIM_SHELL_VISUAL_IDENTIFIER_EXPANSION='⭐'
@@ -795,7 +823,7 @@
 
   #[ nix_shell: nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html) ]##
   # Nix shell color.
-  typeset -g POWERLEVEL9K_NIX_SHELL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_NIX_SHELL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_NIX_SHELL_BACKGROUND=4
 
   # Display the icon of nix_shell if PATH contains a subdirectory of /nix/store.
@@ -809,7 +837,7 @@
 
   ##################[ chezmoi_shell: chezmoi shell (https://www.chezmoi.io/) ]##################
   # chezmoi shell color.
-  typeset -g POWERLEVEL9K_CHEZMOI_SHELL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_CHEZMOI_SHELL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_CHEZMOI_SHELL_BACKGROUND=4
   # Custom icon.
   # typeset -g POWERLEVEL9K_CHEZMOI_SHELL_VISUAL_IDENTIFIER_EXPANSION='⭐'
@@ -818,7 +846,7 @@
   # Colors for different levels of disk usage.
   typeset -g POWERLEVEL9K_DISK_USAGE_NORMAL_FOREGROUND=3
   typeset -g POWERLEVEL9K_DISK_USAGE_NORMAL_BACKGROUND=0
-  typeset -g POWERLEVEL9K_DISK_USAGE_WARNING_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_DISK_USAGE_WARNING_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_DISK_USAGE_WARNING_BACKGROUND=3
   typeset -g POWERLEVEL9K_DISK_USAGE_CRITICAL_FOREGROUND=7
   typeset -g POWERLEVEL9K_DISK_USAGE_CRITICAL_BACKGROUND=1
@@ -832,16 +860,16 @@
 
   ###########[ vi_mode: vi mode (you don't need this if you've enabled prompt_char) ]###########
   # Foreground color.
-  typeset -g POWERLEVEL9K_VI_MODE_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_VI_MODE_FOREGROUND=$COLOR_SURFACE0
   # Text and color for normal (a.k.a. command) vi mode.
   typeset -g POWERLEVEL9K_VI_COMMAND_MODE_STRING=NORMAL
-  typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND="#8caaee"
+  typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND=$COLOR_BLUE
   # Text and color for visual vi mode.
   typeset -g POWERLEVEL9K_VI_VISUAL_MODE_STRING=VISUAL
-  typeset -g POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND="#ca9ee6"
+  typeset -g POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND=$COLOR_MAUVE
   # Text and color for overtype (a.k.a. overwrite and replace) vi mode.
   typeset -g POWERLEVEL9K_VI_OVERWRITE_MODE_STRING=OVERTYPE
-  typeset -g POWERLEVEL9K_VI_MODE_OVERWRITE_BACKGROUND="#e78284"
+  typeset -g POWERLEVEL9K_VI_MODE_OVERWRITE_BACKGROUND=$COLOR_RED
   # Text and color for insert vi mode.
   typeset -g POWERLEVEL9K_VI_INSERT_MODE_STRING=
   typeset -g POWERLEVEL9K_VI_MODE_INSERT_FOREGROUND=
@@ -850,14 +878,14 @@
 
   ######################################[ ram: free RAM ]#######################################
   # RAM color.
-  typeset -g POWERLEVEL9K_RAM_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_RAM_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_RAM_BACKGROUND=3
   # Custom icon.
   # typeset -g POWERLEVEL9K_RAM_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   #####################################[ swap: used swap ]######################################
   # Swap color.
-  typeset -g POWERLEVEL9K_SWAP_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_SWAP_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_SWAP_BACKGROUND=3
   # Custom icon.
   # typeset -g POWERLEVEL9K_SWAP_VISUAL_IDENTIFIER_EXPANSION='⭐'
@@ -866,20 +894,20 @@
   # Show average CPU load over this many last minutes. Valid values are 1, 5 and 15.
   typeset -g POWERLEVEL9K_LOAD_WHICH=5
   # Load color when load is under 50%.
-  typeset -g POWERLEVEL9K_LOAD_NORMAL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_LOAD_NORMAL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_LOAD_NORMAL_BACKGROUND=2
   # Load color when load is between 50% and 70%.
-  typeset -g POWERLEVEL9K_LOAD_WARNING_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_LOAD_WARNING_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_LOAD_WARNING_BACKGROUND=3
   # Load color when load is over 70%.
-  typeset -g POWERLEVEL9K_LOAD_CRITICAL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_LOAD_CRITICAL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_LOAD_CRITICAL_BACKGROUND=1
   # Custom icon.
   # typeset -g POWERLEVEL9K_LOAD_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ################[ todo: todo items (https://github.com/todotxt/todo.txt-cli) ]################
   # Todo color.
-  typeset -g POWERLEVEL9K_TODO_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_TODO_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_TODO_BACKGROUND=8
   # Hide todo when the total number of tasks is zero.
   typeset -g POWERLEVEL9K_TODO_HIDE_ZERO_TOTAL=true
@@ -918,7 +946,7 @@
 
   ##############[ taskwarrior: taskwarrior task count (https://taskwarrior.org/) ]##############
   # Taskwarrior color.
-  typeset -g POWERLEVEL9K_TASKWARRIOR_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_TASKWARRIOR_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_TASKWARRIOR_BACKGROUND=6
 
   # Taskwarrior segment format. The following parameters are available within the expansion.
@@ -939,9 +967,9 @@
 
   ######[ per_directory_history: Oh My Zsh per-directory-history local/global indicator ]#######
   # Color when using local/global history.
-  typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_LOCAL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_LOCAL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_LOCAL_BACKGROUND=5
-  typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_GLOBAL_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_GLOBAL_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_GLOBAL_BACKGROUND=3
 
   # Tip: Uncomment the next two lines to hide "local"/"global" text and leave just the icon.
@@ -954,7 +982,7 @@
 
   ################################[ cpu_arch: CPU architecture ]################################
   # CPU architecture color.
-  typeset -g POWERLEVEL9K_CPU_ARCH_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_CPU_ARCH_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_CPU_ARCH_BACKGROUND=3
 
   # Hide the segment when on a specific CPU architecture.
@@ -966,14 +994,14 @@
 
   ##################################[ context: user@hostname ]##################################
   # Context color when running with privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND="#292c3c"
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND="#e78284"
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=$COLOR_MANTLE
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND=$COLOR_RED
   # Context color in SSH without privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND="#292c3c"
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND="#81c8be"
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=$COLOR_MANTLE
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND=$COLOR_TEAL
   # Default context color (no privileges, no SSH).
-  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND="#292c3c"
-  typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND="#ca9ee6"
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=$COLOR_MANTLE
+  typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=$COLOR_MAUVE
 
   # Context format when running with privileges: user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n@%m'
@@ -993,7 +1021,7 @@
 
   ###[ virtualenv: python virtual environment (https://docs.python.org/3/library/venv.html) ]###
   # Python virtual environment color.
-  typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=4
   # Don't show Python version next to the virtual environment name.
   typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
@@ -1007,7 +1035,7 @@
 
   #####################[ anaconda: conda environment (https://conda.io/) ]######################
   # Anaconda environment color.
-  typeset -g POWERLEVEL9K_ANACONDA_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_ANACONDA_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_ANACONDA_BACKGROUND=4
 
   # Anaconda segment format. The following parameters are available within the expansion.
@@ -1041,7 +1069,7 @@
 
   ################[ pyenv: python environment (https://github.com/pyenv/pyenv) ]################
   # Pyenv color.
-  typeset -g POWERLEVEL9K_PYENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PYENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PYENV_BACKGROUND=4
   # Hide python version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_PYENV_SOURCES=(shell local global)
@@ -1068,7 +1096,7 @@
 
   ################[ goenv: go environment (https://github.com/syndbg/goenv) ]################
   # Goenv color.
-  typeset -g POWERLEVEL9K_GOENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_GOENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_GOENV_BACKGROUND=4
   # Hide go version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_GOENV_SOURCES=(shell local global)
@@ -1096,7 +1124,7 @@
 
   ##############[ nvm: node.js version from nvm (https://github.com/nvm-sh/nvm) ]###############
   # Nvm color.
-  typeset -g POWERLEVEL9K_NVM_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_NVM_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_NVM_BACKGROUND=5
   # If set to false, hide node version if it's the same as default:
   # $(nvm version current) == $(nvm version default).
@@ -1137,7 +1165,7 @@
 
   #################[ rust_version: rustc version (https://www.rust-lang.org) ]##################
   # Rust version color.
-  typeset -g POWERLEVEL9K_RUST_VERSION_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_RUST_VERSION_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_RUST_VERSION_BACKGROUND=208
   # Show rust version only when in a rust project subdirectory.
   typeset -g POWERLEVEL9K_RUST_VERSION_PROJECT_ONLY=true
@@ -1155,7 +1183,7 @@
 
   #####################[ php_version: php version (https://www.php.net/) ]######################
   # PHP version color.
-  typeset -g POWERLEVEL9K_PHP_VERSION_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PHP_VERSION_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PHP_VERSION_BACKGROUND=5
   # Show PHP version only when in a PHP project subdirectory.
   typeset -g POWERLEVEL9K_PHP_VERSION_PROJECT_ONLY=true
@@ -1171,7 +1199,7 @@
 
   #############[ rbenv: ruby version from rbenv (https://github.com/rbenv/rbenv) ]##############
   # Rbenv color.
-  typeset -g POWERLEVEL9K_RBENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_RBENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_RBENV_BACKGROUND=1
   # Hide ruby version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_RBENV_SOURCES=(shell local global)
@@ -1196,7 +1224,7 @@
 
   ###[ package: name@version from package.json (https://docs.npmjs.com/files/package.json) ]####
   # Package color.
-  typeset -g POWERLEVEL9K_PACKAGE_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PACKAGE_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PACKAGE_BACKGROUND=6
 
   # Package format. The following parameters are available within the expansion.
@@ -1211,7 +1239,7 @@
 
   #######################[ rvm: ruby version from rvm (https://rvm.io) ]########################
   # Rvm color.
-  typeset -g POWERLEVEL9K_RVM_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_RVM_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_RVM_BACKGROUND=240
   # Don't show @gemset at the end.
   typeset -g POWERLEVEL9K_RVM_SHOW_GEMSET=false
@@ -1222,14 +1250,14 @@
 
   ###########[ fvm: flutter version management (https://github.com/leoafarias/fvm) ]############
   # Fvm color.
-  typeset -g POWERLEVEL9K_FVM_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_FVM_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_FVM_BACKGROUND=4
   # Custom icon.
   # typeset -g POWERLEVEL9K_FVM_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ##########[ luaenv: lua version from luaenv (https://github.com/cehoffman/luaenv) ]###########
   # Lua color.
-  typeset -g POWERLEVEL9K_LUAENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_LUAENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_LUAENV_BACKGROUND=4
   # Hide lua version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_LUAENV_SOURCES=(shell local global)
@@ -1257,7 +1285,7 @@
 
   ###########[ plenv: perl version from plenv (https://github.com/tokuhirom/plenv) ]############
   # Perl color.
-  typeset -g POWERLEVEL9K_PLENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PLENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PLENV_BACKGROUND=4
   # Hide perl version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_PLENV_SOURCES=(shell local global)
@@ -1281,7 +1309,7 @@
 
   ############[ phpenv: php version from phpenv (https://github.com/phpenv/phpenv) ]############
   # PHP color.
-  typeset -g POWERLEVEL9K_PHPENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_PHPENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_PHPENV_BACKGROUND=5
   # Hide php version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_PHPENV_SOURCES=(shell local global)
@@ -1295,7 +1323,7 @@
 
   #######[ scalaenv: scala version from scalaenv (https://github.com/scalaenv/scalaenv) ]#######
   # Scala color.
-  typeset -g POWERLEVEL9K_SCALAENV_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_SCALAENV_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_SCALAENV_BACKGROUND=1
   # Hide scala version if it doesn't come from one of these sources.
   typeset -g POWERLEVEL9K_SCALAENV_SOURCES=(shell local global)
@@ -1309,7 +1337,7 @@
 
   ##########[ haskell_stack: haskell version from stack (https://haskellstack.org/) ]###########
   # Haskell color.
-  typeset -g POWERLEVEL9K_HASKELL_STACK_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_HASKELL_STACK_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_HASKELL_STACK_BACKGROUND=3
 
   # Hide haskell version if it doesn't come from one of these sources.
@@ -1396,7 +1424,7 @@
   #
   # You can define different colors, icons and content expansions for different classes:
   #
-  #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_FOREGROUND="#414559"
+  #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_FOREGROUND=$COLOR_SURFACE0
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_BACKGROUND=2
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_VISUAL_IDENTIFIER_EXPANSION='⭐'
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_CONTENT_EXPANSION='> ${P9K_CONTENT} <'
@@ -1645,7 +1673,7 @@
 
   ##############[ toolbox: toolbox name (https://github.com/containers/toolbox) ]###############
   # Toolbox color.
-  typeset -g POWERLEVEL9K_TOOLBOX_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_TOOLBOX_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_TOOLBOX_BACKGROUND=3
   # Don't display the name of the toolbox if it matches fedora-toolbox-*.
   typeset -g POWERLEVEL9K_TOOLBOX_CONTENT_EXPANSION='${P9K_TOOLBOX_NAME:#fedora-toolbox-*}'
@@ -1663,7 +1691,7 @@
 
   ########################[ vpn_ip: virtual private network indicator ]#########################
   # VPN IP color.
-  typeset -g POWERLEVEL9K_VPN_IP_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_VPN_IP_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_VPN_IP_BACKGROUND=6
   # When on VPN, show just an icon without the IP address.
   # Tip: To display the private IP address when on VPN, remove the next line.
@@ -1681,7 +1709,7 @@
   ###########[ ip: ip address and bandwidth usage for a specified network interface ]###########
   # IP color.
   typeset -g POWERLEVEL9K_IP_BACKGROUND=4
-  typeset -g POWERLEVEL9K_IP_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_IP_FOREGROUND=$COLOR_SURFACE0
   # The following parameters are accessible within the expansion:
   #
   #   Parameter             | Meaning
@@ -1724,7 +1752,7 @@
 
   #####################################[ wifi: wifi speed ]#####################################
   # WiFi color.
-  typeset -g POWERLEVEL9K_WIFI_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_WIFI_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_WIFI_BACKGROUND=4
   # Custom icon.
   # typeset -g POWERLEVEL9K_WIFI_VISUAL_IDENTIFIER_EXPANSION='⭐'
@@ -1751,7 +1779,7 @@
 
   ####################################[ time: current time ]####################################
   # Current time color.
-  typeset -g POWERLEVEL9K_TIME_FOREGROUND="#414559"
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND=$COLOR_SURFACE0
   typeset -g POWERLEVEL9K_TIME_BACKGROUND=7
   # Format for the current time: 09:51:02. See `man 3 strftime`.
   typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
