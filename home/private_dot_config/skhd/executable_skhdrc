@@ -55,7 +55,7 @@ shift + lalt - k : yabai -m window --warp north || $(yabai -m window --display n
 shift + lalt - l : yabai -m window --warp east || $(yabai -m window --display east && yabai -m display --focus east && yabai -m window --warp first) || yabai -m window --move rel:10:0
 
 # Float / Unfloat window: shift + lalt - space
-shift + lalt - space : yabai -m window --toggle float
+shift + lalt - space : yabai -m window --toggle float --grid 6:4:1:1:2:4
 
 # Make window zoom to fullscreen: lalt - f
 lalt - f : yabai -m window --toggle zoom-fullscreen
