@@ -33,23 +33,25 @@ yabai -m config external_bar                   all:36:0       \
 
 # Rules: Management
 yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Preview|Archive Utility|App Store|Steam|Alfred|Activity Monitor)$" manage=off
-yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 yabai -m rule --add label="DataGrip" app="^DataGrip$" title="(Data Sources and Drivers|Settings)" manage=off
-yabai -m rule --add label="LINE" app="^LINE$" title="^$" manage=off
+yabai -m rule --add label="LINE" app="^LINE$" title!="^LINE$" manage=off
+yabai -m rule --add label="KakaoTalk" app="^KakaoTalk$" title!="^KakaoTalk$" manage=off
 yabai -m rule --add app="^Neovide$" manage=on
 
+yabai -m rule --add app="^Finder$" title!="(Co(py|nnect)|Move|Info|Pref)" manage=off grid=6:4:1:1:2:4
+yabai -m rule --add app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add app="^Sublime Text$" manage=off grid=6:4:1:1:2:4
+yabai -m rule --add app="^Finder$" title="" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^Home$" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^1Password$" manage=off grid=6:4:1:1:2:4
+yabai -m rule --add app="^zoom.us$" manage=off grid=6:4:1:1:2:4
+yabai -m rule --add app="^Home Assistant$" manage=off grid=6:4:1:1:2:4
 
 # Rules: Layout
-yabai -m space 1 --label org
-yabai -m rule --add app="^Fantastical$" space=org
-yabai -m rule --add app="^Superhuman$" space=org
-yabai -m rule --add app="^Todoist$" space=org
 yabai -m rule --add app="^Google Chrome$" opacity=1.0
+yabai -m rule --add app="^Firefox$" opacity=1.0
 yabai -m rule --add app="^zoom.us$" opacity=1.0
 
 # Signals
