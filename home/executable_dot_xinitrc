@@ -17,5 +17,5 @@ easyeffects -gapplication-service &
 fcitx &
 sxhkd &
 ~/.config/polybar/launch.sh &
-feh --bg-center $(find ~/.wallpapers -type f | shuf -n 1) &
+feh --bg-center --no-fehbg --randomize ~/.wallpapers/*.png &
 exec bspwm

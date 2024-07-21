@@ -1,0 +1,3 @@
+#!/bin/bash
+
+feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*
