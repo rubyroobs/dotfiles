@@ -23,7 +23,7 @@ After setting up `op` (1Password CLI), get yubikey private keys tubs and generat
 
 ```shell
 for secretFile in \
-    $HOME/.config/gh/private_hosts.yml \
+    $HOME/.config/gh/hosts.yml \
     $HOME/.config/git/credentials ; do
     op_update_secret_from_template $secretFile
 done

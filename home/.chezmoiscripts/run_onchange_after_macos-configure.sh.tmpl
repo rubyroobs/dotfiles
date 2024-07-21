@@ -10,46 +10,22 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 25
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array en ja
 defaults write NSGlobalDomain _HIHideMenuBar -bool true
-defaults write com.apple.dock "autohide" -bool true
-defaults write com.apple.dock show-recents -bool false
-defaults write com.apple.finder CreateDesktop false
-defaults write com.apple.dock "mru-spaces" -bool "false" && killall Dock
-defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-defaults write -g AppleKeyboardUIMode -bool true
+defaults write NSGlobalDomain AppleKeyboardUIMode -bool true
+
+defaults write com.apple.dock "autohide" -bool true
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock "mru-spaces" -bool "false" && killall Dock
+
+defaults write com.apple.finder CreateDesktop false
+
+defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+
+defaults write org.gpgtools.common UseKeychain -bool yes
+defaults write org.gpgtools.common DisableKeychain -bool no
 
 launchctl disable user/$UID/com.openssh.ssh-agent
-if [[ ! -f ~/Library/LaunchAgents/com.rubyroobs.launched.ssh_agent.plist ]]; then
-    echo "Setting up ssh-agent..."
-    echo '<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.rubyroobs.launched.ssh_agent</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>sh</string>
-        <string>-c</string>
-        <string>/opt/homebrew/opt/openssh/bin/ssh-agent -D -a ~/.ssh/agent</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>EnvironmentVariables</key>
-    <dict>
-           <key>SSH_ASKPASS</key>
-           <string>/opt/homebrew/bin/ssh-askpass</string>
-           <key>SUDO_ASKPASS</key>
-           <string>/opt/homebrew/bin/ssh-askpass</string>
-           <key>SSH_ASKPASS_REQUIRE</key>
-           <string>force</string>
-    </dict>
-</dict>
-</plist>
-' | tee ~/Library/LaunchAgents/com.rubyroobs.launched.ssh_agent.plist >/dev/null
-    launchctl load -w ~/Library/LaunchAgents/com.rubyroobs.launched.ssh_agent.plist
-fi
 
 {{- if .corp }}
 if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then

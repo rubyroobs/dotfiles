@@ -7,9 +7,9 @@ export FZF_DEFAULT_OPTS=" \
 --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
 --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
 
-# ssh agent
-if [ -f "$HOME/.ssh/agent" ]; then
-    export SSH_AUTH_SOCK="~/.ssh/agent"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export SSH_ASKPASS=$HOME/ssh-askpass
+    export SSH_ASKPASS_REQUIRE=force
 fi
 
 # asdf

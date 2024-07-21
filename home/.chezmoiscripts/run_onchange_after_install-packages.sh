@@ -61,6 +61,9 @@ if [ ! -d "$FONT_DIR/Noto" ]; then
     curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Noto.tar.xz" | tar xvf - -C $FONT_DIR/Noto
 fi
 
+echo "Rebuilding font cache..."
+fc-cache -f
+
 # macOS application and sketchybar helper bootstrap
 if [[ "$OSTYPE" == "darwin"* ]]; then
     if [ ! -f "/Applications/kitty.app/Contents/MacOS/kitty" ]; then
