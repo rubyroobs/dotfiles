@@ -14,6 +14,9 @@ brew install chezmoi
 # init
 chezmoi init rubyroobs
 
+# GPG
+gpg --edit-card # enter: fetch
+
 # macOS: enable services
 brew services start borders
 brew services start sketchybar
@@ -37,3 +40,10 @@ for yubikeyHandle in \
     op_download_ssh_key $yubikeyHandle
 done
 ```
+
+## Post-installation
+
+### Linux
+
+- [WhiteSur cursors](https://github.com/vinceliuice/WhiteSur-cursors/tree/master) are not automatically installed
+- easyeffects/pulseaudio for x1

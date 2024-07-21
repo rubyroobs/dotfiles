@@ -7,9 +7,10 @@
   format = ssh
 {{- else }}
   email = ruby@ruby.sh
-  signingkey = DC8ACFF3AD1C6D3F007EECE5610C353FE280661B
+  signingkey = 610C353FE280661B!
 [gpg]
-  format = gpg
+  format = openpgp
+  program = gpg
 {{- end }}
 [commit]
   gpgsign = true

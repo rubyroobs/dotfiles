@@ -1,0 +1,21 @@
+xrdb -load ~/.Xresources
+xmodmap ~/.Xmodmap
+xsetroot -cursor_name left_ptr
+
+for f in /etc/X11/xinit/xinitrc.d/?*.sh; do
+    [ -x "$f" ] && . "$f"
+done
+unset f
+
+xset s 600
+xss-lock xlock +resetsaver &
+picom &
+pipewire &
+pipewire-pulse &
+wireplumber &
+easyeffects -gapplication-service &
+fcitx &
+sxhkd &
+~/.config/polybar/launch.sh &
+feh --bg-center $(find ~/.wallpapers -type f | shuf -n 1) &
+exec bspwm

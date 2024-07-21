@@ -1,0 +1,11 @@
+configuration {
+  modi: "window,drun,ssh,combi";
+  font: "Noto Sans Mono 11";
+  combi-modi: "window,drun,ssh";
+  dpi: 192;
+}
+@theme "dmenu"
+
+* {
+  font: "Noto Sans Mono 11";
+}

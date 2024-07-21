@@ -12,3 +12,19 @@
 .config/skhd
 .config/yabai
 {{- end -}}
+
+{{- if and (ne .chezmoi.os "linux") (ne .chezmoi.os "openbsd") -}}
+.config/bspwm
+.config/gtk-3.0
+.config/gtk-4.0
+.config/picom
+.config/polybar
+.config/rofi
+.config/sxhkd
+.fehbg
+.gtkrc
+.gtkrc-2.0
+.Xmodmap
+.Xresources
+.xinitrc
+{{- end -}}

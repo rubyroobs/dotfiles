@@ -1,0 +1,2 @@
+#!/bin/sh
+feh --no-fehbg --bg-center '/home/ruby/.wallpapers/wallhaven-kwj1ed_3840x2400.png'

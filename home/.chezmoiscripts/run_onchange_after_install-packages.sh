@@ -21,44 +21,55 @@ if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
 fi
 
 # fonts
+#
+# force BSD tar
+TAR_BIN=`command -v tar 2>&1`
+if command -v bsdtar > /dev/null 2>&1; then
+    TAR_BIN=`command -v bsdtar 2>&1`
+fi
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
   FONT_DIR="$HOME/Library/Fonts"
 else
-  FONT_DIR="$HOME/.local/share/fonts"
-  mkdir -p $FONT_DIR
+  FONT_DIR="$HOME/.fonts"
+  SYS_FONT_DIR="/usr/share/fonts/"
 fi
 
-if [ ! -f "$FONT_DIR/zpix.ttf" ]; then
-    echo "Installing zpix TTF font..."
-    curl -o $FONT_DIR/zpix.ttf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.ttf
-fi
-
-if [ ! -f "$FONT_DIR/zpix.bdf" ]; then
-    echo "Installing zpix BDF font..."
-    curl -o $FONT_DIR/zpix.bdf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.bdf
+if [ ! -d "$FONT_DIR/zpix" ]; then
+    echo "Installing zpix font..."
+    mkdir -p $FONT_DIR/zpix
+    curl -o $FONT_DIR/zpix/zpix.ttf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.ttf
+    curl -o $FONT_DIR/zpix/zpix.bdf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.bdf
 fi
 
 if [ ! -d "$FONT_DIR/PixelMplus-20130602" ]; then
     echo "Installing PixelMplus font... (this might fail without unzip installed)"
-    curl -sL "https://github.com/itouhiro/PixelMplus/releases/download/v1.0.0/PixelMplus-20130602.zip" | tar xvf - -C $FONT_DIR
+    curl -sL "https://github.com/itouhiro/PixelMplus/releases/download/v1.0.0/PixelMplus-20130602.zip" | $TAR_BIN xvf - -C $FONT_DIR
 fi
 
 if [ ! -d "$FONT_DIR/DejaVuSansMono" ]; then
     echo "Installing DejaVu Sans Mono font..."
     mkdir -p $FONT_DIR/DejaVuSansMono
-    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.tar.xz" | tar xvf - -C $FONT_DIR/DejaVuSansMono
+    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.tar.xz" | $TAR_BIN xvf - -C $FONT_DIR/DejaVuSansMono
 fi
 
 if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
     echo "Installing JetBrains Mono font..."
     mkdir -p $FONT_DIR/JetBrainsMono
-    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" | tar xvf - -C $FONT_DIR/JetBrainsMono
+    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" | $TAR_BIN xvf - -C $FONT_DIR/JetBrainsMono
 fi
 
 if [ ! -d "$FONT_DIR/Noto" ]; then
     echo "Installing Noto font..."
     mkdir -p $FONT_DIR/Noto
-    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Noto.tar.xz" | tar xvf - -C $FONT_DIR/Noto
+    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Noto.tar.xz" | $TAR_BIN xvf - -C $FONT_DIR/Noto
+fi
+
+unamestr=$(uname)
+if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
+    sudo cp -R ~/.fonts/* /usr/share/fonts/
+    sudo mkfontscale /usr/share/fonts/*
+    sudo mkfontdir /usr/share/fonts/*
 fi
 
 echo "Rebuilding font cache..."
