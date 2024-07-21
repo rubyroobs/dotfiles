@@ -1,47 +1,55 @@
 Host *
-    AddKeysToAgent yes
-    IgnoreUnknown UseKeychain
-    UseKeychain yes
-    IdentityFile ~/.ssh/id_ed25519_sk_5CNF_636_joker
+    AddKeysToAgent              yes
+    IgnoreUnknown               UseKeychain
+    UseKeychain                 yes
+    {{- if .corp }}
+    IdentityFile                ~/.ssh/ruby_gitlab_ed25519
+    IdentityFile                ~/.ssh/id_ed25519_sk_5CNF_636_joker
+    {{- end }}
+    IdentityFile                ~/.ssh/id_ed25519
+    IdentityFile                ~/.ssh/id_ed25519_sk_5AN_562_fox
+    IdentityFile                ~/.ssh/id_ed25519_sk_5AT_825_mona
+    IdentityFile                ~/.ssh/id_ed25519_sk_5CN_104_skull
+    IdentityFile                ~/.ssh/id_ed25519_sk_5CTF_544_panther
 
 {{ if .corp }}
 # GCP staging bastion host
 Host lb-bastion.gstg.gitlab.com
-        User                            rnealon
+    User                        rnealon
 
 # gstg boxes
 Host *.gitlab-staging-1.internal
-        ProxyCommand                    ssh lb-bastion.gstg.gitlab.com -W %h:%p
+    ProxyCommand                ssh lb-bastion.gstg.gitlab.com -W %h:%p
 
 # GCP production bastion host
 Host lb-bastion.gprd.gitlab.com
-        User                    rnealon
+    User                        rnealon
 
 # lab bastion host
 Host lb-bastion.db-lab.gitlab.com
-  User                            rnealon
+    User                        rnealon
 
 # lab boxes
 Host *.gitlab-db-lab.internal
-  User                            rnealon
-  PreferredAuthentications        publickey
-  ProxyCommand                    ssh lb-bastion.db-lab.gitlab.com -W %h:%p
+    User                        rnealon
+    PreferredAuthentications    publickey
+    ProxyCommand                ssh lb-bastion.db-lab.gitlab.com -W %h:%p
 
 Host gprd-rails
-        User                    rnealon-rails
-        StrictHostKeyChecking   no
-        HostName                console-01-sv-gprd.c.gitlab-production.internal
-        ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
+    User                        rnealon-rails
+    StrictHostKeyChecking       no
+    HostName                    console-01-sv-gprd.c.gitlab-production.internal
+    ProxyCommand                ssh lb-bastion.gprd.gitlab.com -W %h:%p
 
 Host gprd-psql
-        User                    rnealon-db
-        StrictHostKeyChecking   no
-        HostName                console-01-sv-gprd.c.gitlab-production.internal
-        ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
+    User                        rnealon-db
+    StrictHostKeyChecking       no
+    HostName                    console-01-sv-gprd.c.gitlab-production.internal
+    ProxyCommand                ssh lb-bastion.gprd.gitlab.com -W %h:%p
 
 Host gprd-psql-archive
-        User                    rnealon-db-archive
-        StrictHostKeyChecking   no
-        HostName                console-01-sv-gprd.c.gitlab-production.internal
-        ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
+    User                        rnealon-db-archive
+    StrictHostKeyChecking       no
+    HostName                    console-01-sv-gprd.c.gitlab-production.internal
+    ProxyCommand                ssh lb-bastion.gprd.gitlab.com -W %h:%p
 {{ end }}
