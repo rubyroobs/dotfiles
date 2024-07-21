@@ -33,18 +33,28 @@ local remaining_time = sbar.add("item", {
 
 
 battery:subscribe({"routine", "power_source_change", "system_woke"}, function()
-  sbar.exec("pmset -g batt", function(batt_info)
-    local icon = "!"
-    local label = "?"
+  sbar.exec("pmset -g ps", function(pmset_out)
+    local charge = 0
+    local charging = nil
 
-    local found, _, charge = batt_info:find("(%d+)%%")
-    if found then
-      charge = tonumber(charge)
-      label = charge .. "%"
+    for line in pmset_out:gmatch("[^\r\n]+") do
+      local found, _, charge_val = line:find('(%d+)%%')
+      local discharge = line:find('discharging')
+      if found then
+        charge = charge + tonumber(charge_val)
+        if not charging then
+          if discharge == nil then
+            charging = true
+          else
+            charging = false
+          end
+        end
+      end
     end
 
+    local icon = "!"
+    local label = charge .. "%"
     local color = colors.green
-    local charging, _, _ = batt_info:find("AC Power")
 
     if charging then
       icon = icons.battery.charging
