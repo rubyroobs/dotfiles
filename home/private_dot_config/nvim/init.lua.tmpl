@@ -8,7 +8,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- Neovide
-vim.o.guifont = 'JetBrainsMono NF:h14'
+vim.o.guifont = '{{ .fontFamily }}:h{{ .fontSize }}'
 vim.g.neovide_cursor_vfx_mode = 'pixiedust'
 vim.g.neovide_padding_top = 4
 vim.g.neovide_padding_bottom = 4

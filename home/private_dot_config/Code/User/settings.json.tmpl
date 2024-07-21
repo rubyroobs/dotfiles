@@ -1,0 +1,102 @@
+{
+  // we try to make semantic highlighting look good
+  "editor.semanticHighlighting.enabled": true,
+  // prevent VSCode from modifying the terminal colors
+  "terminal.integrated.minimumContrastRatio": 1,
+  // make the window's titlebar use the workbench colors
+  "window.titleBarStyle": "custom",
+
+  // applicable if you use Go, this is an opt-in flag!
+  "gopls": {
+    "ui.semanticTokens": true,
+  },
+  "editor.tabSize": 2,
+    "terminal.integrated.fontFamily": "{{ .fontFamily }}, JetBrainsMono NF, monospace",
+    "terminal.integrated.fontSize": {{ .fontSize }},
+    "editor.fontFamily": "{{ .fontFamily }}, JetBrainsMono NF, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontSize": {{ .fontSize }},
+    {{ includeTemplate (print "colorschemes/" .colorscheme "/vscode") . }}
+    "rubyTestExplorer.rspecCommand": "RAILS_ENV=test bundle exec rspec",
+    "rubyTestExplorer.minitestCommand": "RAILS_ENV=test bundle exec rake",
+    "git.autofetch": true,
+    "workbench.settings.editor": "json",
+    "go.toolsManagement.autoUpdate": true,
+    "search.followSymlinks": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "ruby.rubocop.useBundler": true,
+    "ruby lsp.trace.server": "off",
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "[python]": {
+      "editor.formatOnType": true
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.openRepositoryInParentFolders": "never",
+    "gitlab.aiAssistedCodeSuggestions.enabled": true,
+    "vs-kubernetes": {
+      "vscode-kubernetes.minikube-path-mac": "/Users/ruby/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
+      "vscode-kubernetes.helm-path-mac": "/Users/ruby/.vs-kubernetes/tools/helm/darwin-arm64/helm"
+    },
+    "[ruby]": {
+      "editor.defaultFormatter": "rubocop.vscode-rubocop"
+    },
+    "[dart]": {
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true,
+      "editor.rulers": [
+        80
+      ],
+      "editor.selectionHighlight": false,
+      "editor.suggestSelection": "first",
+      "editor.tabCompletion": "onlySnippets",
+      "editor.wordBasedSuggestions": "off"
+    },
+    "rubyLsp.rubyVersionManager": {
+      "identifier": "asdf"
+    },
+    "workbench.sideBar.location": "right",
+    "[lua]": {
+      "editor.indentSize": "4",
+      "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+      },
+      "editor.tabCompletion": "on",
+      "editor.quickSuggestionsDelay": 1,
+      "editor.suggest.snippetsPreventQuickSuggestions": false
+    },
+    "colorize.colorized_colors": [
+      "ARGB",
+      // "HEXA",
+      "RGB",
+      "HSL"
+    ],
+    "colorize.languages": [
+      "lua",
+      "shellscript",
+      "css",
+      "sass",
+      "scss",
+      "less",
+      "postcss",
+      "sss",
+      "stylus",
+      "xml",
+      "svg"
+    ]
+  }

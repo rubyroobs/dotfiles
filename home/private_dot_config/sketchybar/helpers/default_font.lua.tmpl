@@ -1,0 +1,20 @@
+return {
+  text = "{{ .fontFamily }}",
+  numbers = "{{ .fontFamily }}",
+
+  style_map = {
+  {{ if hasPrefix "DejaVuSansM" .fontFamily }}
+    ["Regular"] = "Regular",
+    ["Semibold"] = "Regular",
+    ["Bold"] = "Bold",
+    ["Heavy"] = "Bold",
+    ["Black"] = "Bold",
+  {{ else }}
+    ["Regular"] = "Regular",
+    ["Semibold"] = "Medium",
+    ["Bold"] = "SemiBold",
+    ["Heavy"] = "Bold",
+    ["Black"] = "ExtraBold",
+  {{ end }}
+  }
+}

@@ -3,6 +3,7 @@
 
 set -eufo pipefail
 
+# defaults (system settings)
 defaults write NSGlobalDomain AppleInterfaceStyle Dark
 defaults write NSGlobalDomain AppleLanguages -array en-JP ja-JP
 defaults write NSGlobalDomain AppleLocale en_JP
@@ -27,6 +28,7 @@ defaults write org.gpgtools.common DisableKeychain -bool no
 
 launchctl disable user/$UID/com.openssh.ssh-agent
 
+# GDK
 {{- if .corp }}
 if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
     echo "Setting up GitLab ifconfig for GDK..."
