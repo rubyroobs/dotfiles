@@ -1,26 +1,39 @@
-# github.com/rubyroobs/dotfiles
+# dotfiles
 
-Personal dotfiles. Managed with [chezmoi](https://www.chezmoi.io/). Heavily inspired by [twpayne's chezmoi setup](https://github.com/twpayne/dotfiles). Secrets are stored in [1Password](https://1password.com/) and managed with the [1Password CLI](https://1password.com/downloads/command-line/). Feel free to use or remix for your own setup.
+macOS, Linux and OpenBSD dotfiles! very heavily personalized to my usage but feel free to copy/remix~
 
-## Usage (macOS)
+## Installation
 
-Bootstrap with `brew`, setup with `chezmoi`
+Bootstrap with `brew` or the `install.sh` script, setup with `chezmoi`
 
-```
+```shell
+# macOS specific
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install chezmoi
-brew install --cask 1password 1password-cli
-# Setup 1Password for secrets
+
+# init
 chezmoi init rubyroobs
+
+# macOS: enable services
+brew services start borders
+brew services start sketchybar
 ```
 
-Additional installations:
+After setting up `op` (1Password CLI), get yubikey private keys tubs and generate secrets from templates:
 
-```
-# rustup
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+```shell
+for secretFile in \
+    $HOME/.config/gh/private_hosts.yml \
+    $HOME/.config/git/credentials ; do
+    op_update_secret_from_template $secretFile
+done
 
-# GnuPG setup
-op document get 4s7zgzzdy3rknmd2sucyh2edeq | gpg --import
-op document get hu5n2ec5nwf7odaqhminxmuhke | gpg --allow-secret-key --import
+for yubikeyHandle in \
+    5AN_562_fox \
+    5AT_825_mona \
+    5CNF_636_joker \
+    5CN_104_skull \
+    5CTF_544_panther ; do
+    op_download_ssh_key $yubikeyHandle
+done
 ```

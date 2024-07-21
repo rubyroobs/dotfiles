@@ -8,30 +8,81 @@ setopt hist_ignore_space
 setopt hist_reduce_blanks
 setopt print_eight_bit
 
-MAGIC_ENTER_GIT_COMMAND='git status -u .'
-MAGIC_ENTER_OTHER_COMMAND='ll'
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if command -v nvim &> /dev/null; then
-  alias vimdiff='nvim -d'
-  alias vi='nvim'
-  alias vim='nvim'
+# universal package update alias function thingy
+function pkgup() {
+    if command -v brew > /dev/null 2>&1; then
+        brew bundle --verbose --no-lock --file=$HOME/.config/homebrew/Brewfile || true
+    elif command -v yay > /dev/null 2>&1; then
+        yay -Syu
+    elif command -v pacman > /dev/null 2>&1; then
+        doas pacman -Syu
+    elif command -v pkg_add > /dev/null 2>&1; then
+        doas pkg_add -uvi
+    fi
+}
+
+## 1Password
+# update file from template
+function op_update_secret_from_template() {
+    if [[ ! -f "$1.1ptpl" ]]; then
+        echo "template does not exist: $1.1ptpl" >&2
+        return 1
+    fi
+    op --account my.1password.com inject -i "$1.1ptpl" -o "$1"
+    chmod 0600 $1
+}
+
+# download FIDO2 SSH key reference
+function op_download_ssh_key() {
+    op --account my.1password.com read --out-file "$HOME/.ssh/id_ed25519_sk_$1" "op://Personal/YubiKey FIDO2 Resident SSH Keys/id_ed25519_sk_$1"
+    chmod 0600 "$HOME/.ssh/id_ed25519_sk_$1"
+    ssh-add -K "$HOME/.ssh/id_ed25519_sk_$1"
+}
+
+# neovim and neovide
+if command -v nvim > /dev/null 2>&1; then
+    alias vimdiff='nvim -d'
+    alias vi='nvim'
+    alias vim='nvim'
+elif command -v vim > /dev/null 2>&1; then
+    alias vi='vim'
 fi
 
-{{ if eq .chezmoi.os "darwin" -}}
-alias neovide='open --new -b com.neovide.neovide --args ${PWD}'
-{{ end -}}
+if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux-gnu"* ]]; then
+    alias neovide='open --new -b com.neovide.neovide --args ${PWD}'
+fi
 
-__git_files () {
+# prefer doas (alias doas to sudo if no doas, alias sudo to doas if doas)
+if command -v doas > /dev/null 2>&1 && doas -C /etc/doas.conf; then
+    alias sudo='doas'
+    alias sudoedit='doas nvim'
+elif command -v sudo > /dev/null 2>&1; then
+    alias doas='sudo'
+fi
+
+# for git plugins
+function __git_files () {
     _wanted files expl 'local files' _files  
 }
 
+MAGIC_ENTER_GIT_COMMAND='git status -u .'
+MAGIC_ENTER_OTHER_COMMAND='ll'
+
+# fzf loading
+function zvm_after_init() {
+    if command -v fzf > /dev/null 2>&1; then
+        source <(fzf --zsh)
+    fi
+}
+
+zstyle :omz:plugins:ssh-agent quiet yes
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
 typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[comment]='fg=#626880'
@@ -84,24 +135,16 @@ ZSH_HIGHLIGHT_STYLES[cursor]='fg=#c6d0f5'
 autoload -Uz compinit
 compinit
 
-source ~/.antidote/antidote.zsh
-antidote load
+if [ -f "$HOME/.antidote/antidote.zsh" ]; then
+    source ~/.antidote/antidote.zsh
+    antidote load
 
-bindkey '^[[A' history-substring-search-up
-bindkey '^[OA' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey '^[OB' history-substring-search-down
-bindkey "^R" history-incremental-search-backward
-HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[OA' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey '^[OB' history-substring-search-down
+    bindkey "^R" history-incremental-search-backward
+    HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+fi
 
-function zvm_after_init() {
-  if command -v fzf &> /dev/null; then
-    source <(fzf --zsh)
-  fi
-}
-
-# 2024-06-10: Disabled as going back to p10k
-# if command -v starship &> /dev/null; then
-#   eval "$(starship init zsh)"
-# fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

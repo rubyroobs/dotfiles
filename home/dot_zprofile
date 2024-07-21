@@ -7,9 +7,17 @@ export FZF_DEFAULT_OPTS=" \
 --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
 --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
 
-. "$HOME/.asdf/asdf.sh"
+# ssh agent
+if [ -f "$HOME/.ssh/agent" ]; then
+    export SSH_AUTH_SOCK="~/.ssh/agent"
+fi
 
-{{ if eq .chezmoi.os "darwin" -}}
+# asdf
+if [ -f "$HOME/.asdf/asdf.sh" ]; then
+    . "$HOME/.asdf/asdf.sh"
+fi
+
+# brew (macOS)
 if [ -d "/opt/homebrew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -27,7 +35,6 @@ if [ -d "/opt/homebrew" ]; then
         source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
     fi
 fi
-{{ end -}}
 
 # fvm
 if [ -d "$HOME/fvm" ]; then

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+# macOS - install homebrew, setup Sketchybar helper initial apps (if kitty not already installed)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    command -v brew >/dev/null 2>&1 || (echo '🍺  Installing Homebrew' && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
+
+    brew bundle --verbose --no-lock --file={{.chezmoi.sourceDir}}/private_dot_config/homebrew/Brewfile
+fi

@@ -1,0 +1,108 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+defaults write NSGlobalDomain AppleInterfaceStyle Dark
+defaults write NSGlobalDomain AppleLanguages -array en-JP ja-JP
+defaults write NSGlobalDomain AppleLocale en_JP
+defaults write NSGlobalDomain InitialKeyRepeat -int 25
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array en ja
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
+defaults write com.apple.dock "autohide" -bool true
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.finder CreateDesktop false
+defaults write com.apple.dock "mru-spaces" -bool "false" && killall Dock
+defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+defaults write -g AppleKeyboardUIMode -bool true
+
+launchctl disable user/$UID/com.openssh.ssh-agent
+if [[ ! -f ~/Library/LaunchAgents/com.rubyroobs.launched.ssh_agent.plist ]]; then
+    echo "Setting up ssh-agent..."
+    echo '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.rubyroobs.launched.ssh_agent</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>sh</string>
+        <string>-c</string>
+        <string>/opt/homebrew/opt/openssh/bin/ssh-agent -D -a ~/.ssh/agent</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>EnvironmentVariables</key>
+    <dict>
+           <key>SSH_ASKPASS</key>
+           <string>/opt/homebrew/bin/ssh-askpass</string>
+           <key>SUDO_ASKPASS</key>
+           <string>/opt/homebrew/bin/ssh-askpass</string>
+           <key>SSH_ASKPASS_REQUIRE</key>
+           <string>force</string>
+    </dict>
+</dict>
+</plist>
+' | tee ~/Library/LaunchAgents/com.rubyroobs.launched.ssh_agent.plist >/dev/null
+    launchctl load -w ~/Library/LaunchAgents/com.rubyroobs.launched.ssh_agent.plist
+fi
+
+{{- if .corp }}
+if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
+    echo "Setting up GitLab ifconfig for GDK..."
+    echo '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.gitlab1.ifconfig</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>Nice</key>
+    <integer>10</integer>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/sbin/ifconfig</string>
+      <string>lo0</string>
+      <string>alias</string>
+      <string>172.16.123.1</string>
+    </array>
+</dict>
+</plist>
+' | sudo tee /Library/LaunchDaemons/org.gitlab1.ifconfig.plist >/dev/null
+    sudo chmod 0644 /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
+    sudo chown root:wheel /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
+    sudo launchctl load /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
+fi
+{{- end }}
+
+if command -v dockutil > /dev/null 2>&1; then
+    if dockutil --find "Podcasts" > /dev/null 2>&1; then
+        echo "Fixing the dock..."
+        for dockItemLabel in \
+          Safari \
+          FaceTime \
+          Maps \
+          Photos \
+          Contacts \
+          Calendar \
+          Reminders \
+          Podcasts \
+          TV \
+          News \
+          Numbers \
+          Keynote \
+          Pages ; do
+            dockutil --find "$dockItemLabel" > /dev/null 2>&1 && dockutil --no-restart --remove "$dockItemLabel"
+        done
+
+        killall Dock
+        killall Finder
+    fi
+fi
+
+{{ end -}}

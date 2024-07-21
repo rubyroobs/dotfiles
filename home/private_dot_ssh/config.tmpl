@@ -1,10 +1,47 @@
-{{- if eq .chezmoi.os "darwin" }}
 Host *
-  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-  {{- if .corp }}
-  IdentityFile ~/.ssh/ruby_gitlab_ed25519.pub
-  {{- end }}
-{{- end }}
+    AddKeysToAgent yes
+    IgnoreUnknown UseKeychain
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519_sk_5CNF_636_joker
+
 {{ if .corp }}
-{{ onepasswordDocument "w6r5gb6bdhzd5pirjwurueulwu" "6wteuztwoqfyqrvvna7ydbiy3i" "gitlab" }}
+# GCP staging bastion host
+Host lb-bastion.gstg.gitlab.com
+        User                            rnealon
+
+# gstg boxes
+Host *.gitlab-staging-1.internal
+        ProxyCommand                    ssh lb-bastion.gstg.gitlab.com -W %h:%p
+
+# GCP production bastion host
+Host lb-bastion.gprd.gitlab.com
+        User                    rnealon
+
+# lab bastion host
+Host lb-bastion.db-lab.gitlab.com
+  User                            rnealon
+
+# lab boxes
+Host *.gitlab-db-lab.internal
+  User                            rnealon
+  PreferredAuthentications        publickey
+  ProxyCommand                    ssh lb-bastion.db-lab.gitlab.com -W %h:%p
+
+Host gprd-rails
+        User                    rnealon-rails
+        StrictHostKeyChecking   no
+        HostName                console-01-sv-gprd.c.gitlab-production.internal
+        ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
+
+Host gprd-psql
+        User                    rnealon-db
+        StrictHostKeyChecking   no
+        HostName                console-01-sv-gprd.c.gitlab-production.internal
+        ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
+
+Host gprd-psql-archive
+        User                    rnealon-db-archive
+        StrictHostKeyChecking   no
+        HostName                console-01-sv-gprd.c.gitlab-production.internal
+        ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
 {{ end }}
