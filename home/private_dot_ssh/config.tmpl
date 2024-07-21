@@ -1,16 +1,30 @@
+{{- $keyfiles := list
+    "~/.ssh/id_ed25519"
+    "~/.ssh/ruby_gitlab_ed25519" -}}
+
+{{- $fidoSerialHandles := dict
+        "636" "~/.ssh/id_ed25519_sk_5CNF_636_joker"
+        "825" "~/.ssh/id_ed25519_sk_5AT_825_mona"
+        "104" "~/.ssh/id_ed25519_sk_5CN_104_skull"
+        "562" "~/.ssh/id_ed25519_sk_5AN_562_fox"
+        "544" "~/.ssh/id_ed25519_sk_5CTF_544_panther" -}}
+
 Host *
     AddKeysToAgent              yes
     IgnoreUnknown               UseKeychain
     UseKeychain                 yes
-    {{- if .corp }}
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519
-    IdentityFile                ~/.ssh/id_ed25519_sk_5CNF_636_joker
-    {{- end }}
-    IdentityFile                ~/.ssh/id_ed25519
-    IdentityFile                ~/.ssh/id_ed25519_sk_5AN_562_fox
-    IdentityFile                ~/.ssh/id_ed25519_sk_5AT_825_mona
-    IdentityFile                ~/.ssh/id_ed25519_sk_5CN_104_skull
-    IdentityFile                ~/.ssh/id_ed25519_sk_5CTF_544_panther
+
+{{ range $keyfiles -}}
+Match Exec "[ -f {{ . }} ]"
+    IdentityFile                {{ . }}
+
+{{ end -}}
+
+{{ range $serialSuffix, $handleFile := $fidoSerialHandles -}}
+Match Exec "gpg --card-status | grep -Pq '(?<=Serial number).*\K[0-9]{5}{{$serialSuffix}}$'"
+    IdentityFile                {{ $handleFile }}
+
+{{ end -}}
 
 {{ if .corp }}
 # GCP staging bastion host
