@@ -44,8 +44,11 @@ function op_update_secret_from_template() {
 # download FIDO2 SSH key reference
 function op_download_ssh_key() {
     op --account my.1password.com read --out-file "$HOME/.ssh/id_ed25519_sk_$1" "op://Personal/YubiKey FIDO2 Resident SSH Keys/id_ed25519_sk_$1"
+    op --account my.1password.com read --out-file "$HOME/.ssh/id_ed25519_sk_$1_notouch" "op://Personal/YubiKey FIDO2 Resident SSH Keys/id_ed25519_sk_$1_notouch"
     chmod 0600 "$HOME/.ssh/id_ed25519_sk_$1"
+    chmod 0600 "$HOME/.ssh/id_ed25519_sk_$1_notouch"
     ssh-add "$HOME/.ssh/id_ed25519_sk_$1"
+    ssh-add "$HOME/.ssh/id_ed25519_sk_$1_notouch"
 }
 
 # neovim and neovide
