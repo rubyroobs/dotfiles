@@ -27,6 +27,13 @@ Match Exec "gpg --card-status | grep -Pq '(?<=Serial number).*\K[0-9]{5}{{$seria
 {{ end -}}
 
 {{ if .corp }}
+Host gitlab.com
+    User                        git
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/id_ed25519_sk_5CNF_636_joker_notouch
+    IdentityFile                ~/.ssh/id_ed25519_sk_5CNF_636_joker
+    IdentityFile                ~/.ssh/ruby_gitlab_ed25519
+
 # GCP staging bastion host
 Host lb-bastion.gstg.gitlab.com
     User                        rnealon
