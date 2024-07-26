@@ -1,9 +1,9 @@
 local icons = require("icons")
 local colors = require("colors")
 
-local allowlist = { ["Sonos"] = true,
-                    ["Spotify"] = true,
-                    ["Music"] = true    };
+local allowlist = { ["Sonos"]   = true,
+                    ["Music"]   = true,
+                    ["Firefox"] = true };
 
 local media_cover = sbar.add("item", {
   position = "right",

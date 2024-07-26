@@ -1,0 +1,29 @@
+	bar_background = {{ .colors.rosely.rosely7 | replace "#" "0xff" }},
+
+	text = {{ .colors.rosely.rosely8 | replace "#" "0xff" }},
+	disabled_text = {{ .colors.rosely.roselyB | replace "#" "0xff" }},
+
+	front_app_text = {{ .colors.rosely.rosely8| replace "#" "0xff" }},
+
+	item_background = {{ .colors.rosely.rosely6 | replace "#" "0xff" }},
+	item_selected_background  = {{ .colors.rosely.rosely5 | replace "#" "0xff" }},
+	item_selected_text = {{ .colors.rosely.rosely8 | replace "#" "0xff" }},
+
+	popup_background = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	popup_border = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+
+	battery_full = {{ .colors.rosely.roselyD | replace "#" "0xff" }},
+	battery_warning = {{ .colors.rosely.roselyF | replace "#" "0xff" }},
+	battery_danger = {{ .colors.rosely.roselyC | replace "#" "0xff" }},
+
+	cpu_graph_low = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	cpu_graph_medium_low = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	cpu_graph_medium = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	cpu_graph_high = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+
+	wifi_up_text = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	wifi_down_text = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	wifi_not_connected = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+
+	volume_slider_background = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},
+	volume_slider_highlight = {{ .colors.rosely.rosely0 | replace "#" "0xff" }},

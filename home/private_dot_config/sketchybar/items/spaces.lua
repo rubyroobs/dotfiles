@@ -17,19 +17,19 @@ for i = 1, 10, 1 do
       padding_left = 10,
       padding_right = 4,
       color = colors.text,
-      highlight_color = colors.crust,
+      highlight_color = colors.item_selected_text,
     },
     label = {
       padding_right = 14,
       color = colors.text,
-      highlight_color = colors.crust,
+      highlight_color = colors.item_selected_text,
       font = "sketchybar-app-font:Regular:13.5",
       y_offset = -1,
     },
     padding_right = 1,
     padding_left = 1,
     background = {
-      color = colors.mantle,
+      color = colors.item_background,
     },
   })
 
@@ -60,7 +60,7 @@ for i = 1, 10, 1 do
     space:set({
       icon = { highlight = selected, },
       label = { highlight = selected },
-      background = { color = selected and colors.red or colors.surface1 }
+      background = { color = selected and colors.item_selected_background or colors.item_background }
     })
   end)
 
@@ -108,7 +108,7 @@ end)
 --   icon = {
 --     padding_left = 8,
 --     padding_right = 9,
---     color = colors.surface1,
+--     color = colors.item_background,
 --     string = icons.switch.on,
 --   },
 --   label = {
@@ -116,11 +116,11 @@ end)
 --     padding_left = 0,
 --     padding_right = 8,
 --     string = "Spaces",
---     color = colors.surface1,
+--     color = colors.item_background,
 --   },
 --   background = {
---     color = colors.with_alpha(colors.surface1, 0.0),
---     border_color = colors.with_alpha(colors.surface1, 0.0),
+--     color = colors.with_alpha(colors.item_background, 0.0),
+--     border_color = colors.with_alpha(colors.item_background, 0.0),
 --   }
 -- })
 
@@ -138,7 +138,7 @@ end)
 --         color = { alpha = 1.0 },
 --         border_color = { alpha = 1.0 },
 --       },
---       icon = { color = colors.surface1 },
+--       icon = { color = colors.item_background },
 --       label = { width = "dynamic" }
 --     })
 --   end)
@@ -151,7 +151,7 @@ end)
 --         color = { alpha = 0.0 },
 --         border_color = { alpha = 0.0 },
 --       },
---       icon = { color = colors.surface1 },
+--       icon = { color = colors.item_background },
 --       label = { width = 0, }
 --     })
 --   end)

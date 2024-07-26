@@ -32,7 +32,7 @@ local cal = sbar.add("item", "calendar", {
 })
 
 sbar.add("bracket", "calendar.bracket", { cal.name }, {
-  background = { color = colors.surface1 }
+  background = { color = colors.item_background }
 })
 
 sbar.add("item", { position = "right", width = settings.group_paddings })

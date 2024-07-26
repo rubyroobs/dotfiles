@@ -38,7 +38,7 @@ local volume_bracket = sbar.add("bracket", "widgets.volume.bracket", {
   volume_icon.name,
   volume_percent.name
 }, {
-  background = { color = colors.surface1 },
+  background = { color = colors.item_background },
   popup = { align = "center" }
 })
 
@@ -50,18 +50,18 @@ sbar.add("item", "widgets.volume.padding", {
 local volume_slider = sbar.add("slider", popup_width, {
   position = "popup." .. volume_bracket.name,
   slider = {
-    highlight_color = colors.blue,
+    highlight_color = colors.volume_slider_highlight,
     background = {
       height = 6,
       corner_radius = 3,
-      color = colors.surface2,
+      color = colors.volume_slider_background,
     },
     knob= {
       string = "􀀁",
       drawing = true,
     },
   },
-  background = { color = colors.surface1, height = 2, y_offset = -20 },
+  background = { color = colors.volume_slider_background, height = 2, y_offset = -20 },
   click_script = 'osascript -e "set volume output volume $PERCENTAGE"'
 })
 
@@ -109,11 +109,11 @@ local function volume_toggle_details(env)
       current_audio_device = result:sub(1, -2)
       sbar.exec("SwitchAudioSource -a -t output", function(available)
         current = current_audio_device
-        local color = colors.surface1
+        local color = colors.disabled_text
         local counter = 0
 
         for device in string.gmatch(available, '[^\r\n]+') do
-          local color = colors.surface1
+          local color = colors.disabled_text
           if current == device then
             color = colors.text
           end
@@ -122,7 +122,7 @@ local function volume_toggle_details(env)
             width = popup_width,
             align = "center",
             label = { string = device, color = color },
-            click_script = 'SwitchAudioSource -s "' .. device .. '" && sketchybar --set /volume.device\\.*/ label.color=' .. colors.surface1 .. ' --set $NAME label.color=' .. colors.text
+            click_script = 'SwitchAudioSource -s "' .. device .. '" && sketchybar --set /volume.device\\.*/ label.color=' .. colors.disabled_text .. ' --set $NAME label.color=' .. colors.text
 
           })
           counter = counter + 1

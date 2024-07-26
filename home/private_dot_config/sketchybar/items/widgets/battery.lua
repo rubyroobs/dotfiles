@@ -54,7 +54,7 @@ battery:subscribe({"routine", "power_source_change", "system_woke"}, function()
 
     local icon = "!"
     local label = charge .. "%"
-    local color = colors.green
+    local color = colors.battery_full
 
     if charging then
       icon = icons.battery.charging
@@ -67,10 +67,10 @@ battery:subscribe({"routine", "power_source_change", "system_woke"}, function()
         icon = icons.battery._50
       elseif found and charge > 20 then
         icon = icons.battery._25
-        color = colors.peach
+        color = colors.battery_warning
       else
         icon = icons.battery._0
-        color = colors.red
+        color = colors.battery_danger
       end
     end
 
@@ -103,7 +103,7 @@ battery:subscribe("mouse.clicked", function(env)
 end)
 
 sbar.add("bracket", "widgets.battery.bracket", { battery.name }, {
-  background = { color = colors.surface1 }
+  background = { color = colors.item_background }
 })
 
 sbar.add("item", "widgets.battery.padding", {

@@ -53,8 +53,9 @@ yabai -m rule --add app="^Home Assistant$" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^Google Chrome$" opacity=1.0
 yabai -m rule --add app="^Firefox$" opacity=1.0
 yabai -m rule --add app="^zoom.us$" opacity=1.0
+yabai -m rule --add app="^Preview$" opacity=1.0
 
 
-borders active_color="gradient(top_left=0xffff9e64,bottom_right=0xffbb9af7)" inactive_color="gradient(top_left=0x40ff9e64,bottom_right=0x40bb9af7)" width=6 2>/dev/null 1>&2 &
+{{- includeTemplate (print "colorschemes/" .colorscheme "/yabai-borders") . -}}
 
 echo "yabai configuration loaded"

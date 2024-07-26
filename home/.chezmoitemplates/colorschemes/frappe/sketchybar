@@ -1,0 +1,29 @@
+	bar_background = 0xFF232634,
+
+	text = 0xFFc6d0f5,
+	disabled_text = 0xFF51576d,
+
+	front_app_text = 0xFFc6d0f5,
+
+	item_background = 0xFF51576d,
+	item_selected_background  = 0xFFE78284,
+	item_selected_text = 0xFF232634,
+
+	popup_background = 0xFF232634,
+	popup_border = 0xFF51576d,
+
+	battery_full = 0xFFA6D189,
+	battery_warning = 0xFFEF9F76,
+	battery_danger = 0xFFE78284,
+
+	cpu_graph_low = 0xFF8CAAEE,
+	cpu_graph_medium_low = 0xFFE5C890,
+	cpu_graph_medium = 0xFFEF9F76,
+	cpu_graph_high = 0xFFE78284,
+
+	wifi_up_text = 0xFFE78284,
+	wifi_down_text = 0xFF8CAAEE,
+	wifi_not_connected = 0xFFE78284,
+
+	volume_slider_background = 0xFF626880,
+	volume_slider_highlight = 0xFF8CAAEE,
