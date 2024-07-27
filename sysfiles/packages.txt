@@ -1,3 +1,9 @@
+fastfetch
+libsodium
+ripgrep
+lazygit
+ffmpeg
+sxhkd
 1password-cli
 adobe-source-han-sans-jp-fonts
 adobe-source-han-serif-jp-fonts
