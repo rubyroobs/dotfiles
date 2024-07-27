@@ -6,6 +6,11 @@ local icon_map = require("helpers.icon_map")
 -- Probably not needed if using the Apple log again?
 sbar.add("item", { width = 4 })
 
+local item_padding_right = 14
+if (settings.no_app_labels) then
+  item_padding_right = 0
+end
+
 local spaces = {}
 
 for i = 1, 10, 1 do
@@ -20,7 +25,7 @@ for i = 1, 10, 1 do
       highlight_color = colors.item_selected_text,
     },
     label = {
-      padding_right = 14,
+      padding_right = item_padding_right,
       color = colors.text,
       highlight_color = colors.item_selected_text,
       font = "sketchybar-app-font:Regular:13.5",
@@ -85,6 +90,10 @@ local space_window_observer = sbar.add("item", {
 })
 
 space_window_observer:subscribe("space_windows_change", function(env)
+  if (settings.no_app_labels) then
+    return
+  end
+
   local icon_line = ""
   local no_app = true
   for app, count in pairs(env.INFO.apps) do

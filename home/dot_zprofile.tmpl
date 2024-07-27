@@ -14,8 +14,9 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 {{ includeTemplate (print "colorschemes/" .colorscheme "/fzf") . }}
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    export SSH_SK_PROVIDER=/usr/local/lib/libsk-libfido2.dylib
     export SSH_ASKPASS=$HOME/.ssh/ssh-askpass
-    export SSH_ASKPASS_REQUIRE=force
+    # export SSH_ASKPASS_REQUIRE=force
 fi
 
 # asdf

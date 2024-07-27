@@ -20,6 +20,17 @@ if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
 
+{{- if (eq .chezmoi.os "darwin") }}
+# libfido2 SK provider for macOS ssh-agent
+if [ ! -f "/usr/local/lib/libsk-libfido2.dylib" ]; then
+    if command -v install-libsk-libfido2 > /dev/null 2>&1; then
+        echo "install-libsk-libfido2 available but dylib is missing, installing..."
+        sudo install-libsk-libfido2
+        killall ssh-agent
+    fi
+fi
+{{- end }}
+
 # fonts
 #
 # force BSD tar
