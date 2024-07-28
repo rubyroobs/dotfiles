@@ -1,3 +1,4 @@
+whitesur-cursor-theme-git
 fastfetch
 libsodium
 ripgrep

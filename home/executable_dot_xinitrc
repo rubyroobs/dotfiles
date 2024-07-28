@@ -9,17 +9,15 @@ unset f
 
 autorandr --change --force
 sleep 1
-# if no autorandr
-# feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*.png &
+feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*.png &
 
 xset s 600
 xss-lock xlock +resetsaver &
 picom &
+lxpolkit &
 pipewire &
 pipewire-pulse &
 wireplumber &
 easyeffects -gapplication-service &
 fcitx &
-sxhkd &
-~/.config/polybar/launch.sh &
 exec bspwm

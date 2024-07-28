@@ -12,10 +12,11 @@ else
 fi
 
 bspc config border_width            2
-bspc config window_gap              12
+bspc config window_gap              20 
 bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   true
 bspc config split_ratio             0.5 
 bspc config borderless_monocle      true
 bspc config gapless_monocle         true
 
+~/.config/polybar/launch.sh &
