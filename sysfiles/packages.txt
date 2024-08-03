@@ -4,6 +4,10 @@ libsodium
 ripgrep
 lazygit
 ffmpeg
+lxqt-policykit
+wireplumber
+pipewire-pulse
+pipewire
 sxhkd
 1password-cli
 sof-firmware
@@ -17,6 +21,8 @@ intel-media-driver
 eza
 fcitx-im
 fcitx-mozc
+fcitx-hangul
+fcitx-configtool
 fzf
 fd
 jq
@@ -46,7 +52,7 @@ xsel
 xlockmore
 xss-lock
 youtube-dl
-ytp-dl
+yt-dlp
 yubikey-manager
 zsh
 xinit-xsession

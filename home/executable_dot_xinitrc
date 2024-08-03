@@ -7,17 +7,50 @@ for f in /etc/X11/xinit/xinitrc.d/?*.sh; do
 done
 unset f
 
-autorandr --change --force
-sleep 1
-feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*.png &
+if command -v autorandr > /dev/null 2>&1; then
+    autorandr --change --force
+    sleep 1
+fi
+
+if command -v feh > /dev/null 2>&1; then
+    feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*.png &
+fi
 
 xset s 600
-xss-lock xlock +resetsaver &
-picom &
-lxpolkit &
-pipewire &
-pipewire-pulse &
-wireplumber &
-easyeffects -gapplication-service &
-fcitx &
-exec bspwm
+
+if command -v xss-lock > /dev/null 2>&1; then
+    xss-lock xlock +resetsaver &
+fi
+
+if command -v picom > /dev/null 2>&1; then
+    picom &
+fi
+
+if command -v lxqt-policykit-agent > /dev/null 2>&1; then
+    lxqt-policykit-agent &
+fi
+
+if command -v pipewire > /dev/null 2>&1; then
+    pipewire &
+fi
+
+if command -v pipewire-pulse > /dev/null 2>&1; then
+    pipewire-pulse &
+fi
+
+if command -v wireplumber > /dev/null 2>&1; then
+    wireplumber &
+fi
+
+if command -v easyeffects > /dev/null 2>&1; then
+    easyeffects -gapplication-service &
+fi
+
+if command -v fcitx > /dev/null 2>&1; then
+    fcitx &
+fi
+
+if command -v bspwm > /dev/null 2>&1; then
+    exec bspwm
+fi
+
