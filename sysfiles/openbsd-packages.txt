@@ -11,7 +11,9 @@ chezmoi
 firefox
 feh
 eza
-fcitx-im
+fcitx
+fcitx-qt
+fcitx-gtk
 fcitx-configtool-qt
 fcitx-anthy
 fcitx-hangul

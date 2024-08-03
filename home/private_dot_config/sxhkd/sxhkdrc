@@ -20,40 +20,40 @@ alt + super + r
 
 # macOS-like copy (CMD-C), cut (CMD-X), paste (CMD-V), select-all (CMD-A)
 super + @a
-	xdotool key --clearmodifiers Control_L+a; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+a
 
 super + @x
-        xdotool key --clearmodifiers Control_L+x; sleep 1; xdotool keyup Super_L
+        xdotool key --clearmodifiers Control_L+x
 
 super + @z
-	xdotool key --clearmodifiers Control_L+z; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+z
 
 super + @t
-	xdotool key --clearmodifiers Control_L+t; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+t
 
 super + @o
-	xdotool key --clearmodifiers Control_L+o; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+o
 
 super + @s
-	xdotool key --clearmodifiers Control_L+s; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+s
 
 super + @p
-	xdotool key --clearmodifiers Control_L+p; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+p
 
 super + shift + @t
-	xdotool key --clearmodifiers Control_L+Shift_L+t; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+Shift_L+t
 
 super + shift + @p
-	xdotool key --clearmodifiers Control_L+Shift_L+p; sleep 1; xdotool keyup Super_L
+	xdotool key --clearmodifiers Control_L+Shift_L+p
 
 super + c
-	~/bin/super_copy; sleep 1; xdotool keyup Super_L
+	~/bin/super_copy
 
 super + @v
-	~/bin/super_paste; sleep 1; xdotool keyup Super_L
+	~/bin/super_paste
 
 super + @w
-	~/bin/super_w; sleep 1; xdotool keyup Super_L
+	~/bin/super_w
 
 #
 # bspwm hotkeys

@@ -19,10 +19,12 @@ firefox
 feh
 intel-media-driver
 eza
-fcitx-im
-fcitx-mozc
-fcitx-hangul
-fcitx-configtool
+fcitx5
+fcitx5-qt
+fcitx5-gtk
+fcitx5-configtool
+fcitx5-mozc
+fcitx5-hangul
 fzf
 fd
 jq

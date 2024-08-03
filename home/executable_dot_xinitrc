@@ -46,7 +46,9 @@ if command -v easyeffects > /dev/null 2>&1; then
     easyeffects -gapplication-service &
 fi
 
-if command -v fcitx > /dev/null 2>&1; then
+if command -v fcitx5 > /dev/null 2>&1; then
+    fcitx5 &
+elif command -v fcitx > /dev/null 2>&1; then
     fcitx &
 fi
 
