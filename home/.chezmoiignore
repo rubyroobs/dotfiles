@@ -28,4 +28,5 @@
 .Xmodmap
 .Xresources
 .xinitrc
+bin/
 {{- end -}}

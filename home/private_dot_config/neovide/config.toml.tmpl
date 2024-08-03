@@ -1,0 +1,6 @@
+{{- if (eq .chezmoi.os "darwin") }}
+frame = "buttonless"
+title-hidden = true
+{{- else }}
+frame = "none"
+{{- end }}

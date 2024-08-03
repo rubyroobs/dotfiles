@@ -1,3 +1,4 @@
 #!/bin/bash
 
-feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*
+feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/* &
+~/.config/bspwm/bspwmrc &

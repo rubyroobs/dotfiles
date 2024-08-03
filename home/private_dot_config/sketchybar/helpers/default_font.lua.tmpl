@@ -1,9 +1,9 @@
 return {
-  text = "{{ .fontFamily }}",
-  numbers = "{{ .fontFamily }}",
+  text = "{{ .defaultMonospaceFontFamily }}",
+  numbers = "{{ .defaultMonospaceFontFamily }}",
 
   style_map = {
-  {{ if hasPrefix "DejaVuSansM" .fontFamily }}
+  {{ if hasPrefix "DejaVuSansM" .defaultMonospaceFontFamily }}
     ["Regular"] = "Regular",
     ["Semibold"] = "Regular",
     ["Bold"] = "Bold",

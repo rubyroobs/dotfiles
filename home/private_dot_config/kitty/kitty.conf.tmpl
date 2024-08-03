@@ -11,8 +11,8 @@ background_opacity 1
 dynamic_background_opacity yes
 
 # Font
-font_family {{ .fontFamily }}
-font_size {{ .fontSize }}
+font_family {{ .defaultMonospaceFontFamily }}, monospace, emoji 
+font_size 14
 
 # Colors
 {{- includeTemplate (print "colorschemes/" .colorscheme "/kitty") . -}}

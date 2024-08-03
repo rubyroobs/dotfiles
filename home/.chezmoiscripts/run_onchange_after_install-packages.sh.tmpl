@@ -49,34 +49,84 @@ fi
 if [ ! -d "$FONT_DIR/zpix" ]; then
     echo "Installing zpix font..."
     mkdir -p $FONT_DIR/zpix
-    curl -o $FONT_DIR/zpix/zpix.ttf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.ttf
-    curl -o $FONT_DIR/zpix/zpix.bdf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.bdf
+    curl -sL -o $FONT_DIR/zpix/zpix.ttf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.ttf
+    curl -sL -o $FONT_DIR/zpix/zpix.bdf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.bdf
 fi
 
 if [ ! -d "$FONT_DIR/PixelMplus-20130602" ]; then
     echo "Installing PixelMplus font... (this might fail without unzip installed)"
-    curl -sL "https://github.com/itouhiro/PixelMplus/releases/download/v1.0.0/PixelMplus-20130602.zip" | $TAR_BIN xvf - -C $FONT_DIR
+    curl -sL "https://github.com/itouhiro/PixelMplus/releases/download/v1.0.0/PixelMplus-20130602.zip" | $TAR_BIN xf - -C $FONT_DIR
 fi
 
 if [ ! -d "$FONT_DIR/DejaVuSansMono" ]; then
     echo "Installing DejaVu Sans Mono font..."
     mkdir -p $FONT_DIR/DejaVuSansMono
-    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.tar.xz" | $TAR_BIN xvf - -C $FONT_DIR/DejaVuSansMono
+    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.tar.xz" | $TAR_BIN xf - -C $FONT_DIR/DejaVuSansMono
 fi
 
 if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
     echo "Installing JetBrains Mono font..."
     mkdir -p $FONT_DIR/JetBrainsMono
-    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" | $TAR_BIN xvf - -C $FONT_DIR/JetBrainsMono
+    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" | $TAR_BIN xf - -C $FONT_DIR/JetBrainsMono
+fi
+
+if [ ! -d "$FONT_DIR/NotoNerdFont" ]; then
+    echo "Installing Noto nerd font..."
+    mkdir -p $FONT_DIR/NotoNerdFont
+    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Noto.tar.xz" | $TAR_BIN xf - -C $FONT_DIR/NotoNerdFont
 fi
 
 if [ ! -d "$FONT_DIR/Noto" ]; then
     echo "Installing Noto font..."
     mkdir -p $FONT_DIR/Noto
-    curl -sL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Noto.tar.xz" | $TAR_BIN xvf - -C $FONT_DIR/Noto
+    mkdir -p /tmp/notofontdl
+    # TODO: auto update this? their formatting means I can't do the latest thingy
+    curl -sL "https://github.com/notofonts/notofonts.github.io/archive/refs/tags/noto-monthly-release-24.8.1.zip" | $TAR_BIN xf - --strip-components=2 -C /tmp/notofontdl notofonts.github.io-noto-monthly-release-24.8.1/fonts
+    install -Dm644 /tmp/notofontdl/*/hinted/ttf/*.tt[fc] -t $FONT_DIR/Noto
+    rm -rf /tmp/notofontdl
 fi
 
+if [ ! -d "$FONT_DIR/NotoCJK" ]; then
+    echo "Installing Noto CJK font..."
+    mkdir -p $FONT_DIR/NotoCJK
+    curl -sL "https://github.com/notofonts/noto-cjk/releases/latest/download/01_NotoSerifCJK.ttc.zip" | $TAR_BIN xf - -C $FONT_DIR/NotoCJK
+fi
+
+if [ ! -d "$FONT_DIR/MPLUS" ]; then
+    echo "Installing MPLUS font..."
+    mkdir -p $FONT_DIR/MPLUS
+    curl -sL "https://github.com/coz-m/MPLUS_FONTS/archive/c47fd4ff0a604d1517625a0f3d67e6d64e12d585.zip" | $TAR_BIN xf - --strip-components=3 -C $FONT_DIR/MPLUS MPLUS_FONTS-c47fd4ff0a604d1517625a0f3d67e6d64e12d585/fonts/ttf
+fi
+
+
 unamestr=$(uname)
+
+if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
+    if [ ! -d "$FONT_DIR/SanFrancisco" ]; then
+        echo "Installing San Francisco font..."
+        mkdir -p $FONT_DIR/SanFrancisco
+        curl -sL "https://github.com/AppleDesignResources/SanFranciscoFont/archive/77f8a1e62803752013d4933dbaf11653ec3826f9.zip" | $TAR_BIN xf - --strip-components=1 -C $FONT_DIR/SanFrancisco
+    fi
+
+    if [ ! -d "$FONT_DIR/HiraKakuGo" ]; then
+        echo "Installing Hiragino Kaku Gothic Pro font..."
+        mkdir -p $FONT_DIR/HiraKakuGo
+        curl -sL "https://github.com/sideroad/capturing/archive/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip" | $TAR_BIN xf - --strip-components=2 -C $FONT_DIR/HiraKakuGo capturing-be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68/.fonts/
+    fi
+
+    if [ ! -d "$FONT_DIR/AppleSDGothicNeo" ]; then
+        echo "Installing Hiragino Kaku Gothic Pro font..."
+        mkdir -p $FONT_DIR/AppleSDGothicNeo
+        curl -sL "https://github.com/adrinerDP/font-applesdgothicneo/archive/86137e950e321310309cfd7a239746ab1b5ba5ff.zip" | $TAR_BIN xf - --strip-components=2 -C $FONT_DIR/AppleSDGothicNeo font-applesdgothicneo-86137e950e321310309cfd7a239746ab1b5ba5ff/fonts/
+    fi
+
+    if [ ! -d "$FONT_DIR/AppleColorEmoji" ]; then
+        echo "Installing Apple Color Emoji font..."
+        mkdir -p $FONT_DIR/AppleColorEmoji
+        curl -sL -o $FONT_DIR/AppleColorEmoji/AppleColorEmoji.ttf https://github.com/samuelngs/apple-emoji-linux/releases/latest/download/AppleColorEmoji.ttf
+    fi
+fi
+
 if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
     sudo cp -R ~/.fonts/* /usr/share/fonts/
     sudo mkfontscale /usr/share/fonts/*

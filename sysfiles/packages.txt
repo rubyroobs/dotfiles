@@ -6,8 +6,6 @@ lazygit
 ffmpeg
 sxhkd
 1password-cli
-adobe-source-han-sans-jp-fonts
-adobe-source-han-serif-jp-fonts
 sof-firmware
 autorandr
 bspwm
@@ -39,10 +37,12 @@ curl
 w3m
 wget
 x11-ssh-askpass
+xdotool
 xorg-mkfontscale
 xorg-xfontsel
 xorg-xlsfonts
 xscreensaver
+xsel
 xlockmore
 xss-lock
 youtube-dl

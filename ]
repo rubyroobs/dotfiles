@@ -26,7 +26,7 @@ include-file = $HOME/.config/polybar/modules.ini
 monitor = ${env:MONITOR:}
 
 width = 100%
-height = 18pt
+height = 24pt
 fixed_center = true
 
 dpi = 192
@@ -34,18 +34,18 @@ dpi = 192
 background = ${colors.bg}
 foreground = ${colors.fg}
 
-padding = 0 
+line-size = 3pt
+
+padding = 2
 
 module-margin = 1
 
-font-0 = monospace:size=11;6
-font-1 = M Plus 1 Code:size=11;6
-font-2 = Noto Sans Mono CJK KR:size=11;6
-font-3 = emoji:size=11;6
+font-0 = JetbrainsMono Nerd Font:style=Medium:size=11;2
+font-1 = PixelMplus12:size=11;2
 
-modules-left = bspwm title
+modules-left = bspwm
 modules-center = datetime
-modules-right = pulseaudio battery xkeyboard memory cpu network
+modules-right = pulseaudio battery xkeyboard memory cpu wlan date
 
 cursor-click = pointer
 cursor-scroll = ns-resize

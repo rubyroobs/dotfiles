@@ -17,6 +17,10 @@ if command -v skhd > /dev/null 2>&1; then
     skhd --start-service
 fi
 
+if command -v sxhkd > /dev/null 2>&1; then
+    pkill -x sxhkd; sxhkd &
+fi
+
 if command -v sketchybar > /dev/null 2>&1; then
     sketchybar --reload
 fi
@@ -25,6 +29,6 @@ if command -v kitty > /dev/null 2>&1; then
     pgrep kitty | xargs kill -SIGUSR1
 fi
 
-if command -v polybar > /dev/null 2>&1; then
-    DISPLAY=:0 ~/.config/polybar/launch.sh
+if command -v bspwm > /dev/null 2>&1; then
+    DISPLAY=:0 ~/.config/bspwm/bspwmrc > /dev/null 2>&1 &
 fi

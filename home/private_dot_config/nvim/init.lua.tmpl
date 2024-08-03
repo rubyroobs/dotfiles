@@ -5,18 +5,20 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Clipboard always
-set clipboard+=unnamedplus
+vim.opt.clipboard="unnamed,unnamedplus"
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
 -- Neovide
-vim.o.guifont = '{{ .fontFamily }}:h{{ .fontSize }}'
+vim.o.guifont = '{{ .defaultMonospaceFontFamily }}:h14'
 vim.g.neovide_cursor_vfx_mode = 'pixiedust'
 vim.g.neovide_padding_top = 4
 vim.g.neovide_padding_bottom = 4
 vim.g.neovide_padding_right = 4
 vim.g.neovide_padding_left = 4
+
+{{- if (eq .chezmoi.os "darwin") }}
 if vim.g.neovide then
   vim.keymap.set('n', '<D-s>', ':w<CR>') -- Save
   vim.keymap.set('v', '<D-c>', '"+y') -- Copy
@@ -34,6 +36,21 @@ vim.api.nvim_set_keymap('v', '<D-v>', '<C-R>+', { noremap = true, silent = true 
 if vim.g.neovide and vim.fn.has 'macunix' then
   vim.keymap.set('n', '<D-n>', ":silent exec '!/Applications/neovide.app/Contents/MacOS/neovide'<cr>")
 end
+{{- else }}
+if vim.g.neovide then
+  vim.keymap.set('n', '<C-s>', ':w<CR>') -- Save
+  vim.keymap.set('v', '<C-c>', '"+y') -- Copy
+  vim.keymap.set('n', '<C-v>', '"+P') -- Paste normal mode
+  vim.keymap.set('v', '<C-v>', '"+P') -- Paste visual mode
+  vim.keymap.set('c', '<C-v>', '<C-R>+') -- Paste command mode
+  vim.keymap.set('i', '<C-v>', '<ESC>l"+Pli') -- Paste insert mode
+end
+
+vim.api.nvim_set_keymap('', '<C-v>', '+p<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('!', '<C-v>', '<C-R>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<C-v>', '<C-R>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<C-v>', '<C-R>+', { noremap = true, silent = true })
+{{- end }}
 
 -- [[ Setting options ]]
 require 'options'

@@ -1,6 +1,5 @@
 gtk-cursor-theme-name=WhiteSur-cursors
 gtk-cursor-theme-size=48
-gtk-font-name={{.fontFamily}} {{.fontSize}}
 gtk-xft-antialias=1
 gtk-xft-dpi=192
 gtk-xft-hinting=1

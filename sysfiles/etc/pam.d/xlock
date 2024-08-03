@@ -1,0 +1,5 @@
+#%PAM-1.0
+auth	   sufficient  	pam_unix.so try_first_pass likeauth nullok
+auth       sufficient  	pam_fprintd.so
+#auth       required	/lib/security/pam_stack.so service=system-auth
+auth       include	system-auth
