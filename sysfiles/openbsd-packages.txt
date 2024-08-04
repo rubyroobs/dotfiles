@@ -29,7 +29,7 @@ polybar
 rclone
 rofi
 curl
-w3m
+w3m-0.5.3pl20230121p1-image
 wget
 xdotool
 xscreensaver
@@ -43,3 +43,4 @@ git
 xz
 unzip
 p7zip
+xsel
