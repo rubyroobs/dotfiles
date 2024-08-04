@@ -15,10 +15,17 @@ brew install chezmoi
 chezmoi init rubyroobs
 
 # GPG
+gpgconf --kill scdaemon # only for openbsd
 gpg --edit-card # enter: fetch
 
 # change shell to zsh
 chsh -s $(which zsh)
+
+# openbsd: enable rcctls
+doas rcctl enable apmd
+doas rcctl start apmd
+doas rcctl enable pcscd
+doas rcctl start pcscd 
 
 # macOS: enable services
 brew services start borders

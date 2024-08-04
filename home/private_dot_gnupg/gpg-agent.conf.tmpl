@@ -1,8 +1,10 @@
 {{- if eq .chezmoi.os "darwin" -}}
 pinentry-program /opt/homebrew/bin/pinentry-mac
+{{- else if eq .chezmoi.os "openbsd" -}}
+pinentry-program /usr/local/bin/pinentry-dmenu
 {{- else -}}
 pinentry-program /usr/bin/pinentry-curses
-{{ end -}}
+{{- end }}
 enable-ssh-support
 default-cache-ttl 60
 max-cache-ttl 120

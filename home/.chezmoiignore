@@ -38,6 +38,7 @@ bin/
 {{- end -}}
 
 {{- if ne .chezmoi.os "openbsd" -}}
-.xsession
 .config/packages/openbsd
+.gnupg/scdaemon.conf
+.xsession
 {{- end -}}
