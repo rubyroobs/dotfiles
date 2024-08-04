@@ -30,3 +30,8 @@
 .xinitrc
 bin/
 {{- end -}}
+
+{{- if ne .chezmoi.os "openbsd" -}}
+.xsession
+end
+{{- end -}}

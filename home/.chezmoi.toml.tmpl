@@ -4,6 +4,8 @@
 {{- $headless := false -}}{{/* true if this machine does not have a screen and keyboard */}}
 {{- "" -}}
 
+{{- $dpi := "192" -}}{{/* default hidpi since this is almost always the case */}}
+
 {{- $osID := .chezmoi.os -}}
 {{- if hasKey .chezmoi.osRelease "id" -}}
 {{-   $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
@@ -36,6 +38,8 @@
 {{-   if eq $hostname "tanuki" -}}
 {{-     $corp = true -}}
 {{-   else if stdinIsATTY -}}
+{{-     $dpiOptions := list "96" "192" -}}
+{{-     $dpi := promptChoice "dpi?" $dpiOptions -}}
 {{-     $corp = promptBoolOnce . "corp" "corp" -}}
 {{-     $headless = promptBoolOnce . "headless" "headless" -}}
 {{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" -}}
@@ -53,6 +57,7 @@
     {{- else }}
     defaultMonospaceFontFamily = "JetBrainsMono NF"
     {{- end }}
+    dpi = {{ $dpi }}
     corp = {{ $corp }}
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
