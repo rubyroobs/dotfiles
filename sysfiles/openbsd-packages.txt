@@ -44,3 +44,4 @@ xz
 unzip
 p7zip
 xsel
+dbus
