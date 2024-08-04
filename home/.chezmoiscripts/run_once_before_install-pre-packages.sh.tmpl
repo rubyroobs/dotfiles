@@ -10,9 +10,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then
-    echo "Running initial Linux package update and install..."
-    sudo pacman -Syu
-    sudo pacman -S --needed --noconfirm - < {{.chezmoi.sourceDir}}/private_dot_config/packages/pacman/packages.txt
+    echo "Running initial Linux package update and install (hope you're on an arch-based distro)..."
+    yay -Syu
+    yay -S --needed --noconfirm - < {{.chezmoi.sourceDir}}/private_dot_config/packages/pacman/packages.txt
 fi
 
 if [[ "$OSTYPE" == "openbsd"* ]]; then

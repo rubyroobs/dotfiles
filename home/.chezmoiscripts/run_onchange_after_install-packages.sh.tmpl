@@ -168,11 +168,13 @@ if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
 fi
 
 if [[ "$unamestr" == "OpenBSD" ]]; then
+    echo "Copying fonts to system paths..."
     doas mkdir -p /usr/local/share/fonts/
     doas cp -R ~/.fonts/* /usr/local/share/fonts/
     doas mkfontscale /usr/local/share/fonts/*
     doas mkfontdir /usr/local/share/fonts/*
 elif [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
+    echo "Copying fonts to system paths..."
     sudo cp -R ~/.fonts/* /usr/share/fonts/
     sudo mkfontscale /usr/share/fonts/*
     sudo mkfontdir /usr/share/fonts/*
