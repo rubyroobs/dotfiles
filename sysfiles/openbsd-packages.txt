@@ -1,3 +1,4 @@
+ggrep
 polkit
 lxqt-policykit
 libsodium
