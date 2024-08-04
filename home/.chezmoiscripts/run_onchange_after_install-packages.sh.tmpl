@@ -53,11 +53,15 @@ if [ ! -d "$FONT_DIR/zpix" ]; then
     curl -sL -o $FONT_DIR/zpix/zpix.bdf https://github.com/SolidZORO/zpix-pixel-font/releases/latest/download/zpix.bdf
 fi
 
-if [ ! -d "$FONT_DIR/PixelMplus-20130602" ]; then
-    echo "Installing PixelMplus font... (this might fail without unzip installed)"
+if [ ! -d "$FONT_DIR/PixelMplus" ]; then
+    echo "Installing PixelMplus font..."
+    mkdir -p /tmp/pixelmplusfontdl
     curl -sL -o /tmp/PixelMplus-20130602.zip "https://github.com/itouhiro/PixelMplus/releases/download/v1.0.0/PixelMplus-20130602.zip"
-    unzip -q /tmp/PixelMplus-20130602.zip -d $FONT_DIR
+    unzip -qo /tmp/PixelMplus-20130602.zip -d /tmp/pixelmplusfontdl
     rm /tmp/PixelMplus-20130602.zip
+    mkdir -p $FONT_DIR/PixelMplus
+    install -m644 /tmp/pixelmplusfontdl/PixelMplus-20130602/*.tt[fc] $FONT_DIR/PixelMplus
+    rm -rf /tmp/pixelmplusfontdl
 fi
 
 if [ ! -d "$FONT_DIR/DejaVuSansMono" ]; then
@@ -80,58 +84,69 @@ fi
 
 if [ ! -d "$FONT_DIR/Noto" ]; then
     echo "Installing Noto font..."
-    mkdir -p $FONT_DIR/Noto
     mkdir -p /tmp/notofontdl
-    # TODO: auto update this? their formatting means I can't do the latest thingy
     curl -sL -o /tmp/noto-monthly-release-24.8.1.zip "https://github.com/notofonts/notofonts.github.io/archive/refs/tags/noto-monthly-release-24.8.1.zip"
-    unzip -q /tmp/noto-monthly-release-24.8.1.zip -d /tmp/notofontdl
+    unzip -qo /tmp/noto-monthly-release-24.8.1.zip "notofonts.github.io-noto-monthly-release-24.8.1/fonts/*" -d /tmp/notofontdl
     rm /tmp/noto-monthly-release-24.8.1.zip
-    install -Dm644 /tmp/notofontdl/notofonts.github.io-noto-monthly-release-24.8.1/fonts/*/hinted/ttf/*.tt[fc] -t $FONT_DIR/Noto
+    mkdir -p $FONT_DIR/Noto
+    install -m644 /tmp/notofontdl/notofonts.github.io-noto-monthly-release-24.8.1/fonts/*/hinted/ttf/*.tt[fc] $FONT_DIR/Noto
     rm -rf /tmp/notofontdl
 fi
 
 if [ ! -d "$FONT_DIR/NotoCJK" ]; then
     echo "Installing Noto CJK font..."
-    mkdir -p $FONT_DIR/NotoCJK
     curl -sL -o /tmp/01_NotoSerifCJK.ttc.zip "https://github.com/notofonts/noto-cjk/releases/latest/download/01_NotoSerifCJK.ttc.zip"
-    unzip -q /tmp/01_NotoSerifCJK.ttc.zip -d $FONT_DIR/NotoCJK
+    mkdir -p $FONT_DIR/NotoCJK
+    unzip -qo /tmp/01_NotoSerifCJK.ttc.zip -d $FONT_DIR/NotoCJK
     rm /tmp/01_NotoSerifCJK.ttc.zip
 fi
 
 if [ ! -d "$FONT_DIR/MPLUS" ]; then
     echo "Installing MPLUS font..."
-    mkdir -p $FONT_DIR/MPLUS
+    mkdir -p /tmp/mplusfontdl
     curl -sL -o /tmp/c47fd4ff0a604d1517625a0f3d67e6d64e12d585.zip "https://github.com/coz-m/MPLUS_FONTS/archive/c47fd4ff0a604d1517625a0f3d67e6d64e12d585.zip"
-    unzip -q /tmp/c47fd4ff0a604d1517625a0f3d67e6d64e12d585.zip -d /tmp/mplusfontdl
+    unzip -qo /tmp/c47fd4ff0a604d1517625a0f3d67e6d64e12d585.zip -d /tmp/mplusfontdl
     rm /tmp/c47fd4ff0a604d1517625a0f3d67e6d64e12d585.zip
-    install -Dm644 /tmp/mplusfontdl/MPLUS_FONTS-c47fd4ff0a604d1517625a0f3d67e6d64e12d585/fonts/ttf/*.tt[fc] -t $FONT_DIR/MPLUS
+    mkdir -p $FONT_DIR/MPLUS
+    install -m644 /tmp/mplusfontdl/MPLUS_FONTS-c47fd4ff0a604d1517625a0f3d67e6d64e12d585/fonts/ttf/*.tt[fc] $FONT_DIR/MPLUS
     rm -rf /tmp/mplusfontdl
 fi
-
 
 unamestr=$(uname)
 
 if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
     if [ ! -d "$FONT_DIR/SanFrancisco" ]; then
         echo "Installing San Francisco font..."
-        mkdir -p $FONT_DIR/SanFrancisco
+        mkdir -p /tmp/sanfranciscofontdl
         curl -sL -o /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/77f8a1e62803752013d4933dbaf11653ec3826f9.zip"
-        unzip -q /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip -d /tmp/sanfranciscofontdl
+        unzip -qo /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip -d /tmp/sanfranciscofontdl
         rm /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip
-        install -Dm644 /tmp/sanfranciscofontdl/SanFranciscoFont-77f8a1e62803752013d4933dbaf11653ec3826f9/*.otf -t $FONT_DIR/SanFrancisco
+        mkdir -p $FONT_DIR/SanFrancisco
+        install -m644 /tmp/sanfranciscofontdl/SanFranciscoFont-77f8a1e62803752013d4933dbaf11653ec3826f9/*.otf $FONT_DIR/SanFrancisco
         rm -rf /tmp/sanfranciscofontdl
     fi
 
     if [ ! -d "$FONT_DIR/HiraKakuGo" ]; then
-        echo "Installing Hiragino Kaku Gothic Pro font..."
+        echo "Installing Hiragino Kaku Gothic Pro (Japanese/Kana) font..."
+        mkdir -p /tmp/hirakakufontdl
+        curl -sL -o /tmp/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip "https://github.com/sideroad/capturing/archive/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip"
+        unzip -qo /tmp/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip "capturing-be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68/.fonts/*" -d /tmp/hirakakufontdl
+        rm /tmp/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip
         mkdir -p $FONT_DIR/HiraKakuGo
-        curl -sL "https://github.com/sideroad/capturing/archive/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip" | $TAR_BIN xf - --strip-components=2 -C $FONT_DIR/HiraKakuGo capturing-be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68/.fonts/
+        install -m644 /tmp/hirakakufontdl/capturing-be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68/.fonts/*.otf $FONT_DIR/HiraKakuGo
+        rm -rf /tmp/hirakakufontdl
     fi
 
     if [ ! -d "$FONT_DIR/AppleSDGothicNeo" ]; then
-        echo "Installing Hiragino Kaku Gothic Pro font..."
+        echo "Installing Apple SD Gothic Neo (Hangul) font..."
         mkdir -p $FONT_DIR/AppleSDGothicNeo
-        curl -sL "https://github.com/adrinerDP/font-applesdgothicneo/archive/86137e950e321310309cfd7a239746ab1b5ba5ff.zip" | $TAR_BIN xf - --strip-components=2 -C $FONT_DIR/AppleSDGothicNeo font-applesdgothicneo-86137e950e321310309cfd7a239746ab1b5ba5ff/fonts/
+        mkdir -p /tmp/applesdfontdl
+        curl -sL -o /tmp/86137e950e321310309cfd7a239746ab1b5ba5ff.zip "https://github.com/adrinerDP/font-applesdgothicneo/archive/86137e950e321310309cfd7a239746ab1b5ba5ff.zip"
+        unzip -qo /tmp/86137e950e321310309cfd7a239746ab1b5ba5ff.zip "font-applesdgothicneo-86137e950e321310309cfd7a239746ab1b5ba5ff/fonts/*" -d /tmp/applesdfontdl
+        rm /tmp/86137e950e321310309cfd7a239746ab1b5ba5ff.zip
+        mkdir -p $FONT_DIR/AppleSDGothicNeo
+        install -m644 /tmp/applesdfontdl/font-applesdgothicneo-86137e950e321310309cfd7a239746ab1b5ba5ff/fonts/*.otf $FONT_DIR/AppleSDGothicNeo
+        rm -rf /tmp/applesdfontdl
     fi
 
     if [ ! -d "$FONT_DIR/AppleColorEmoji" ]; then
