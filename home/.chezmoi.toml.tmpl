@@ -59,7 +59,7 @@
     {{/*defaultMonospaceFontFamily = "JetBrainsMono NF"*/}}
     defaultMonospaceFontFamily = "Maple Mono NF"
     {{- end }}
-    dpi = {{ $dpi }}
+    dpi = {{ $dpi | atoi | int64 }}
     corp = {{ $corp }}
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
