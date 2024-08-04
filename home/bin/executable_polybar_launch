@@ -7,10 +7,16 @@ pkill polybar
 # Wait until the processes have been shut down
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
+# use GNU grep on OpenBSD
+GREP_BIN=`command -v grep 2>&1`
+if command -v ggrep > /dev/null 2>&1; then
+    GREP_BIN=`command -v ggrep 2>&1`
+fi
+
 # Launch the bar
-if type "xrandr"; then
+if command -v xrandr > /dev/null 2>&1; then
     # the weird regex for connected is to not try connecting to eDP-1 when in clamshell
-    for m in $(xrandr --query | grep " connected\s.*[0-9].*$" | cut -d" " -f1); do
+    for m in $(xrandr --query | $GREP_BIN " connected\s.*[0-9].*$" | cut -d" " -f1); do
         MONITOR=$m polybar -q main -c "$DIR"/config.ini &
     done
 else

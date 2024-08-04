@@ -42,7 +42,7 @@ zsh
 bash
 git
 xz
-unzip
+unzip-6.0p17-iconv
 p7zip
 xsel
 dbus

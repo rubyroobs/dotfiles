@@ -132,4 +132,10 @@ if command -v eza > /dev/null 2>&1; then
     alias l.="eza -a | grep -E '^\.'"
 fi
 
+# prefer ggrep
+if command -v ggrep > /dev/null 2>&1; then
+    alias grep='ggrep --color'
+    alias sgrep='ggrep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
+fi
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
