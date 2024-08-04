@@ -9,6 +9,12 @@ return {
     ["Bold"] = "Bold",
     ["Heavy"] = "Bold",
     ["Black"] = "Bold",
+  {{ else if hasPrefix "Maple Mono" .defaultMonospaceFontFamily }}
+    ["Regular"] = "Light",
+    ["Semibold"] = "Regular",
+    ["Bold"] = "Bold",
+    ["Heavy"] = "Bold",
+    ["Black"] = "Bold",
   {{ else }}
     ["Regular"] = "Regular",
     ["Semibold"] = "Medium",

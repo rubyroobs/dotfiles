@@ -62,3 +62,4 @@ greetd
 1password
 xz
 unzip
+p7zip

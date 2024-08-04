@@ -42,3 +42,4 @@ bash
 git
 xz
 unzip
+p7zip
