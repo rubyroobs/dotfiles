@@ -60,3 +60,5 @@ zsh
 xinit-xsession
 greetd
 1password
+xz
+unzip

@@ -48,7 +48,11 @@
 
 [data]
     colorscheme = "frappe"
+    {{- if eq .chezmoi.os "darwin" -}}
+    defaultMonospaceFontFamily = "JetBrainsMono Nerd Font"
+    {{- else }}
     defaultMonospaceFontFamily = "JetBrainsMono NF"
+    {{- end }}
     corp = {{ $corp }}
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
