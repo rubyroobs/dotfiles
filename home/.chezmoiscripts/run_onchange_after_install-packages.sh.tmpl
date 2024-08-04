@@ -156,14 +156,15 @@ if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
     fi
 fi
 
-if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
-    PRIV_ESC_BIN=`command -v sudo 2>&1`
-    if command -v doas > /dev/null 2>&1; then
-        PRIV_ESC_BIN=`command -v doas 2>&1`
-    fi
-    $PRIV_ESC_BIN cp -R ~/.fonts/* /usr/share/fonts/
-    $PRIV_ESC_BIN mkfontscale /usr/share/fonts/*
-    $PRIV_ESC_BIN mkfontdir /usr/share/fonts/*
+if [[ "$unamestr" == "OpenBSD" ]]; then
+    doas mkdir -p /usr/local/share/fonts/
+    doas cp -R ~/.fonts/* /usr/local/share/fonts/
+    doas mkfontscale /usr/local/share/fonts/*
+    doas mkfontdir /usr/local/share/fonts/*
+elif [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
+    sudo cp -R ~/.fonts/* /usr/share/fonts/
+    sudo mkfontscale /usr/share/fonts/*
+    sudo mkfontdir /usr/share/fonts/*
 fi
 
 echo "Rebuilding font cache..."
