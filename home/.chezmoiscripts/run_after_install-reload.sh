@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # VS Code
 if [ -d "$HOME/Library/Application Support" ]; then

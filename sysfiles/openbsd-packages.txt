@@ -38,3 +38,5 @@ youtube-dl
 yt-dlp
 yubikey-manager
 zsh
+bash
+git
