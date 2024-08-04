@@ -1,3 +1,4 @@
+neofetch
 ggrep
 polkit
 lxqt-policykit
