@@ -17,6 +17,9 @@ chezmoi init rubyroobs
 # GPG
 gpg --edit-card # enter: fetch
 
+# change shell to zsh
+chsh -s $(which zsh)
+
 # macOS: enable services
 brew services start borders
 brew services start sketchybar

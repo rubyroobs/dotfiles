@@ -24,13 +24,17 @@ fi
 # universal package update alias function thingy
 function pkgup() {
     if command -v brew > /dev/null 2>&1; then
-        brew bundle --verbose --no-lock --file=$HOME/.config/homebrew/Brewfile || true
+        brew bundle --verbose --no-lock --file=$HOME/.config/packages/darwin/Brewfile || true
+        brew upgrade
     elif command -v yay > /dev/null 2>&1; then
         yay -Syu
+        yay -S --needed --noconfirm - < $HOME/.config/packages/pacman/packages.txt
     elif command -v pacman > /dev/null 2>&1; then
-        doas pacman -Syu
+        sudo pacman -Syu
+        sudo pacman -S --needed --noconfirm - < $HOME/.config/packages/pacman/packages.txt
     elif command -v pkg_add > /dev/null 2>&1; then
         doas pkg_add -uvi
+        doas pkg_add -l $HOME/.config/packages/openbsd/packages.txt
     fi
 }
 

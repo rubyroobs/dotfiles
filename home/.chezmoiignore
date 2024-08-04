@@ -9,7 +9,7 @@
 
 {{- if ne .chezmoi.os "darwin" -}}
 .ssh/ssh-askpass
-.config/homebrew
+.config/packages/darwin
 .config/sketchybar
 .config/skhd
 .config/yabai
@@ -33,7 +33,11 @@
 bin/
 {{- end -}}
 
+{{- if ne .chezmoi.os "linux" -}}{{/*TODO: make this more specific to pacman/arch based distros?*/}}
+.config/packages/pacman
+{{- end -}}
+
 {{- if ne .chezmoi.os "openbsd" -}}
 .xsession
-end
+.config/packages/openbsd
 {{- end -}}

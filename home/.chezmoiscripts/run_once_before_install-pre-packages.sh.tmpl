@@ -6,5 +6,17 @@ set -eufo pipefail
 if [[ "$OSTYPE" == "darwin"* ]]; then
     command -v brew >/dev/null 2>&1 || (echo '🍺  Installing Homebrew' && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
 
-    brew bundle --verbose --no-lock --file={{.chezmoi.sourceDir}}/private_dot_config/homebrew/Brewfile
+    brew bundle --verbose --no-lock --file={{.chezmoi.sourceDir}}/private_dot_config/packages/darwin/Brewfile
+fi
+
+if [[ "$OSTYPE" == "linux"* ]]; then
+    echo "Running initial Linux package update and install..."
+    sudo pacman -Syu
+    sudo pacman -S --needed --noconfirm - < {{.chezmoi.sourceDir}}/private_dot_config/packages/pacman/packages.txt
+fi
+
+if [[ "$OSTYPE" == "openbsd"* ]]; then
+    echo "Running initial OpenBSD package update and install..."
+    doas pkg_add -uvi
+    doas pkg_add -l {{.chezmoi.sourceDir}}/private_dot_config/packages/openbsd/packages.txt
 fi
