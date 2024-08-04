@@ -56,27 +56,6 @@ function op_download_ssh_key() {
     {{- end }}
 }
 
-# neovim and neovide
-if command -v nvim > /dev/null 2>&1; then
-    alias vimdiff='nvim -d'
-    alias vi='nvim'
-    alias vim='nvim'
-elif command -v vim > /dev/null 2>&1; then
-    alias vi='vim'
-fi
-
-if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux-gnu"* ]]; then
-    alias neovide='open --new -b com.neovide.neovide --args ${PWD}'
-fi
-
-# prefer doas (alias doas to sudo if no doas, alias sudo to doas if doas)
-if command -v doas > /dev/null 2>&1 && doas -C /etc/doas.conf; then
-    alias sudo='doas'
-    alias sudoedit='doas nvim'
-elif command -v sudo > /dev/null 2>&1; then
-    alias doas='sudo'
-fi
-
 # for git plugins
 function __git_files () {
     _wanted files expl 'local files' _files  
@@ -115,6 +94,42 @@ if [ -f "$HOME/.antidote/antidote.zsh" ]; then
     bindkey '^[OB' history-substring-search-down
     bindkey "^R" history-incremental-search-backward
     HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+fi
+
+# Aliases (after antidote as ohmyzsh/common-aliases overwrites some like l)
+# neovim and neovide
+if command -v nvim > /dev/null 2>&1; then
+    alias vimdiff='nvim -d'
+    alias vi='nvim'
+    alias vim='nvim'
+elif command -v vim > /dev/null 2>&1; then
+    alias vi='vim'
+fi
+
+if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux-gnu"* ]]; then
+    alias neovide='open --new -b com.neovide.neovide --args ${PWD}'
+fi
+
+# prefer doas (alias doas to sudo if no doas, alias sudo to doas if doas)
+if command -v doas > /dev/null 2>&1 && doas -C /etc/doas.conf; then
+    alias sudo='doas'
+    alias sudoedit='doas nvim'
+elif command -v sudo > /dev/null 2>&1; then
+    alias doas='sudo'
+fi
+
+# prefer eza
+if command -v eza > /dev/null 2>&1; then
+    alias ls='eza --color=always --group-directories-first --icons'
+    alias ll='eza -la --icons --octal-permissions --group-directories-first'
+    alias l='eza -bGF --header --git --color=always --group-directories-first --icons'
+    alias llm='eza -lbGd --header --git --sort=modified --color=always --group-directories-first --icons' 
+    alias la='eza --long --all --group --group-directories-first'
+    alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale --color=always --group-directories-first --icons'
+
+    alias lS='eza -1 --color=always --group-directories-first --icons'
+    alias lt='eza --tree --level=2 --color=always --group-directories-first --icons'
+    alias l.="eza -a | grep -E '^\.'"
 fi
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
