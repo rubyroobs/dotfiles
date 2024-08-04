@@ -14,13 +14,15 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
     done
 fi
 
+{{- if ne .chezmoi.os "openbsd" }}
 # rustup
 if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
     echo "Installing rustup..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
+{{- end }}
 
-{{- if (eq .chezmoi.os "darwin") }}
+{{- if eq .chezmoi.os "darwin" }}
 # libfido2 SK provider for macOS ssh-agent
 if [ ! -f "/usr/local/lib/libsk-libfido2.dylib" ]; then
     if command -v install-libsk-libfido2 > /dev/null 2>&1; then
