@@ -1,7 +1,7 @@
 {{- if eq .chezmoi.os "darwin" -}}
 pinentry-program /opt/homebrew/bin/pinentry-mac
 {{- else if eq .chezmoi.os "openbsd" -}}
-pinentry-program /usr/local/bin/pinentry-dmenu
+pinentry-program /usr/local/bin/pinentry-curses
 {{- else -}}
 pinentry-program /usr/bin/pinentry-curses
 {{- end }}
