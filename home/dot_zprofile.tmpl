@@ -4,6 +4,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export SSH_SK_PROVIDER=/usr/local/lib/libsk-libfido2.dylib
     export SSH_ASKPASS=$HOME/.ssh/ssh-askpass
     # export SSH_ASKPASS_REQUIRE=force
+elif [ -f "/usr/lib/ssh/gnome-ssh-askpass3" ]; then
+    PATH="$PATH:$HOME/bin"
+    export SSH_ASKPASS=/usr/lib/ssh/gnome-ssh-askpass3
 else
     PATH="$PATH:$HOME/bin"
     export SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass

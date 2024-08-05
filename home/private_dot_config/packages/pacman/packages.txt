@@ -44,8 +44,8 @@ rofi
 curl
 w3m
 wget
-x11-ssh-askpass
 xdotool
+gnome-ssh-askpass3
 xorg-mkfontscale
 xorg-xfontsel
 xorg-xlsfonts
