@@ -4,7 +4,7 @@ libsodium
 ripgrep
 lazygit
 ffmpeg
-lxqt-policykit
+lxsession-gtk3
 wireplumber
 pipewire-pulse
 pipewire

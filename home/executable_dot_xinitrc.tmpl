@@ -50,6 +50,10 @@ if command -v lxqt-policykit-agent > /dev/null 2>&1; then
     lxqt-policykit-agent &
 fi
 
+if command -v lxsession > /dev/null 2>&1; then
+    lxsession &
+fi
+
 if command -v pipewire > /dev/null 2>&1; then
     pipewire &
 fi
