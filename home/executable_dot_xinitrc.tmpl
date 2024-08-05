@@ -6,7 +6,11 @@ export GDK_SCALE={{ divf .dpi 96 }}
 export GDK_DPI_SCALE={{ divf 96 .dpi }}
 export QT_SCREEN_SCALE_FACTORS={{ divf .dpi 96 }}
 export QT_FONT_DPI={{ .dpi }}
-export GTK_IM_MODULE=fcitx
+if [[ "$OSTYPE" == "openbsd"* ]]; then
+    export GTK_IM_MODULE=xim
+else
+    export GTK_IM_MODULE=fcitx
+fi
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export GLFW_IM_MODULE=ibus
