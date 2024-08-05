@@ -1,3 +1,7 @@
+{{- $grep_bin := "grep" -}}
+{{- if eq $.chezmoi.os "openbsd" -}}
+{{- $grep_bin = "ggrep" -}}
+{{- end -}}
 {{- $keyFiles := list
     "~/.ssh/ruby_gitlab_ed25519"
     "~/.ssh/ruby_gitlab_ed25519_alt"
@@ -23,7 +27,7 @@ Match Exec "[ -f {{ $keyFile }} ]"
         "544" "5CTF_544_panther" -}}
 
 {{ range $serialSuffix, $handleFile := $fidoSerialHandles -}}
-Match Exec "gpg --card-status | grep -Pq '(?<=Serial number).*\K[0-9]{5}{{$serialSuffix}}$'"
+Match Exec "gpg --card-status | {{$grep_bin}} -Pq '(?<=Serial number).*\K[0-9]{5}{{$serialSuffix}}$'"
     {{- if eq $.chezmoi.os "darwin" }}
     IgnoreUnknown               UseKeychain
     UseKeychain                 yes
