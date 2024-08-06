@@ -22,6 +22,28 @@ if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
 fi
 {{- end }}
 
+{{- if eq .chezmoi.os "openbsd" }}
+# gitstatusd
+if [ ! -f "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-romkatv-SLASH-powerlevel10k/gitstatus/usrbin/gitstatusd" ]; then
+    echo "Getting dependencies for and compiling gitstatusd..."
+    doas pkg_add cmake gmake gcc-11.2.0p13 g++-11.2.0p14 git wget
+    (cd $HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-romkatv-SLASH-powerlevel10k/gitstatus && bash ./build -w)
+fi
+
+# rbenv
+if [ ! -d "$HOME/.rbenv" ]; then
+    echo "Installing rbenv and dependencies..."
+    doas pkg_add git gcc-11.2.0p13 gmake libffi libyaml openssl-3.3.1p0v0
+    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+    git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    export PATH="$HOME/.rbenv/shims:$PATH"
+    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local"
+    eval "$(rbenv init -)"
+    rbenv install $(rbenv install -l | grep -v - | tail -1)
+fi
+{{- end }}
+
 {{- if eq .chezmoi.os "darwin" }}
 # libfido2 SK provider for macOS ssh-agent
 if [ ! -f "/usr/local/lib/libsk-libfido2.dylib" ]; then
