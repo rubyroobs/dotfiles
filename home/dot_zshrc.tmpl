@@ -29,6 +29,11 @@ if [[ -d "$HOME/.rbenv" ]]; then
     eval "$(rbenv init -)"
 fi
 
+# LLVM (libclang) OpenBSD
+if [[ "$OSTYPE" == "openbsd"* ]]; then
+    export LIBCLANG_PATH=/usr/local/llvm17/lib
+fi
+
 # universal package update alias function thingy
 function pkgup() {
     if command -v brew > /dev/null 2>&1; then

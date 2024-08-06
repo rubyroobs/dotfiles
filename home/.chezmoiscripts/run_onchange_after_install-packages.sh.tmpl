@@ -225,6 +225,13 @@ fi
 echo "Rebuilding font cache..."
 fc-cache -f
 
+# markdownlint if node available
+if command -v node > /dev/null 2>&1; then
+    if ! command -v markdownlint > /dev/null 2>&1; then
+        doas npm install -g markdownlint-cli
+    fi
+fi
+
 # macOS application and sketchybar helper bootstrap
 if [[ "$OSTYPE" == "darwin"* ]]; then
     if [ ! -f "/Applications/kitty.app/Contents/MacOS/kitty" ]; then

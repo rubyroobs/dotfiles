@@ -1,3 +1,4 @@
+llvm-17.0.6p11
 gnupg
 pcsc-tools
 neofetch

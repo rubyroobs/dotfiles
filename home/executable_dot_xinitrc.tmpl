@@ -29,6 +29,12 @@ if [[ "$OSTYPE" == "openbsd"* ]]; then
     if [ -x ${PREFIX}/bin/dbus-launch -a -z "${DBUS_SESSION_BUS_ADDRESS}" ]; then
         eval `dbus-launch --sh-syntax --exit-with-x11`
     fi
+
+    find /usr/local/share/fonts -type f -name 'fonts.dir' | sed -r 's|/[^/]+$||' | sort | uniq | xargs -I % xset fp+ %
+    xset fp rehash
+else
+    find /usr/share/fonts -type f -name 'fonts.dir' | sed -r 's|/[^/]+$||' | sort | uniq | xargs -I % xset fp+ %
+    xset fp rehash
 fi
 
 if command -v autorandr > /dev/null 2>&1; then
