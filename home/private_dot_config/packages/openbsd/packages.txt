@@ -58,5 +58,4 @@ rust-gdb
 go
 gopls
 go-tools
-ruby33
 node
