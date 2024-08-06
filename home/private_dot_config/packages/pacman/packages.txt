@@ -1,10 +1,11 @@
+vmware-workstation
 whitesur-cursor-theme-git
 fastfetch
 libsodium
 ripgrep
 lazygit
 ffmpeg
-lxsession-gtk3
+lxsession
 wireplumber
 pipewire-pulse
 pipewire
