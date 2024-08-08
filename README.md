@@ -28,6 +28,8 @@ sudo ln -s /etc/srv/pcscd /var/service
 sudo ln -s /etc/srv/polkitd /var/service
 sudo ln -s /etc/srv/wpa_supplicant /var/service
 echo "session         optional        pam_rundir.so" | sudo tee -a /etc/pam.d/login
+sudo usermod -a -G users ruby
+sudo usermod -a -G plugdev ruby
 
 # openbsd: enable rcctls
 doas rcctl enable apmd

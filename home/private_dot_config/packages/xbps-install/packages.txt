@@ -88,4 +88,6 @@ clang-tools-extra
 make
 openssh
 openssh-sk-helper
+ykpers
+libu2f-host
 gcc
