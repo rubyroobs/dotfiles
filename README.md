@@ -22,8 +22,9 @@ gpg --edit-card # enter: fetch
 chsh -s $(which zsh)
 
 # void: enable services and setup pam_rundir
-sudo ln -s /etc/srv/alsa /var/service
+sudo ln -s /etc/srv/dbus /var/service
 sudo ln -s /etc/srv/dhcpcd /var/service
+sudo ln -s /etc/srv/elogind /var/service
 sudo ln -s /etc/srv/pcscd /var/service
 sudo ln -s /etc/srv/polkitd /var/service
 sudo ln -s /etc/srv/wpa_supplicant /var/service

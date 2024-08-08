@@ -1,4 +1,5 @@
 void-repo-nonfree
+elogind
 alsa-utils
 pam_rundir
 inxi
