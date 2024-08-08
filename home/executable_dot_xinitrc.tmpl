@@ -80,7 +80,9 @@ elif command -v fcitx > /dev/null 2>&1; then
     fcitx &
 fi
 
+sleep 3
+
 if command -v bspwm > /dev/null 2>&1; then
-    exec bspwm
+    exec dbus-run-session -- bspwm
 fi
 

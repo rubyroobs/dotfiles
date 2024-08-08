@@ -25,6 +25,7 @@
 .config/rofi
 .config/sxhkd
 .fehbg
+.gnupg/scdaemon.conf
 .gtkrc
 .gtkrc-2.0
 .Xmodmap
@@ -39,6 +40,5 @@ bin/
 
 {{- if ne .chezmoi.os "openbsd" -}}
 .config/packages/openbsd
-.gnupg/scdaemon.conf
 .xsession
 {{- end -}}

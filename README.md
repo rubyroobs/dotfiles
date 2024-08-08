@@ -21,6 +21,14 @@ gpg --edit-card # enter: fetch
 # change shell to zsh
 chsh -s $(which zsh)
 
+# void: enable services and setup pam_rundir
+sudo ln -s /etc/srv/alsa /var/service
+sudo ln -s /etc/srv/dhcpcd /var/service
+sudo ln -s /etc/srv/pcscd /var/service
+sudo ln -s /etc/srv/polkitd /var/service
+sudo ln -s /etc/srv/wpa_supplicant /var/service
+echo "session         optional        pam_rundir.so" | sudo tee -a /etc/pam.d/login
+
 # openbsd: enable rcctls
 doas rcctl enable apmd
 doas rcctl start apmd

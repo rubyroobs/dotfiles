@@ -34,6 +34,9 @@ function pkgup() {
     if command -v brew > /dev/null 2>&1; then
         brew bundle --verbose --no-lock --file=$HOME/.config/packages/darwin/Brewfile || true
         brew upgrade
+    elif command -v xbps-install > /dev/null 2>&1; then
+        sudo xbps-install -Syu
+        sudo xbps-install -Syu $(cat $HOME/.config/packages/xbps-install/packages.txt)
     elif command -v yay > /dev/null 2>&1; then
         yay -Syu
         yay -S --needed --noconfirm - < $HOME/.config/packages/pacman/packages.txt

@@ -9,10 +9,17 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     brew bundle --verbose --no-lock --file={{.chezmoi.sourceDir}}/private_dot_config/packages/darwin/Brewfile
 fi
 
-if [[ "$OSTYPE" == "linux"* ]]; then
-    echo "Running initial Linux package update and install (hope you're on an arch-based distro)..."
+if command -v yay > /dev/null 2>&1; then
+    echo "Running initial Linux package update and install via yay..."
     yay -Syu
     yay -S --needed --noconfirm - < {{.chezmoi.sourceDir}}/private_dot_config/packages/pacman/packages.txt
+fi
+
+if command -v xbps-install > /dev/null 2>&1; then
+    echo "Running initial Linux package update and install via xbps-install..."
+    sudo xbps-install -Syu
+    sudo xbps-install -Sy void-repo-nonfree
+    sudo xbps-install -Sy $(cat {{.chezmoi.sourceDir}}/private_dot_config/packages/xbps-install/packages.txt)
 fi
 
 if [[ "$OSTYPE" == "openbsd"* ]]; then
