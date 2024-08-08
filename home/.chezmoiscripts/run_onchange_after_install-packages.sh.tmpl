@@ -14,6 +14,26 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
     done
 fi
 
+# 1Password CLI (op)
+if [ ! "$(command -v op)" ]; then
+    OP_VERSION="2.30.0"
+    # todo: detect and support ARM
+    wget "https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/op_{{.chezmoi.os}}_amd64_v${OP_VERSION}.zip" -O /tmp/opcli.zip
+    unzip -d /tmp/opcli /tmp/opcli.zip 
+    if [ "$(command -v doas)" ]; then
+        doas mv /tmp/opcli/op /usr/local/bin/
+        doas groupadd -f onepassword-cli
+        doas chgrp onepassword-cli /usr/local/bin/op
+        doas chmod g+s /usr/local/bin/op
+    else
+        sudo mv /tmp/opcli/op /usr/local/bin/
+        sudo groupadd -f onepassword-cli
+        sudo chgrp onepassword-cli /usr/local/bin/op
+        sudo chmod g+s /usr/local/bin/op
+    fi
+    rm -r /tmp/opcli.zip /tmp/opcli
+fi
+
 {{- if ne .chezmoi.os "openbsd" }}
 # rustup
 if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
@@ -86,7 +106,7 @@ if [ ! -d "$FONT_DIR/PixelMplus" ]; then
     mkdir -p $FONT_DIR/PixelMplus
     install -m644 /tmp/pixelmplusfontdl/PixelMplus-20130602/*.tt[fc] $FONT_DIR/PixelMplus
     rm -rf /tmp/pixelmplusfontdl
-fi
+fi\
 
 if [ ! -d "$FONT_DIR/DejaVuSansMono" ]; then
     echo "Installing DejaVu Sans Mono font..."
