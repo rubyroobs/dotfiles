@@ -7,7 +7,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 elif [ -f "/usr/lib/ssh/gnome-ssh-askpass3" ]; then
     PATH="$PATH:$HOME/bin"
     export SSH_ASKPASS=/usr/lib/ssh/gnome-ssh-askpass3
-else
+elif [ -f "/usr/lib/ssh/gnome-ssh-askpass" ]; then
+    PATH="$PATH:$HOME/bin"
+    export SSH_ASKPASS=/usr/lib/ssh/gnome-ssh-askpass
+elif [ -f "/usr/lib/ssh/x11-ssh-askpass" ]; then
     PATH="$PATH:$HOME/bin"
     export SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass
 fi
