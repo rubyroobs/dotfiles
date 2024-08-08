@@ -86,4 +86,6 @@ clang
 clang-analyzer
 clang-tools-extra
 make
+openssh
+openssh-sk-helper
 gcc
