@@ -1,4 +1,8 @@
 void-repo-nonfree
+linux-headers
+linux-mainline-headers
+linux-tools
+autoconf
 elogind
 alsa-utils
 pam_rundir
@@ -9,9 +13,9 @@ pcsc-ccid
 pcsclite
 u2f-hidraw-policy
 kitty
-xlockmore
+xsecurelock
 polkit
-polkit-qt5
+polkit-gnome
 xtools
 vim
 xdg-desktop-portal

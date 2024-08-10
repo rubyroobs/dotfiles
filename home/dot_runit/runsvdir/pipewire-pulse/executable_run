@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if command -v pipewire-pulse > /dev/null 2>&1 && sv check "$HOME/.runit/runsvdir/wireplumber"; then
+    exec pipewire-pulse
+else
+    exit 1
+fi
+

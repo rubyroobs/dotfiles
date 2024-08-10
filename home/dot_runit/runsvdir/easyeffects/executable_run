@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if command -v easyeffects > /dev/null 2>&1 && sv check "$HOME/.runit/runsvdir/pipewire-pulse"; then
+    exec easyeffects -gapplication-service
+else
+    exit 1
+fi
+

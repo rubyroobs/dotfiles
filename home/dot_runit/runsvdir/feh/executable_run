@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if command -v feh > /dev/null 2>&1; then
+    exec feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*.png
+else
+    exit 1
+fi
+

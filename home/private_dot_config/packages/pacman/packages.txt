@@ -52,7 +52,7 @@ xorg-xfontsel
 xorg-xlsfonts
 xscreensaver
 xsel
-xlockmore
+xsecurelock
 xss-lock
 youtube-dl
 yt-dlp

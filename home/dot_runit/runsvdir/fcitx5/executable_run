@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if command -v fcitx5 > /dev/null 2>&1; then
+    exec fcitx5
+elif command -v fcitx > /dev/null 2>&1; then
+    exec fcitx
+else
+    exit 1
+fi
+

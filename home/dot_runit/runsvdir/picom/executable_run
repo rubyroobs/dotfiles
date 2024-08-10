@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if command -v picom > /dev/null 2>&1; then
+    exec picom
+else
+    exit 1
+fi
+
