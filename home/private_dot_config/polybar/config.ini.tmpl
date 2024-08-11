@@ -19,7 +19,7 @@
 [global/wm]
 margin-top = 0
 margin-bottom = 0
-include-file = $HOME/.config/polybar/colors.ini
+include-file = $HOME/.config/polybar/frappe.ini
 include-file = $HOME/.config/polybar/modules.ini
 {{- if eq $.chezmoi.os "openbsd" }}
 include-file = $HOME/.config/polybar/modules_openbsd.ini
@@ -36,10 +36,10 @@ fixed_center = true
 
 dpi = {{.dpi}}
 
-background = ${colors.bg}
-foreground = ${colors.fg}
+background = ${colors.crust}
+foreground = ${colors.text}
 
-padding = 0 
+padding-right = 1
 
 module-margin = 1
 
