@@ -24,6 +24,6 @@ fi
 
 if [[ "$OSTYPE" == "openbsd"* ]]; then
     echo "Running initial OpenBSD package update and install..."
-    doas pkg_add -uvi
-    doas pkg_add -l {{.chezmoi.sourceDir}}/private_dot_config/packages/openbsd/packages.txt
+    doas pkg_add -uvi || true
+    doas pkg_add -l {{.chezmoi.sourceDir}}/private_dot_config/packages/openbsd/packages.txt || true
 fi

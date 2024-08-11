@@ -1,4 +1,5 @@
-llvm-17.0.6p11
+obsdfreqd
+llvm-17.0.6p12
 gnupg
 pcsc-tools
 neofetch

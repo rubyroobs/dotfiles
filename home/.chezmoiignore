@@ -34,11 +34,17 @@
 bin/
 {{- end -}}
 
-{{- if ne .chezmoi.os "linux" -}}{{/*TODO: make this more specific to pacman/arch based distros?*/}}
+{{- if ne .chezmoi.os "linux" -}}
 .config/packages/pacman
+.config/packages/xbps-install
+.runit/runsvdir/pipewire
+.runit/runsvdir/pipewire-pulse
+.runit/runsvdir/wireplumber
+.runit/runsvdir/easyeffects
 {{- end -}}
 
 {{- if ne .chezmoi.os "openbsd" -}}
 .config/packages/openbsd
+.profile
 .xsession
 {{- end -}}

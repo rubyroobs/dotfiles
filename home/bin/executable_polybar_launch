@@ -2,6 +2,7 @@
 
 if command -v runsvdir > /dev/null 2>&1; then
     # todo: restart the service?
+    true
 else
     DIR="$HOME/.config/polybar"
     # Terminate already running bar instances

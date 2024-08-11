@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
 export MONITOR=DP-3
-connected=$(xrandr --listactivemonitors | grep "\s$MONITOR")
 
-sleep 3
+# use GNU grep on OpenBSD
+GREP_BIN=`command -v grep 2>&1`
+if command -v ggrep > /dev/null 2>&1; then
+    GREP_BIN=`command -v ggrep 2>&1`
+fi
+connected=$(xrandr --listactivemonitors | $GREP_BIN "\s$MONITOR")
 
-if command -v polybar > /dev/null 2>&1 && [[ $connected != "" ]] && sv check "$HOME/.runit/runsvdir/pipewire-pulse"; then
+if command -v polybar > /dev/null 2>&1 && [[ $connected != "" ]]; then
     exec polybar -q main -c "$HOME/.config/polybar/config.ini"
 else
     exit 1
