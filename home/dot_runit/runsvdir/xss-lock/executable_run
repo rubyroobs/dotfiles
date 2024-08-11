@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 if command -v xss-lock > /dev/null 2>&1; then
-    exec xss-lock xsecurelock
+    if command -v xss-lock > /dev/null 2>&1; then
+        exec xss-lock xsecurelock
+    else
+        exec xss-lock xlock
+    fi
 else
     exit 1
 fi
