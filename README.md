@@ -21,6 +21,8 @@ gpg --edit-card # enter: fetch
 # change shell to zsh
 chsh -s $(which zsh)
 
+# setup mac like keybinds https://superuser.com/a/1197929
+
 # void: enable services and setup pam_rundir
 sudo ln -s /etc/srv/dbus /var/service
 sudo ln -s /etc/srv/dhcpcd /var/service

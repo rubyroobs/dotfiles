@@ -54,6 +54,11 @@ function pkgup() {
     fi
 }
 
+# 
+function restartit() {
+    sv force-shutdown $HOME/.runit/runsvdir/*
+}
+
 ## 1Password
 # update file from template
 function op_update_secret_from_template() {
