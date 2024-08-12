@@ -75,9 +75,9 @@ if [ ! -f "/usr/local/lib/libsk-libfido2.dylib" ]; then
 fi
 {{- end }}
 
-# runit via busybox
+# runit via busybox~
 if ! command -v sv > /dev/null 2>&1 && command -v busybox > /dev/null 2>&1; then
-    busybox --list | awk '/^runsv|^chpst$|^sv/' | xargs -I{} ln -sv /usr/bin/busybox /usr/local/bin/{}
+    busybox --list | awk '/^runsv|^chpst$|^sv/' | xargs -I{} sudo ln -sv /usr/bin/busybox /usr/local/bin/{}
 fi
 
 # fonts!

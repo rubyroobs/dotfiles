@@ -17,7 +17,7 @@ bspwm
 chezmoi
 easyeffects
 firefox
-runit-systemd
+busybox
 feh
 intel-media-driver
 eza
