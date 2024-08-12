@@ -1,3 +1,5 @@
+lsp-plugins
+man
 vmware-workstation
 whitesur-cursor-theme-git
 fastfetch
@@ -51,6 +53,7 @@ gnome-ssh-askpass3
 xorg-mkfontscale
 xorg-xfontsel
 xorg-xlsfonts
+xorg-xsetroot
 xscreensaver
 xsel
 xsecurelock

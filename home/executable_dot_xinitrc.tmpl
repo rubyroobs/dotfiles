@@ -48,6 +48,10 @@ if command -v autorandr > /dev/null 2>&1; then
     sleep 1
 fi
 
+if command -v feh > /dev/null 2>&1; then
+    feh --bg-center --bg-fill --no-fehbg --randomize ~/.wallpapers/*.png &
+fi
+
 xset s 600
 
 if command -v runsvdir > /dev/null 2>&1; then

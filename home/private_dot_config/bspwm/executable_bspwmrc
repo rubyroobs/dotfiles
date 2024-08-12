@@ -1,7 +1,5 @@
 #! /bin/sh
 
-pgrep -x sxhkd > /dev/null || sxhkd &
-
 # detect desk setup or just laptop
 if [[ $(xrandr --query | grep " connected primary" | cut -d" " -f1) == "DP-3" ]]; then
     bspc monitor DP-3 -d 1 2 3 4 5 6 7 8

@@ -38,7 +38,6 @@ bin/
 .config/packages/pacman
 .config/packages/xbps-install
 .runit/runsvdir/pipewire
-.runit/runsvdir/pipewire-pulse
 .runit/runsvdir/wireplumber
 .runit/runsvdir/easyeffects
 {{- end -}}
