@@ -3,6 +3,7 @@ llvm-17.0.6p12
 gnupg
 pcsc-tools
 neofetch
+gsed
 ggrep
 polkit
 lxqt-policykit
@@ -39,7 +40,6 @@ curl
 w3m-0.5.3pl20230121p1-image
 wget
 xdotool
-xsecurelock
 xscreensaver
 xss-lock
 youtube-dl

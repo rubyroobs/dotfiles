@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if command -v sxhkd > /dev/null 2>&1; then
-    cd $HOME && exec sxhkd
+    pkill sxhkd; cd $HOME && exec sxhkd
 else
     exit 1
 fi
