@@ -14,5 +14,10 @@ dynamic_background_opacity yes
 font_family {{ .defaultMonospaceFontFamily }}, monospace, emoji 
 font_size 14
 
+# Keybinds
+map super+v             paste_from_clipboard
+map super+c             copy_to_clipboard
+map super+w             close_window
+
 # Colors
 {{- includeTemplate (print "colorschemes/" .colorscheme "/kitty") . -}}

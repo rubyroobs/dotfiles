@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ -f "$HOME/bin/xkb_net_active_window_switch" ]]; then
+    exec $HOME/bin/xkb_net_active_window_switch
+else
+    exit 1
+fi
+
+

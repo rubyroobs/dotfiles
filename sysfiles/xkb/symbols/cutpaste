@@ -2,7 +2,7 @@ default partial xkb_symbols "superversions" {
     replace key <AB01> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               z,               Z, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatX>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatZ>,mods=Control,clearmods=Super)]
     };
     replace key <AB02> {
         type[Group1]= "ALPHABETIC_SUPER",
@@ -22,32 +22,32 @@ default partial xkb_symbols "superversions" {
     replace key <AC01> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               a,               A, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatV>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatA>,mods=Control,clearmods=Super)]
     };
     replace key <AC02> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               s,               S, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatV>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatS>,mods=Control,clearmods=Super)]
     };
     replace key <AD02> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               w,               W, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatV>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatW>,mods=Control,clearmods=Super)]
     };
     replace key <AD05> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               t,               T, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatV>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatT>,mods=Control,clearmods=Super)]
     };
     replace key <AD09> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               o,               O, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatV>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatO>,mods=Control,clearmods=Super)]
     };
     replace key <AD10> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               p,               P, NoSymbol ],
-        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatV>,mods=Control,clearmods=Super)]
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatP>,mods=Control,clearmods=Super)]
     };
 };
 

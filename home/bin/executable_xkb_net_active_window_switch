@@ -1,0 +1,31 @@
+#!/usr/bin/env	bash
+
+# default options
+setxkbmap -option ctrl:nocaps -option cutpaste:super
+
+# time tracking to avoid duplicates
+timestp=$(date +%s)
+
+# use GNU grep on OpenBSD
+GREP_BIN=`command -v grep 2>&1`
+if command -v ggrep > /dev/null 2>&1; then
+	GREP_BIN=`command -v ggrep 2>&1`
+fi
+
+xprop -spy -root _NET_ACTIVE_WINDOW | $GREP_BIN --line-buffered -o '0[xX][a-zA-Z0-9]\{1,7\}' |
+while read -r id; do
+	newtime=$(date +%s)
+	timediff=$((newtime-timestp))
+	if [ $timediff -gt 0 ]; then
+		if xprop -id $id WM_CLASS | $GREP_BIN kitty > /dev/null 2>&1; then
+			if setxkbmap -query | $GREP_BIN 'cutpaste:super' > /dev/null 2>&1; then
+				setxkbmap -option -option $(setxkbmap -query | sed -n 's/options:\s*\(cutpaste:[^:]*,\)\?\|,cutpaste:[^,]*//gp')
+			fi
+		else
+			if [[ ! $(setxkbmap -query | $GREP_BIN 'cutpaste:super' > /dev/null 2>&1) ]]; then
+				setxkbmap -option cutpaste:super
+			fi
+		fi
+		timestp=$(date +%s)
+	fi
+done
