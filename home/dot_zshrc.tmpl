@@ -126,6 +126,14 @@ if [ -f "$HOME/.antidote/antidote.zsh" ]; then
 fi
 
 # Aliases (after antidote as ohmyzsh/common-aliases overwrites some like l)
+
+# servers/services
+alias goyangi='ssh goyangi.bun-mermaid.ts.net'
+alias tokki='ssh tokki.bun-mermaid.ts.net'
+alias smol='ssh smol.bun-mermaid.ts.net'
+alias syno='ssh syno.bun-mermaid.ts.net'
+alias sdf='ssh -t tty.sdf.org'
+
 # neovim and neovide
 if command -v nvim > /dev/null 2>&1; then
     alias vimdiff='nvim -d'

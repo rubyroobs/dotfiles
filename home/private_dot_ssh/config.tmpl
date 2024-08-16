@@ -2,22 +2,6 @@
 {{- if eq $.chezmoi.os "openbsd" -}}
 {{- $grep_bin = "ggrep" -}}
 {{- end -}}
-{{- $keyFiles := list
-    "~/.ssh/ruby_gitlab_ed25519"
-    "~/.ssh/ruby_gitlab_ed25519_alt"
-    "~/.ssh/id_ed25519" -}}
-
-{{ range $keyFile := $keyFiles -}}
-Match Exec "[ -f {{ $keyFile }} ]"
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
-    AddKeysToAgent              yes
-    IdentitiesOnly              yes
-    IdentityFile                {{ $keyFile }}
-
-{{ end -}}
 
 {{- $fidoSerialHandles := dict
         "636" "5CNF_636_joker"
@@ -28,11 +12,7 @@ Match Exec "[ -f {{ $keyFile }} ]"
 
 {{ range $serialSuffix, $handleFile := $fidoSerialHandles -}}
 Match Exec "gpg --card-status 2>/dev/null | {{$grep_bin}} -Pq '(?<=Serial number).*\K[0-9]{5}{{$serialSuffix}}$'"
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
-    AddKeysToAgent              yes
+    PreferredAuthentications    publickey
     IdentitiesOnly              yes
     IdentityFile                ~/.ssh/id_ed25519_sk_{{ $handleFile }}_notouch
     IdentityFile                ~/.ssh/id_ed25519_sk_{{ $handleFile }}
@@ -42,85 +22,41 @@ Match Exec "gpg --card-status 2>/dev/null | {{$grep_bin}} -Pq '(?<=Serial number
 {{ if .corp }}
 # GCP staging bastion host
 Host lb-bastion.gstg.gitlab.com
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     User                        rnealon
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 # gstg boxes
 Host *.gitlab-staging-1.internal
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     ProxyCommand                ssh lb-bastion.gstg.gitlab.com -W %h:%p
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 # GCP production bastion host
 Host lb-bastion.gprd.gitlab.com
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     User                        rnealon
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 # lab bastion host
 Host lb-bastion.db-lab.gitlab.com
     User                        rnealon
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 # lab boxes
 Host *.gitlab-db-lab.internal
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     User                        rnealon
     PreferredAuthentications    publickey
     ProxyCommand                ssh lb-bastion.db-lab.gitlab.com -W %h:%p
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 Host gprd-rails
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     User                        rnealon-rails
     StrictHostKeyChecking       no
     HostName                    console-01-sv-gprd.c.gitlab-production.internal
     ProxyCommand                ssh lb-bastion.gprd.gitlab.com -W %h:%p
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 Host gprd-psql
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     User                        rnealon-db
     StrictHostKeyChecking       no
     HostName                    console-01-sv-gprd.c.gitlab-production.internal
     ProxyCommand                ssh lb-bastion.gprd.gitlab.com -W %h:%p
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 
 Host gprd-psql-archive
-    {{- if eq $.chezmoi.os "darwin" }}
-    IgnoreUnknown               UseKeychain
-    UseKeychain                 yes
-    {{- end }}
     User                        rnealon-db-archive
     StrictHostKeyChecking       no
     HostName                    console-01-sv-gprd.c.gitlab-production.internal
     ProxyCommand                ssh lb-bastion.gprd.gitlab.com -W %h:%p
-    IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/ruby_gitlab_ed25519_alt
 {{ end }}
