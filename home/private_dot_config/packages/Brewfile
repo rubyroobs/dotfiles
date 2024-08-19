@@ -47,7 +47,6 @@ brew 'w3m'
 brew 'wget'
 brew 'xz'
 brew 'yt-dlp'
-
 cask '1password-cli'
 cask 'browserosaurus'
 cask 'google-cloud-sdk'

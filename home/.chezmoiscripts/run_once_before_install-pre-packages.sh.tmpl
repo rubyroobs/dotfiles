@@ -6,24 +6,24 @@ set -eufo pipefail
 if [[ "$OSTYPE" == "darwin"* ]]; then
     command -v brew >/dev/null 2>&1 || (echo '🍺  Installing Homebrew' && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
 
-    brew bundle --verbose --no-lock --file={{.chezmoi.sourceDir}}/private_dot_config/packages/darwin/Brewfile
+    brew bundle --verbose --no-lock --file={{.chezmoi.sourceDir}}/private_dot_config/packages/Brewfile
 fi
 
 if command -v yay > /dev/null 2>&1; then
     echo "Running initial Linux package update and install via yay..."
     yay -Syu
-    yay -S --needed --noconfirm - < {{.chezmoi.sourceDir}}/private_dot_config/packages/pacman/packages.txt
+    yay -S --needed --noconfirm - < {{.chezmoi.sourceDir}}/private_dot_config/packages/yay.txt
 fi
 
 if command -v xbps-install > /dev/null 2>&1; then
     echo "Running initial Linux package update and install via xbps-install..."
     sudo xbps-install -Syu
     sudo xbps-install -Sy void-repo-nonfree
-    sudo xbps-install -Sy $(cat {{.chezmoi.sourceDir}}/private_dot_config/packages/xbps-install/packages.txt)
+    sudo xbps-install -Sy $(cat {{.chezmoi.sourceDir}}/private_dot_config/packages/xbps-install.txt)
 fi
 
 if [[ "$OSTYPE" == "openbsd"* ]]; then
     echo "Running initial OpenBSD package update and install..."
     doas pkg_add -uvi || true
-    doas pkg_add -l {{.chezmoi.sourceDir}}/private_dot_config/packages/openbsd/packages.txt || true
+    doas pkg_add -l {{.chezmoi.sourceDir}}/private_dot_config/packages/pkg_add.txt || true
 fi

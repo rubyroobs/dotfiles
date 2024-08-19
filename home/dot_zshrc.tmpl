@@ -37,20 +37,20 @@ fi
 # universal package update alias function thingy
 function pkgup() {
     if command -v brew > /dev/null 2>&1; then
-        brew bundle --verbose --no-lock --file=$HOME/.config/packages/darwin/Brewfile || true
+        brew bundle --verbose --no-lock --file=$HOME/.config/packages/homebrew/Brewfile || true
         brew upgrade
     elif command -v xbps-install > /dev/null 2>&1; then
         sudo xbps-install -Syu
-        sudo xbps-install -Syu $(cat $HOME/.config/packages/xbps-install/packages.txt)
+        sudo xbps-install -Syu $(cat $HOME/.config/packages/xbps-install.txt)
     elif command -v yay > /dev/null 2>&1; then
         yay -Syu
-        yay -S --needed --noconfirm - < $HOME/.config/packages/pacman/packages.txt
+        yay -S --needed --noconfirm - < $HOME/.config/packages/yay.txt
     elif command -v pacman > /dev/null 2>&1; then
         sudo pacman -Syu
-        sudo pacman -S --needed --noconfirm - < $HOME/.config/packages/pacman/packages.txt
+        sudo pacman -S --needed --noconfirm - < $HOME/.config/packages/yay.txt
     elif command -v pkg_add > /dev/null 2>&1; then
         doas pkg_add -uvi
-        doas pkg_add -l $HOME/.config/packages/openbsd/packages.txt
+        doas pkg_add -l $HOME/.config/packages/pkg_add.txt
     fi
 }
 

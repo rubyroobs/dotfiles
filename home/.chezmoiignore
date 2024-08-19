@@ -9,7 +9,8 @@
 
 {{- if ne .chezmoi.os "darwin" -}}
 .ssh/ssh-askpass
-.config/packages/darwin
+.config/packages/Brewfile
+.config/packages/Brewfile.bootstrap
 .config/sketchybar
 .config/skhd
 .config/yabai
@@ -35,15 +36,15 @@ bin/
 {{- end -}}
 
 {{- if ne .chezmoi.os "linux" -}}
-.config/packages/pacman
-.config/packages/xbps-install
+.config/packages/yay.txt
+.config/packages/xbps-install.txt
 .runit/runsvdir/pipewire
 .runit/runsvdir/wireplumber
 .runit/runsvdir/easyeffects
 {{- end -}}
 
 {{- if ne .chezmoi.os "openbsd" -}}
-.config/packages/openbsd
+.config/packages/pkg_add.txt
 .profile
 .xsession
 {{- end -}}
