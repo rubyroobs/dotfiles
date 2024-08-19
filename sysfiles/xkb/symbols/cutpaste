@@ -29,10 +29,20 @@ default partial xkb_symbols "superversions" {
         symbols[Group1]= [               s,               S, NoSymbol ],
         actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatS>,mods=Control,clearmods=Super)]
     };
+    replace key <AD01> {
+        type[Group1]= "ALPHABETIC_SUPER",
+        symbols[Group1]= [               q,               Q, NoSymbol ],
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatQ>,mods=Control,clearmods=Super)]
+    };
     replace key <AD02> {
         type[Group1]= "ALPHABETIC_SUPER",
         symbols[Group1]= [               w,               W, NoSymbol ],
         actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatW>,mods=Control,clearmods=Super)]
+    };
+    replace key <AD04> {
+        type[Group1]= "ALPHABETIC_SUPER",
+        symbols[Group1]= [               r,               R, NoSymbol ],
+        actions[Group1]= [      NoAction(),      NoAction(), RedirectKey(key=<LatR>,mods=Control,clearmods=Super)]
     };
     replace key <AD05> {
         type[Group1]= "ALPHABETIC_SUPER",
