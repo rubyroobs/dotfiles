@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+export DISPLAY=:0.0
+xlock &
