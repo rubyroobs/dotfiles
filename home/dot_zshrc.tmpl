@@ -140,6 +140,10 @@ if command -v delta > /dev/null 2>&1; then
 fi
 
 # helix, neovim and neovide
+if command -v helix > /dev/null 2>&1; then
+    alias hx='helix'
+fi
+
 if command -v hx > /dev/null 2>&1; then
     alias vi='hx'
     alias vim='hx'
