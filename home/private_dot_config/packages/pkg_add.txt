@@ -23,6 +23,7 @@ go
 go-tools
 gopls
 gsed
+helix
 jq
 libsodium
 llvm-17.0.6p12

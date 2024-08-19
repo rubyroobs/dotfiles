@@ -22,6 +22,7 @@ fprintd
 fzf
 gnome-ssh-askpass3
 greetd
+helix
 intel-media-driver
 jq
 lazygit

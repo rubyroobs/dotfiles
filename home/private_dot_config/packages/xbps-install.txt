@@ -30,6 +30,7 @@ gnome-ssh-askpass
 gnupg
 gnupg2-scdaemon
 greetd
+helix
 intel-media-driver
 intel-ucode
 intel-video-accel
