@@ -37,7 +37,7 @@ fi
 # universal package update alias function thingy
 function pkgup() {
     if command -v brew > /dev/null 2>&1; then
-        brew bundle --verbose --no-lock --file=$HOME/.config/packages/homebrew/Brewfile || true
+        brew bundle --verbose --no-lock --file=$HOME/.config/packages/Brewfile || true
         brew upgrade
     elif command -v xbps-install > /dev/null 2>&1; then
         sudo xbps-install -Syu
