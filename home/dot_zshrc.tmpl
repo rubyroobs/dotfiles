@@ -100,14 +100,6 @@ function zvm_after_init() {
     fi
 }
 
-zstyle :omz:plugins:ssh-agent quiet yes
-zstyle :omz:plugins:ssh-agent lazy yes
-{{- if eq .chezmoi.os "darwin" }}
-zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
-alias ssh-add='/usr/bin/ssh-add'
-alias ssh-agent='/usr/bin/ssh-agent'
-{{- end }}
-
 {{ includeTemplate (print "colorschemes/" .colorscheme "/zsh-syntax-highlighting") . }}
 
 autoload -Uz compinit
@@ -186,5 +178,9 @@ if command -v ggrep > /dev/null 2>&1; then
     alias grep='ggrep --color'
     alias sgrep='ggrep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 fi
+
+# make sure no ssh agent!!!
+export SSH_AUTH_SOCK=
+export SSH_AGENT_PID=
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
