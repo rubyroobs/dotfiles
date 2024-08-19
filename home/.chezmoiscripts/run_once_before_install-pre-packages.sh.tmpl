@@ -27,10 +27,3 @@ if [[ "$OSTYPE" == "openbsd"* ]]; then
     doas pkg_add -uvi || true
     doas pkg_add -l {{.chezmoi.sourceDir}}/private_dot_config/packages/pkg_add.txt || true
 fi
-
-# Reload helix config if available
-if command -v hx > /dev/null 2>&1; then
-    pkill -USR1 hx
-fi
-
-exit 0

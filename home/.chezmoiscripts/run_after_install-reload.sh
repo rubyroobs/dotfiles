@@ -18,7 +18,7 @@ if command -v skhd > /dev/null 2>&1; then
 fi
 
 if command -v sxhkd > /dev/null 2>&1; then
-    pkill -x sxhkd; sxhkd &
+    sv restart $HOME/.runit/runsvdir/sxhkd
 fi
 
 if command -v sketchybar > /dev/null 2>&1; then
@@ -31,4 +31,8 @@ fi
 
 if command -v bspwm > /dev/null 2>&1; then
     DISPLAY=:0 ~/.config/bspwm/bspwmrc > /dev/null 2>&1 &
+fi
+
+if command -v hx > /dev/null 2>&1; then
+    pgrep kitty | xargs kill -SIGUSR1
 fi
