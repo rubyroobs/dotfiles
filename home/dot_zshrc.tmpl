@@ -76,13 +76,6 @@ function op_download_ssh_key() {
     op --account my.1password.com read --out-file "$HOME/.ssh/id_ed25519_sk_$1_notouch" "op://Personal/YubiKey FIDO2 Resident SSH Keys/id_ed25519_sk_$1_notouch"
     chmod 0600 "$HOME/.ssh/id_ed25519_sk_$1"
     chmod 0600 "$HOME/.ssh/id_ed25519_sk_$1_notouch"
-    {{- if eq .chezmoi.os "darwin" }}
-    /usr/bin/ssh-add --apple-use-keychain "$HOME/.ssh/id_ed25519_sk_$1"
-    /usr/bin/ssh-add --apple-use-keychain "$HOME/.ssh/id_ed25519_sk_$1_notouch"
-    {{- else }}
-    ssh-add "$HOME/.ssh/id_ed25519_sk_$1"
-    ssh-add "$HOME/.ssh/id_ed25519_sk_$1_notouch"
-    {{- end }}
 }
 
 # for git plugins
