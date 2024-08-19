@@ -20,6 +20,7 @@ ffmpeg
 firefox
 fprintd
 fzf
+git-delta
 gnome-ssh-askpass3
 greetd
 helix
@@ -49,6 +50,7 @@ rofi
 sof-firmware
 sxhkd
 unzip
+visual-studio-code-bin
 vmware-workstation
 w3m
 wget

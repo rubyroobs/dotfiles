@@ -4,6 +4,7 @@ bspwm
 chezmoi
 curl
 dbus
+delta
 eza
 fcitx
 fcitx-anthy

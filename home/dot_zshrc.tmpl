@@ -1,7 +1,7 @@
 export LC_ALL=en_US.UTF-8  
 export LC_DATE=ja_JP.UTF-8
 export LANG=en_US.UTF-8
-export EDITOR=nvim
+export EDITOR=hx
 HISTSIZE=10000000
 SAVEHIST=10000000
 HISTFILE=~/.zsh_history
@@ -134,9 +134,17 @@ alias smol='ssh smol.bun-mermaid.ts.net'
 alias syno='ssh syno.bun-mermaid.ts.net'
 alias sdf='ssh -t tty.sdf.org'
 
-# neovim and neovide
-if command -v nvim > /dev/null 2>&1; then
-    alias vimdiff='nvim -d'
+# delta
+if command -v delta > /dev/null 2>&1; then
+    alias vimdiff='delta'
+fi
+
+# helix, neovim and neovide
+if command -v hx > /dev/null 2>&1; then
+    alias vi='hx'
+    alias vim='hx'
+    alias nvim='hx'
+elif command -v nvim > /dev/null 2>&1; then
     alias vi='nvim'
     alias vim='nvim'
 elif command -v vim > /dev/null 2>&1; then

@@ -59,7 +59,8 @@ for yubikeyHandle in \
     5AT_825_mona \
     5CNF_636_joker \
     5CN_104_skull \
-    5CTF_544_panther ; do
+    5CTF_544_panther \
+    5AN_009_queen ; do
     op_download_ssh_key $yubikeyHandle
 done
 ```
@@ -74,3 +75,4 @@ done
 ## TODOs
 
 - [ ] Auto sorting for package lists (for now `for file in Brewfile Brewfile.bootstrap pkg_add.txt xbps-install.txt yay.txt; do sort -o $HOME/.local/share/chezmoi/home/private_dot_config/packages/$file{,}; done`)
+

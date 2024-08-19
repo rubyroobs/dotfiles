@@ -8,7 +8,8 @@
         "825" "5AT_825_mona"
         "104" "5CN_104_skull"
         "562" "5AN_562_fox"
-        "544" "5CTF_544_panther" -}}
+        "544" "5CTF_544_panther"
+        "009" "5AN_009_queen" -}}
 
 {{ range $serialSuffix, $handleFile := $fidoSerialHandles -}}
 Match Exec "gpg --card-status 2>/dev/null | {{$grep_bin}} -Pq '(?<=Serial number).*\K[0-9]{5}{{$serialSuffix}}$'"

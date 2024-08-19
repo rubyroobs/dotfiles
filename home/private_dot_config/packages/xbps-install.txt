@@ -8,6 +8,7 @@ clang-analyzer
 clang-tools-extra
 curl
 dbus
+delta
 easyeffects
 elogind
 eza

@@ -54,12 +54,16 @@
 [color]
   ui = auto
 [core]
-  editor = nvim -f
+  pager = delta
+  editor = hx
   whitespace = trailing-space,space-before-tab
+[delta]
+  navigate = true
 [diff]
   algorithm = histogram
   renamelimit = 8192
   renames = copies
+  colorMoved = default
 [fetch]
   fsckobjects = false
   prune = true
@@ -70,6 +74,10 @@
   required = true
 [init]
   defaultBranch = "main"
+[interactive]
+  diffFilter = delta --color-only
+[merge]
+  conflictstyle = diff3
 [pager]
   branch = false
   grep = false
