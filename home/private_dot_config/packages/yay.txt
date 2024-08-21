@@ -40,7 +40,7 @@ neovim
 obsidian
 opendoas
 p7zip
-picom
+picom-git
 pipewire
 pipewire-pulse
 polybar
