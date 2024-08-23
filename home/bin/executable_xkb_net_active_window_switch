@@ -19,9 +19,9 @@ fi
 
 xprop -spy -root _NET_ACTIVE_WINDOW | $GREP_BIN --line-buffered -o '0[xX][a-zA-Z0-9]\{1,7\}' |
 while read -r id; do
-	newtime=$(date +%s)
-	timediff=$((newtime-timestp))
-	if [ $timediff -gt 0 ]; then
+	# newtime=$(date +%s)
+	# timediff=$((newtime-timestp))
+	# if [ $timediff -gt 0 ]; then
 		if xprop -id $id WM_CLASS | $GREP_BIN kitty > /dev/null 2>&1; then
 			if setxkbmap -query | $GREP_BIN 'cutpaste:super' > /dev/null 2>&1; then
 				setxkbmap -option -option $(setxkbmap -query | $SED_BIN -n 's/options:\s*\(cutpaste:[^:]*,\)\?\|,cutpaste:[^,]*//gp')
@@ -31,6 +31,6 @@ while read -r id; do
 				setxkbmap -option cutpaste:super
 			fi
 		fi
-		timestp=$(date +%s)
+		# timestp=$(date +%s)
 	fi
 done
