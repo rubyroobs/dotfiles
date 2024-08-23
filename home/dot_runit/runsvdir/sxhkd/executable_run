@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. $HOME/.xenv.sh
+
 if command -v sxhkd > /dev/null 2>&1; then
     pkill sxhkd; cd $HOME && exec sxhkd
 else

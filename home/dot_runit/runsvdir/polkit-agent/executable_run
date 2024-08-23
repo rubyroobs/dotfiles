@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. $HOME/.xenv.sh
+
 if [[ -f "/usr/libexec/polkit-gnome-authentication-agent-1" ]]; then
     exec /usr/libexec/polkit-gnome-authentication-agent-1
 elif command -v lxqt-policykit-agent > /dev/null 2>&1; then

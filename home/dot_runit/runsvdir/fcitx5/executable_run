@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. $HOME/.xenv.sh
+
 if command -v fcitx5 > /dev/null 2>&1; then
     exec fcitx5
 elif command -v fcitx > /dev/null 2>&1; then

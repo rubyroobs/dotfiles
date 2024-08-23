@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+. $HOME/.xenv.sh
 export MONITOR=eDP-1
 
 # use GNU grep on OpenBSD

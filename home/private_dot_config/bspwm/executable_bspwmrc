@@ -21,6 +21,9 @@ bspc config split_ratio             0.5
 bspc config borderless_monocle      true
 bspc config gapless_monocle         true
 
-sleep 3
-# sv force-shutdown $HOME/.runit/runsvdir/*
+if command -v fcitx5-remote > /dev/null 2>&1 && sv check "$HOME/.runit/runsvdir/fcitx5"; then
+    fcitx5-remote -c 1 || true
+fi
+
+sv restart $HOME/.runit/runsvdir/polybar*
 
