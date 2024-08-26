@@ -3,7 +3,7 @@
 {{- $grep_bin = "ggrep" -}}
 {{- end -}}
 
-{{- $fidoSerialHandles := dict
+{{- $fidoSerialKeys := dict
         "636" "5CNF_636_joker"
         "825" "5AT_825_mona"
         "104" "5CN_104_skull"
@@ -11,12 +11,12 @@
         "544" "5CTF_544_panther"
         "009" "5AN_009_queen" -}}
 
-{{ range $serialSuffix, $handleFile := $fidoSerialHandles -}}
+{{ range $serialSuffix, $handleFile := $fidoSerialKeys -}}
 Match Exec "gpg --card-status 2>/dev/null | {{$grep_bin}} -Pq '(?<=Serial number).*\K[0-9]{5}{{$serialSuffix}}$'"
     PreferredAuthentications    publickey
     IdentitiesOnly              yes
-    IdentityFile                ~/.ssh/id_ed25519_sk_{{ $handleFile }}_notouch
-    IdentityFile                ~/.ssh/id_ed25519_sk_{{ $handleFile }}
+    IdentityFile                ~/.ssh/{{$handleFile}}.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
 
 {{ end -}}
 
@@ -36,7 +36,6 @@ Host lb-bastion.gprd.gitlab.com
 # lab bastion host
 Host lb-bastion.db-lab.gitlab.com
     User                        rnealon
-
 # lab boxes
 Host *.gitlab-db-lab.internal
     User                        rnealon
