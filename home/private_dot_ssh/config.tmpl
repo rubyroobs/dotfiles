@@ -16,7 +16,9 @@ Match Exec "gpg --card-status 2>/dev/null | {{$grep_bin}} -Pq '(?<=Serial number
     PreferredAuthentications    publickey
     IdentitiesOnly              yes
     IdentityFile                ~/.ssh/{{$handleFile}}.pub
+    {{- if ne $.chezmoi.os "linux" }}
     IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+    {{- end }}
 
 {{ end -}}
 
