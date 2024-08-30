@@ -86,13 +86,6 @@ function __git_files () {
 MAGIC_ENTER_GIT_COMMAND='git status -u .'
 MAGIC_ENTER_OTHER_COMMAND='ll'
 
-# fzf loading
-function zvm_after_init() {
-    if command -v fzf > /dev/null 2>&1; then
-        source <(fzf --zsh)
-    fi
-}
-
 {{ includeTemplate (print "colorschemes/" .colorscheme "/zsh-syntax-highlighting") . }}
 
 autoload -Uz compinit
@@ -171,6 +164,9 @@ if command -v ggrep > /dev/null 2>&1; then
     alias grep='ggrep --color'
     alias sgrep='ggrep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 fi
+
+# fzf for history search
+source <(fzf --zsh)
 
 # GPG for SSH
 unset SSH_AGENT_PID
