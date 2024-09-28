@@ -1,1 +1,1 @@
-.p10k.latte.zsh
+.p10k.frappe.zsh
