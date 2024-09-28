@@ -53,7 +53,7 @@ rust-rustfmt
 rust-src
 sxhkd
 unzip-6.0p17-iconv
-w3m-0.5.3pl20230121p1-image
+w3m-0.5.3pl20240810p0-image
 wget
 wireplumber
 xdotool
