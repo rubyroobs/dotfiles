@@ -1,0 +1,85 @@
+# vim:fileencoding=utf-8:ft=conf:foldmethod=marker
+
+allow_remote_control yes
+
+# No title bar and padding to make up for that
+hide_window_decorations titlebar-and-corners
+window_padding_width 4
+
+# Transparency
+background_opacity 1
+dynamic_background_opacity yes
+
+# Font
+font_family {{ .defaultMonospaceFontFamily }}, monospace, emoji 
+font_size 14
+
+# Keybinds
+map super+v             paste_from_clipboard
+map super+c             copy_to_clipboard
+map super+w             close_window
+
+# Colors - pink!
+
+# The basic colors
+foreground              #FF6D99
+background              #FFEAF1
+selection_foreground    #FEFAF1
+selection_background    #c6d0f5
+
+# Cursor colors
+cursor                  #c60df5
+cursor_text_color       #FEFAF1
+
+# URL underline color when hovering with mouse
+url_color               #c60df5
+
+# Kitty window border colors
+active_border_color     #FFFFFF
+inactive_border_color   #FFFFFF
+bell_border_color       #FFFFFF
+
+# OS Window titlebar colors
+wayland_titlebar_color  system
+macos_titlebar_color    system
+
+# Tab bar colors
+active_tab_foreground   #FFFFFF
+active_tab_background   #FFFFFF
+inactive_tab_foreground #FFFFFF
+inactive_tab_background #FFFFFF
+tab_bar_background      #FFFFFF
+
+# Colors for marks (marked text in the terminal)
+mark1_foreground #FFFFFF
+mark1_background #FFFFFF
+mark2_foreground #FFFFFF
+mark2_background #FFFFFF
+mark3_foreground #FFFFFF
+mark3_background #FFFFFF
+
+# The 16 terminal colors
+
+color0 #666666
+color8 #B4B4B4
+
+color1 #C11F5A
+color9 #7E2245
+
+color2  #31BA93
+color10 #57A37C
+
+color3  #E89F7B
+color11 #EEE6AB
+
+color4  #B39FD6
+color12 #9797FD
+
+color5  #FFC0E6
+color13 #FFCFF4
+
+color6  #77C4E8
+color14 #B9D7FF
+
+color7  #BEDCAB
+color15 #DAFFD7

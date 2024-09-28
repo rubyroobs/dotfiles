@@ -1,0 +1,93 @@
+# vim:fileencoding=utf-8:ft=conf:foldmethod=marker
+
+allow_remote_control yes
+
+# No title bar and padding to make up for that
+hide_window_decorations titlebar-and-corners
+window_padding_width 4
+
+# Transparency
+background_opacity 1
+dynamic_background_opacity yes
+
+# Font
+font_family {{ .defaultMonospaceFontFamily }}, monospace, emoji 
+font_size 14
+
+# Keybinds
+map super+v             paste_from_clipboard
+map super+c             copy_to_clipboard
+map super+w             close_window
+
+# Colors - Catppuccin Frappe
+
+# The basic colors
+foreground              {{ .colors.frappe.text }}
+background              {{ .colors.frappe.base }}
+selection_foreground    {{ .colors.frappe.base }}
+selection_background    {{ .colors.frappe.rosewater }}
+
+# Cursor colors
+cursor                  {{ .colors.frappe.rosewater }}
+cursor_text_color       {{ .colors.frappe.base }}
+
+# URL underline color when hovering with mouse
+url_color               {{ .colors.frappe.rosewater }}
+
+# Kitty window border colors
+active_border_color     {{ .colors.frappe.lavender }}
+inactive_border_color   {{ .colors.frappe.overlay0 }}
+bell_border_color       {{ .colors.frappe.yellow }}
+
+# OS Window titlebar colors
+wayland_titlebar_color  {{ .colors.frappe.base }}
+macos_titlebar_color    {{ .colors.frappe.base }}
+
+# Tab bar colors
+active_tab_foreground   {{ .colors.frappe.crust }}
+active_tab_background   {{ .colors.frappe.mauve }}
+inactive_tab_foreground {{ .colors.frappe.text }}
+inactive_tab_background {{ .colors.frappe.mantle }}
+tab_bar_background      {{ .colors.frappe.crust }}
+
+# Colors for marks (marked text in the terminal)
+mark1_foreground {{ .colors.frappe.base }}
+mark1_background {{ .colors.frappe.lavender }}
+mark2_foreground {{ .colors.frappe.base }}
+mark2_background {{ .colors.frappe.mauve }}
+mark3_foreground {{ .colors.frappe.base }}
+mark3_background {{ .colors.frappe.sapphire }}
+
+# The 16 terminal colors
+
+# black
+color0 {{ .colors.frappe.surface1 }}
+color8 {{ .colors.frappe.surface2 }}
+
+# red
+color1 {{ .colors.frappe.red }}
+color9 {{ .colors.frappe.red }}
+
+# green
+color2  {{ .colors.frappe.green }}
+color10 {{ .colors.frappe.green }}
+
+# yellow
+color3  {{ .colors.frappe.yellow }}
+color11 {{ .colors.frappe.yellow }}
+
+# blue
+color4  {{ .colors.frappe.blue }}
+color12 {{ .colors.frappe.blue }}
+
+# magenta
+color5  {{ .colors.frappe.pink }}
+color13 {{ .colors.frappe.pink }}
+
+# cyan
+color6  {{ .colors.frappe.teal }}
+color14 {{ .colors.frappe.teal }}
+
+# white
+color7  {{ .colors.frappe.subtext1 }}
+color15 {{ .colors.frappe.subtext0 }}

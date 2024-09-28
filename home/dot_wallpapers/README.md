@@ -7,3 +7,7 @@ credits/sources for wallpapers:
   - downloaded from wallhaven ([link](https://wallhaven.cc/w/ey193k))
   - cannot find the original image/name of the piece on the artist's pixiv :(
 
+- **wallhaven-nmlzom_3840x2400.png**
+  - artist: unknown
+  - downloaded from wallhaven ([link](https://wallhaven.cc/w/nmlzom))
+  - cannot find source nor original :/

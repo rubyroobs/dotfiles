@@ -1,0 +1,112 @@
+# vim:fileencoding=utf-8:ft=conf:foldmethod=marker
+
+allow_remote_control yes
+
+# No title bar and padding to make up for that
+hide_window_decorations titlebar-and-corners
+window_padding_width 4
+
+# Transparency
+background_opacity 1
+dynamic_background_opacity yes
+
+# Font
+font_family {{ .defaultMonospaceFontFamily }}, monospace, emoji 
+font_size 14
+
+# Keybinds
+map super+v             paste_from_clipboard
+map super+c             copy_to_clipboard
+map super+w             close_window
+
+# Colors - pink!
+
+# The basic colors
+foreground              #333333
+background              #FFFFFF
+selection_foreground    #FFFFFF
+selection_background    #333333
+
+# Cursor colors
+cursor                  #333333
+cursor_text_color       #FFFFFF
+
+# URL underline color when hovering with mouse
+url_color               #333333
+
+# Kitty window border colors
+active_border_color     #FFFFFF
+inactive_border_color   #FFFFFF
+bell_border_color       #FFFFFF
+
+# OS Window titlebar colors
+wayland_titlebar_color  system
+macos_titlebar_color    system
+
+# Tab bar colors
+active_tab_foreground   #FFFFFF
+active_tab_background   #FFFFFF
+inactive_tab_foreground #FFFFFF
+inactive_tab_background #FFFFFF
+tab_bar_background      #FFFFFF
+
+# Colors for marks (marked text in the terminal)
+mark1_foreground #FFFFFF
+mark1_background #FFFFFF
+mark2_foreground #FFFFFF
+mark2_background #FFFFFF
+mark3_foreground #FFFFFF
+mark3_background #FFFFFF
+
+# The 16 terminal colors
+
+# The 16 terminal colors
+
+# black
+color0 #5c5f77
+color8 #6c6f85
+
+# red
+color1 #d20f39
+color9 #d20f39
+
+# green
+color2  #40a02b
+color10 #40a02b
+
+# yellow
+color3  #df8e1d
+color11 #df8e1d
+
+# blue
+color4  #1e66f5
+color12 #1e66f5
+
+# magenta
+color5  #ea76cb
+color13 #ea76cb
+
+# cyan
+color6  #179299
+color14 #179299
+
+# white
+color7  #acb0be
+color15 #bcc0cc
+
+# color0 #2E3440
+# color1 #E5AECA
+# color2 #BF616A
+# color3 #5E81AC
+# color4 #EBCB8B
+# color5 #A3BE8C
+# color6 #D08770
+# color7 #E5E9F0
+# color8 #4C566A
+# color9 #E5AECA
+# color10 #BF616A
+# color11 #5E81AC
+# color12 #EBCB8B
+# color13 #A3BE8C
+# color14 #D08770
+# color15 #8FBCBB
