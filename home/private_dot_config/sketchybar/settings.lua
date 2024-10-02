@@ -4,7 +4,7 @@ return {
 
   icons = "sf-symbols",
   
-  no_app_labels = true,
+  no_app_labels = false,
 
   font = require("helpers.default_font"),
 }
