@@ -72,6 +72,16 @@ done
 - [WhiteSur cursors](https://github.com/vinceliuice/WhiteSur-cursors/tree/master) are not automatically installed
 - easyeffects/pulseaudio for x1
 
+### Repo on corp laptop
+
+```shell
+git config user.name "Ruby Nealon"
+git config user.email "ruby@ruby.sh"
+git config user.signingkey "9421A2F39BB45E3CCF0DDB7F30C8419F45FDFD51"
+git config gpg.format "openpgp"
+git config gpg.program "gpg"
+```
+
 ## TODOs
 
 - [ ] Auto sorting for package lists (for now `for file in Brewfile Brewfile.bootstrap pkg_add.txt xbps-install.txt yay.txt; do sort -o $HOME/.local/share/chezmoi/home/private_dot_config/packages/$file{,}; done`)
