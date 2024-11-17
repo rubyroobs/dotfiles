@@ -31,14 +31,31 @@ yabai -m config external_bar                   all:24:0       \
                 window_gap                     20
 
 # Rules: Management
-yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom\.us|Photo Booth|Archive Utility|App Store|Steam|Alfred|Activity Monitor)$" manage=off
-yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
-yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
-yabai -m rule --add label="DataGrip" app="^DataGrip$" title="(Data Sources and Drivers|Settings)" manage=off
-yabai -m rule --add label="LINE" app="^LINE$" title!="^LINE$" manage=off
-yabai -m rule --add label="KakaoTalk" app="^KakaoTalk$" title!="^KakaoTalk$" manage=off
-yabai -m rule --add app="^Neovide$" manage=on
 
+# Turn off tiling by default for all apps
+yabai -m rule --add app=".*" manage=off
+
+# Turn on tiling for specific apps
+yabai -m rule --add label="Safari" app="^Safari$" title!="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=on
+yabai -m rule --add label="Firefox" app="^Firefox$" manage=on
+yabai -m rule --add label="Google Chrome" app="^Google Chrome$" manage=on
+yabai -m rule --add label="Superhuman" app="^Superhuman$" manage=on
+yabai -m rule --add label="Calendar" app="^Calendar$" manage=on
+yabai -m rule --add label="Notes" app="^Notes$" manage=on
+yabai -m rule --add label="Reminders" app="^Reminders" manage=on
+yabai -m rule --add label="kitty" app="^kitty$" manage=on
+yabai -m rule --add label="Code" app="^Code$" manage=on
+yabai -m rule --add label="DataGrip" app="^DataGrip$" title!="(Data Sources and Drivers|Settings)" manage=on
+yabai -m rule --add label="Signal" app="^Signal$" manage=on
+yabai -m rule --add label="LINE" app="^LINE$" title!="^LINE$" manage=on
+yabai -m rule --add label="KakaoTalk" app="^KakaoTalk$" title!="^KakaoTalk$" manage=on
+yabai -m rule --add label="WhatsApp" app="^WhatsApp$" manage=on
+yabai -m rule --add label="Messages" app="^Messages$" manage=on
+yabai -m rule --add label="Slack" app="^Slack$" manage=on
+yabai -m rule --add label="Friture" app="^(F|f)riture$" manage=on
+yabai -m rule --add label="Music" app="^Music$" manage=on
+
+# Default centering for some apps
 yabai -m rule --add app="^Finder$" title!="(Co(py|nnect)|Move|Info|Pref)" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add app="^Sublime Text$" manage=off grid=6:4:1:1:2:4
@@ -48,15 +65,13 @@ yabai -m rule --add app="^1Password$" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^Sonos$" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^Streaks$" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^zoom\.us$" manage=off grid=6:4:1:1:2:4
-yabai -m rule --add app="^Preview$" manage=off grid=6:4:1:1:2:4
 yabai -m rule --add app="^Home Assistant$" manage=off grid=6:4:1:1:2:4
 
 # Rules: Layout
 yabai -m rule --add app="^Google Chrome$" opacity=1.0
 yabai -m rule --add app="^Firefox$" opacity=1.0
 yabai -m rule --add app="^zoom.us$" opacity=1.0
-yabai -m rule --add app="^Preview$" opacity=1.0
-
+yabai -m rule --add app="^Preview$" opacity=1.0ß
 
 {{- includeTemplate (print "colorschemes/" .colorscheme "/yabai-borders") . -}}
 
