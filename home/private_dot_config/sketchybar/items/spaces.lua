@@ -69,6 +69,18 @@ for i = 1, 10, 1 do
     })
   end)
 
+  local keycodes = {
+    [1] = "18",
+    [2] = "19",
+    [3] = "20",
+    [4] = "21",
+    [5] = "23",
+    [6] = "22",
+    [7] = "26",
+    [8] = "28",
+    [9] = "25"
+  }
+
   space:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "other" then
       space_popup:set({ background = { image = "space." .. env.SID } })
@@ -76,6 +88,7 @@ for i = 1, 10, 1 do
     else
       local op = (env.BUTTON == "right") and "--destroy" or "--focus"
       sbar.exec("yabai -m space " .. op .. " " .. env.SID)
+      -- sbar.exec("osascript -e 'tell application \"System Events\" to key code " .. keycodes[tonumber(env.SID)] .. "using option down'")
     end
   end)
 
