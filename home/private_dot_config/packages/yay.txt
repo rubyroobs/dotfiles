@@ -20,6 +20,7 @@ ffmpeg
 firefox
 fprintd
 fzf
+ghostty
 git-delta
 gnome-ssh-askpass3
 greetd

@@ -68,8 +68,5 @@ ctrl + lalt - l : yabai -m window --resize right:100:0 || yabai -m window --resi
 # Equalize size of windows: lalt - e
 lalt - e : yabai -m space --balance
 
-# New kitty terminal
-alt - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
-
 # Restart yabai
 ctrl + alt + cmd - r : yabai --restart-service

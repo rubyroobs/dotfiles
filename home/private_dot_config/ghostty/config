@@ -1,0 +1,35 @@
+# vim:fileencoding=utf-8:ft=conf:foldmethod=marker
+
+font-family = "{{ .defaultMonospaceFontFamily }}, monospace, emoji"
+font-size = 14
+palette = 0=#51576d
+palette = 1=#e78284
+palette = 2=#a6d189
+palette = 3=#e5c890
+palette = 4=#8caaee
+palette = 5=#f4b8e4
+palette = 6=#81c8be
+palette = 7=#b5bfe2
+palette = 8=#626880
+palette = 9=#e78284
+palette = 10=#a6d189
+palette = 11=#e5c890
+palette = 12=#8caaee
+palette = 13=#f4b8e4
+palette = 14=#81c8be
+palette = 15=#a5adce
+background = 303446
+foreground = c6d0f5
+cursor-color = f2d5cf
+selection-background = 44495d
+selection-foreground = c6d0f5
+
+initial-window = false
+quit-after-last-window-closed = false
+keybind = global:alt+enter=new_window
+keybind = global:alt+shift+enter=toggle_quick_terminal
+keybind = global:cmd+q=close_all_windows
+quick-terminal-animation-duration = 0
+quick-terminal-position = center
+macos-window-shadow = false
+macos-secure-input-indication = true

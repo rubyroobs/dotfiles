@@ -16,7 +16,8 @@ elif [ -f "/usr/lib/ssh/x11-ssh-askpass" ]; then
 fi
 
 # asdf
-if [ -f "$HOME/.asdf/asdf.sh" ]; then
+if [ -d "$HOME/.asdf" ]; then
+    export ASDF_DIR="$HOME/.asdf"
     . "$HOME/.asdf/asdf.sh"
 fi
 
