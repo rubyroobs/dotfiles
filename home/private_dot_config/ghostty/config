@@ -28,7 +28,7 @@ initial-window = false
 quit-after-last-window-closed = false
 keybind = global:alt+enter=new_window
 keybind = global:alt+shift+enter=toggle_quick_terminal
-keybind = global:cmd+q=close_all_windows
+keybind = all:cmd+q=close_all_windows
 quick-terminal-animation-duration = 0
 quick-terminal-position = center
 macos-window-shadow = false
