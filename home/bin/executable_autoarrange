@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+ensure_space_count() {
+    current_space_count=$(yabai -m query --spaces --space last | jq '.index')
+    to_destroy="$(($current_space_count-$1))"
+    to_create="$(($1-$current_space_count))"
+    if [ "$to_create" -gt "0" ]; then
+        for i in $(seq $to_create); do
+            yabai -m space --create
+        done
+    fi
+    if [ "$to_destroy" -gt "0" ]; then
+        for i in $(seq $to_destroy); do
+            yabai -m space $(yabai -m query --spaces --space last | jq '.index') --delete
+        done
+    fi
+}
+
+send_app_to_space () {
+    yabai -m query --windows | jq -re ".[] | select(.app == \"$1\") | .id" | xargs -I % yabai -m window % --space $2
+}
+
+current_display_count=$(yabai -m query --displays | jq length)
+
+####
+# Corp
+####
+
+NUMBER_OF_SPACES=7
+
+ensure_space_count $NUMBER_OF_SPACES
+
+# 1 display: 7 spaces
+if [ "$current_display_count" -eq "1" ]; then
+    for i in $(seq $NUMBER_OF_SPACES); do
+        yabai -m space $i --display 1
+    done
+fi
+
+# 2 displays: 4 spaces / 3 spaces
+if [ "$current_display_count" -eq "2" ]; then
+    for i in $(seq $NUMBER_OF_SPACES); do
+        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo 2 || echo 1)
+    done
+fi
+
+# 3 displays: 4 spaces / 2 spaces / 1 space
+if [ "$current_display_count" -eq "3" ]; then
+    for i in $(seq $NUMBER_OF_SPACES); do
+        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo $([[ "$i" -ge "7" ]] && echo 3 || echo 2) || echo 1)
+    done
+fi
+
+# 1: Chrome (Work) / Stack
+send_app_to_space "Google Chrome" 1
+yabai -m space 1 --layout stack
+
+# 2: DataGrip / Stack
+send_app_to_space "DataGrip" 2
+yabai -m space 2 --layout stack
+
+# 3: Code / Stack
+send_app_to_space "Code" 3
+yabai -m space 3 --layout stack
+
+# 4: Firefox (Personal) / Stack
+send_app_to_space "Firefox" 4
+yabai -m space 4 --layout stack
+
+# 5: Messaging / BSP
+send_app_to_space "LINE" 5
+send_app_to_space "KakaoTalk" 5
+send_app_to_space "Signal" 5
+send_app_to_space "Messages" 5
+send_app_to_space "WhatsApp" 5
+yabai -m space 5 --layout bsp
+
+# 6: Productivity / BSP
+send_app_to_space "Slack" 6
+send_app_to_space "Superhuman" 6
+send_app_to_space "Reminders" 6
+send_app_to_space "Calendar" 6
+yabai -m space 6 --layout bsp
+
+# 7: Music/Misc / Stack
+send_app_to_space "Music" 7
+yabai -m space 7 --layout stack
