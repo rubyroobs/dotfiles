@@ -22,6 +22,7 @@ send_app_to_space () {
 
 current_display_count=$(yabai -m query --displays | jq length)
 
+{{- if .corp }}
 ####
 # Corp
 ####
@@ -85,3 +86,13 @@ yabai -m space 6 --layout bsp
 # 7: Music/Misc / Stack
 send_app_to_space "Music" 7
 yabai -m space 7 --layout stack
+{{- else }}
+####
+# Holssi
+####
+
+NUMBER_OF_SPACES=5
+
+ensure_space_count $NUMBER_OF_SPACES
+
+{{- end }}
