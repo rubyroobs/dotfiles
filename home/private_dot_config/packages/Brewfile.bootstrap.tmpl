@@ -3,13 +3,15 @@
 cask 'alfred'
 cask 'bartender'
 cask 'google-chrome'
-cask 'jetbrains-toolbox'
 cask 'keybase'
 cask 'mullvadvpn'
-cask 'slack'
 cask 'sublime-text'
 cask 'superhuman'
 cask 'transmit'
 cask 'visual-studio-code'
 cask 'vlc'
 cask 'zoom'
+{{- if .corp }}
+cask 'jetbrains-toolbox'
+cask 'slack'
+{{- end }}
