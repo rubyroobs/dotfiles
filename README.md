@@ -84,5 +84,5 @@ git config gpg.program "gpg"
 
 ## TODOs
 
-- [ ] Auto sorting for package lists (for now `for file in Brewfile Brewfile.bootstrap pkg_add.txt xbps-install.txt yay.txt; do sort -o $HOME/.local/share/chezmoi/home/private_dot_config/packages/$file{,}; done`)
+- [ ] Auto sorting for package lists (for now `for file in Brewfile.tmpl Brewfile.bootstrap.tmpl pkg_add.txt xbps-install.txt yay.txt; do sort -o $HOME/.local/share/chezmoi/home/private_dot_config/packages/$file{,}; done`)
 
