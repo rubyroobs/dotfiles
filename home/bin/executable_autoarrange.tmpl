@@ -17,8 +17,28 @@ ensure_space_count() {
 }
 
 send_app_to_space () {
-    yabai -m query --windows | jq -re ".[] | select(.app == \"$1\") | .id" | xargs -I % yabai -m window % --space $2
+    window_count=$(yabai -m query --windows | jq -re ".[] | select(.app == \"$1\") | .id | length")
+    if [ "$window_count" -gt "0" ]; then
+        yabai -m query --windows | jq -re ".[] | select(.app == \"$1\") | .id" | xargs -I % yabai -m window % --space $2
+    fi
 }
+
+workspace_stack () {
+    yabai -m space $1 --layout stack
+}
+
+workspace_bsp () {
+    yabai -m space $1 --layout bsp
+}
+
+workspace_only_multi_bsp () {
+    if [ "$current_display_count" -eq "1" ]; then
+        yabai -m space $1 --layout stack
+    else
+        yabai -m space $1 --layout bsp
+    fi
+}
+
 
 current_display_count=$(yabai -m query --displays | jq length)
 
@@ -52,36 +72,37 @@ if [ "$current_display_count" -eq "3" ]; then
     done
 fi
 
-# 1: Chrome (Work) / Stack
+# 1: Chrome (Work)
 send_app_to_space "Google Chrome" 1
-yabai -m space 1 --layout stack
+workspace_stack 1
 
-# 2: DataGrip / Stack
+# 2: DataGrip
 send_app_to_space "DataGrip" 2
-yabai -m space 2 --layout stack
+workspace_stack 2
 
-# 3: Code / Stack
+# 3: Code
 send_app_to_space "Code" 3
-yabai -m space 3 --layout stack
+workspace_stack 3
 
-# 4: Firefox (Personal) / Stack
+# 4: Firefox (Personal)
 send_app_to_space "Firefox" 4
-yabai -m space 4 --layout stack
+workspace_stack 4
 
 # 5: Productivity
 send_app_to_space "Reminders" 6
 send_app_to_space "Calendar" 6
-yabai -m space 5 --layout bsp
+workspace_only_multi_bsp 5
 
 # 6: Comms
 send_app_to_space "Slack" 6
 send_app_to_space "Superhuman" 6
-yabai -m space 6 --layout bsp
+workspace_only_multi_bsp 6
 
-# 7: Music/Misc / Stack
+# 7: Music/Misc
 send_app_to_space "Music" 7
-yabai -m space 7 --layout stack
-{{- else }}
+send_app_to_space "Sonos" 7
+workspace_stack 7
+{{- else if eq .chezmoi.hostname "holssi" }}
 ####
 # Holssi
 ####
@@ -90,4 +111,64 @@ NUMBER_OF_SPACES=5
 
 ensure_space_count $NUMBER_OF_SPACES
 
+# 1 display: 7 spaces
+if [ "$current_display_count" -eq "1" ]; then
+    for i in $(seq $NUMBER_OF_SPACES); do
+        yabai -m space $i --display 1
+    done
+fi
+
+# 2 displays: 4 spaces / 3 spaces
+if [ "$current_display_count" -eq "2" ]; then
+    for i in $(seq $NUMBER_OF_SPACES); do
+        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo 2 || echo 1)
+    done
+fi
+
+# 3 displays: 4 spaces / 2 spaces / 1 space
+if [ "$current_display_count" -eq "3" ]; then
+    for i in $(seq $NUMBER_OF_SPACES); do
+        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo $([[ "$i" -ge "7" ]] && echo 3 || echo 2) || echo 1)
+    done
+fi
+
+# 1: Web
+send_app_to_space "Firefox" 1
+send_app_to_space "Lagrange" 1
+workspace_stack 1
+
+# 2: Misc. Productive
+send_app_to_space "Guitar Pro 8" 2
+send_app_to_space "Microsoft Word" 2
+send_app_to_space "Microsoft Excel" 2
+send_app_to_space "Microsoft PowerPoint" 2
+workspace_stack 2
+
+# 3: Code
+send_app_to_space "Code" 3
+workspace_stack 3
+
+# 4: Comms
+send_app_to_space "Signal" 4
+send_app_to_space "LINE" 4
+send_app_to_space "KakaoTalk" 4
+send_app_to_space "WhatsApp" 4
+send_app_to_space "Messages" 4
+workspace_only_multi_bsp 4
+
+# 5: Productivity
+send_app_to_space "Reminders" 5
+send_app_to_space "Calendar" 5
+workspace_only_multi_bsp 5
+
+# 6: Email
+send_app_to_space "Superhuman" 6
+workspace_stack 6
+
+# 7: Music/Misc
+send_app_to_space "Music" 7
+send_app_to_space "Sonos" 7
+workspace_stack 7
+{{- else }}
+echo "no known layout for host :("
 {{- end }}

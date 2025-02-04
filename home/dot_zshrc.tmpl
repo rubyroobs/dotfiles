@@ -176,9 +176,4 @@ fi
 export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
-if [ -d "$HOME/.asdf" ]; then
-    export ASDF_DIR="$HOME/.asdf"
-    . "$HOME/.asdf/asdf.sh"
-fi
-
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

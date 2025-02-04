@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # asdf plugins
-if [ -f "$HOME/.asdf/asdf.sh" ]; then
-    . $HOME/.asdf/asdf.sh
+if [ "$(command -v asdf)" ]; then
     for pluginName in \
         ruby \
         golang \

@@ -2,12 +2,6 @@
     type = "git-repo"
     url = "https://github.com/mattmc3/antidote.git"
     refreshPeriod = "168h"
-{{- if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") }}
-[".asdf"]
-    type = "git-repo"
-    url = "https://github.com/asdf-vm/asdf.git"
-    refreshPeriod = "168h"
-{{- end }}
 {{- if and (eq .chezmoi.os "darwin") (not .ephemeral) (not .headless) }}
 ["Library/Fonts/sketchybar-app-font.ttf"]
     type = "file"
