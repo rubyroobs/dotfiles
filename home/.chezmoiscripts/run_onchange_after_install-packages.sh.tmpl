@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
 
-# asdf plugins
-if [ "$(command -v asdf)" ]; then
-    for pluginName in \
-        ruby \
-        golang \
-        nodejs \
-        yarn \
-        golang \
-        shellcheck ; do
-        asdf plugin add $pluginName >/dev/null 2>&1
-    done
-fi
-
 # 1Password CLI (op)
 if [ ! "$(command -v op)" ]; then
     OP_VERSION="2.30.0"

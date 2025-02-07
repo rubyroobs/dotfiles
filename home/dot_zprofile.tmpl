@@ -13,9 +13,9 @@ elif [ -f "/usr/lib/ssh/x11-ssh-askpass" ]; then
     export SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass
 fi
 
-# asdf
-if [ "$(command -v asdf)" ]; then
-    export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+# mise
+if [ "$(command -v mise)" ]; then
+    eval "$(mise activate zsh)"
 fi
 
 # brew (macOS)

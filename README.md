@@ -4,8 +4,6 @@ macOS, Linux and OpenBSD dotfiles! very heavily personalized to my usage but fee
 
 ## Installation
 
-**temporary manual step: install asdf (until 0.16.0 is commonly available in package managers)**
-
 Bootstrap with `brew` or the `install.sh` script, setup with `chezmoi`
 
 ```shell

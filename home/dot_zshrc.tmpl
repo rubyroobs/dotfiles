@@ -94,6 +94,11 @@ compinit
 if [ -f "$HOME/.antidote/antidote.zsh" ]; then
     source ~/.antidote/antidote.zsh
     antidote load
+    
+    if command -v mise > /dev/null 2>&1; then
+        mkdir -p ~/.antidote/functions
+        mise completion zsh > ~/.antidote/functions/_mise
+    fi
 
     bindkey '^[[A' history-substring-search-up
     bindkey '^[OA' history-substring-search-up
