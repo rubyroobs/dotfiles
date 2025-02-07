@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+$HOME/bin/autoarrange
+yabai --restart-service
+sleep 2
+current_space=$(yabai -m query --spaces --space | jq '.index')
+current_space_count=$(yabai -m query --spaces --space last | jq '.index')
+for i in $(seq 1 $current_space_count); do
+    yabai -m space --focus $i > /dev/null 2>&1
+done
+yabai -m space --focus $current_space > /dev/null 2>&1
+$HOME/bin/autoarrange
