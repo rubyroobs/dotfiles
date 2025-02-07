@@ -16,6 +16,7 @@ fi
 # mise
 if [ "$(command -v mise)" ]; then
     eval "$(mise activate zsh)"
+    eval "$(mise hook-env)"
 fi
 
 # brew (macOS)
