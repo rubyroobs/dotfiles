@@ -21,14 +21,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# rbenv if it's there
-if [[ -d "$HOME/.rbenv" ]]; then
-    export PATH="$HOME/.rbenv/bin:$PATH"
-    export PATH="$HOME/.rbenv/shims:$PATH"
-    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local"
-    eval "$(rbenv init -)"
-fi
-
 # LLVM (libclang) OpenBSD
 if [[ "$OSTYPE" == "openbsd"* ]]; then
     export LIBCLANG_PATH=/usr/local/llvm17/lib
