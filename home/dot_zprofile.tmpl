@@ -13,12 +13,6 @@ elif [ -f "/usr/lib/ssh/x11-ssh-askpass" ]; then
     export SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass
 fi
 
-# mise
-if [ "$(command -v mise)" ]; then
-    eval "$(mise activate zsh)"
-    eval "$(mise hook-env)"
-fi
-
 # brew (macOS)
 if [ -d "/opt/homebrew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -36,6 +30,12 @@ if [ -d "/opt/homebrew" ]; then
         source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
         source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
     fi
+fi
+
+# mise
+if [ "$(command -v mise)" ]; then
+    eval "$(mise activate zsh)"
+    eval "$(mise hook-env)"
 fi
 
 # fvm
