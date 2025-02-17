@@ -10,3 +10,4 @@ for i in $(seq 1 $current_space_count); do
 done
 yabai -m space --focus $current_space > /dev/null 2>&1
 $HOME/bin/autoarrange
+brew services restart sketchybar > /dev/null 2>&1
