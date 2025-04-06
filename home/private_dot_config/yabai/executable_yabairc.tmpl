@@ -49,6 +49,23 @@ yabai -m rule --add label="Music" app="^Music$" manage=on
 yabai -m rule --add label="Microsoft Office" app="^Microsoft (Word|Excel|PowerPoint)$" manage=on
 yabai -m rule --add label="Guitar Pro" app="^Guitar Pro [0-9]+$" manage=on
 
+# Tiling for some apps that just don't work properly? 
+# Issue:
+sublayerapps='WhatsApp'
+for app in $sublayerapps; do
+  yabai -m rule --add \
+          label="$app sublayer" \
+          app="^$app$" \
+          sub-layer=below \
+          manage=off
+  yabai -m rule --add \
+          label="$app" \
+          app="^$app$" \
+          role="AXWindow" \
+          subrole="AXStandardWindow" \
+          sub-layer=normal \
+          manage=on
+done
 
 # Default centering for some apps
 yabai -m rule --add app="^Finder$" title!="(Co(py|nnect)|Move|Info|Pref)" manage=off grid=6:4:1:1:2:4
