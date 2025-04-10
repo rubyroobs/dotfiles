@@ -32,6 +32,7 @@ workspace_bsp () {
 }
 
 workspace_only_multi_bsp () {
+    current_display_count=$(yabai -m query --displays | jq length)
     if [ "$current_display_count" -eq "1" ]; then
         yabai -m space $1 --layout stack
     else
