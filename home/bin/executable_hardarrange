@@ -2,7 +2,20 @@
 
 $HOME/bin/autoarrange
 yabai --restart-service
-sleep 2
+sleep 1
+SECONDS=0
+until yabai -m query --spaces --space > /dev/null 2>&1
+do
+  
+  if (( SECONDS > 15 ))
+  then
+     echo "yabai did not reload..."
+     exit 1
+  fi
+
+  sleep 1
+done
+
 current_space=$(yabai -m query --spaces --space | jq '.index')
 current_space_count=$(yabai -m query --spaces --space last | jq '.index')
 for i in $(seq 1 $current_space_count); do
