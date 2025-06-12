@@ -33,3 +33,4 @@ quick-terminal-animation-duration = 0
 quick-terminal-position = center
 macos-window-shadow = false
 macos-secure-input-indication = true
+scrollback-limit = 4294967295
