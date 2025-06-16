@@ -42,7 +42,6 @@ doas rcctl start pcscd
 
 # macOS: enable services
 brew services start borders
-brew services start sketchybar
 ```
 
 After setting up `op` (1Password CLI), get yubikey private keys tubs and generate secrets from templates:

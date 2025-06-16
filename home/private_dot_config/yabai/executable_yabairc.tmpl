@@ -3,8 +3,7 @@
 sudo yabai --load-sa
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
-yabai -m config external_bar                   all:32:0       \
-                mouse_follows_focus            off            \
+yabai -m config mouse_follows_focus            off            \
                 focus_follows_mouse            off            \
                 window_placement               second_child   \
                 window_animation_duration      0.0            \
@@ -34,7 +33,6 @@ yabai -m rule --add label="Superhuman" app="^Superhuman$" manage=on
 yabai -m rule --add label="Calendar" app="^Calendar$" manage=on
 yabai -m rule --add label="Notes" app="^Notes$" manage=on
 yabai -m rule --add label="Reminders" app="^Reminders" manage=on
-yabai -m rule --add label="kitty" app="^kitty$" manage=on
 yabai -m rule --add label="Ghostty" app='^Ghostty$' manage=on
 yabai -m rule --add label="Code" app="^Code$" manage=on
 yabai -m rule --add label="DataGrip" app="^DataGrip$" title!="(Data Sources and Drivers|Settings)" manage=on

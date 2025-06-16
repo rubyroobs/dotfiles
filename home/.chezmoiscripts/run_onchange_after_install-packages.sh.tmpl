@@ -226,15 +226,10 @@ if command -v node > /dev/null 2>&1; then
     fi
 fi
 
-# macOS application and sketchybar helper bootstrap
+# macOS application bootstrap
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    if [ ! -f "/Applications/kitty.app/Contents/MacOS/kitty" ]; then
-        echo "Installing bootstrap applications (to stop this in future applies, make sure kitty is installed)..."
-        brew bundle --verbose --no-lock --file=$HOME/.config/packages/Brewfile.bootstrap
-    fi
-
-    if [ ! -f "$HOME/.local/share/sketchybar_lua/sketchybar.so" ]; then
-        echo "Installing SbarLua (Sketchybar Lua helpers)..."
-        git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/
+    if [ ! -f "/Applications/Ghostty.app/Contents/MacOS/Ghostty" ]; then
+        echo "Installing bootstrap applications (to stop this in future applies, make sure ghostty is installed)..."
+        brew bundle --verbose --file=$HOME/.config/packages/Brewfile.bootstrap
     fi
 fi

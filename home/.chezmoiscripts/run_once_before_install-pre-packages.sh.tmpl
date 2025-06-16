@@ -2,11 +2,11 @@
 
 set -eufo pipefail
 
-# macOS - install homebrew, setup Sketchybar helper initial apps (if kitty not already installed)
+# macOS - install homebrew, setup
 if [[ "$OSTYPE" == "darwin"* ]]; then
     command -v brew >/dev/null 2>&1 || (echo '🍺  Installing Homebrew' && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
 
-    cat {{.chezmoi.sourceDir}}/private_dot_config/packages/Brewfile.tmpl | chezmoi execute-template | brew bundle --verbose --no-lock --file=/dev/stdin
+    cat {{.chezmoi.sourceDir}}/private_dot_config/packages/Brewfile.tmpl | chezmoi execute-template | brew bundle --verbose --file=/dev/stdin
 fi
 
 if command -v yay > /dev/null 2>&1; then

@@ -21,10 +21,6 @@ if command -v sxhkd > /dev/null 2>&1; then
     sv restart $HOME/.runit/runsvdir/sxhkd
 fi
 
-if command -v sketchybar > /dev/null 2>&1; then
-    sketchybar --reload
-fi
-
 if command -v kitty > /dev/null 2>&1; then
     pgrep kitty | xargs kill -SIGUSR1
 fi

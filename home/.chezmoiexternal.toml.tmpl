@@ -2,13 +2,3 @@
     type = "git-repo"
     url = "https://github.com/mattmc3/antidote.git"
     refreshPeriod = "168h"
-{{- if and (eq .chezmoi.os "darwin") (not .ephemeral) (not .headless) }}
-["Library/Fonts/sketchybar-app-font.ttf"]
-    type = "file"
-    url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/sketchybar-app-font.ttf"
-    refreshPeriod = "168h"
-[".config/sketchybar/helpers/icon_map.lua"]
-    type = "file"
-    url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/latest/download/icon_map.lua"
-    refreshPeriod = "168h"
-{{- end }}
