@@ -7,6 +7,9 @@ macOS, Linux and OpenBSD dotfiles! very heavily personalized to my usage but fee
 Bootstrap with `brew` or the `install.sh` script, setup with `chezmoi`
 
 ```shell
+# manually install mise
+curl https://mise.run | sh
+
 # macOS specific
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install chezmoi
