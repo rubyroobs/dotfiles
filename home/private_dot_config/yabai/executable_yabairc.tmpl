@@ -39,7 +39,7 @@ yabai -m rule --add label="DataGrip" app="^DataGrip$" title!="(Data Sources and 
 yabai -m rule --add label="Signal" app="^Signal$" manage=on
 yabai -m rule --add label="LINE" app="^LINE$" title="^LINE$" manage=on
 yabai -m rule --add label="KakaoTalk" app="^KakaoTalk$" title="^KakaoTalk$" manage=on
-yabai -m rule --add label="WhatsApp" app="^WhatsApp$" manage=on
+yabai -m rule --add label="WhatsApp" app="WhatsApp" manage=on
 yabai -m rule --add label="Messages" app="^Messages$" manage=on
 yabai -m rule --add label="Slack" app="^Slack$" manage=on
 yabai -m rule --add label="Friture" app="^(F|f)riture$" manage=on
@@ -53,12 +53,12 @@ sublayerapps='WhatsApp'
 for app in $sublayerapps; do
   yabai -m rule --add \
           label="$app sublayer" \
-          app="^$app$" \
+          app="$app" \
           sub-layer=below \
           manage=off
   yabai -m rule --add \
           label="$app" \
-          app="^$app$" \
+          app="$app" \
           role="AXWindow" \
           subrole="AXStandardWindow" \
           sub-layer=normal \
