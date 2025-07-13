@@ -1,0 +1,52 @@
+{
+  // we try to make semantic highlighting look good
+  "editor.semanticHighlighting.enabled": true,
+  // prevent VSCode from modifying the terminal colors
+  "terminal.integrated.minimumContrastRatio": 1,
+  // make the window's titlebar use the workbench colors
+  "window.titleBarStyle": "custom",
+  // applicable if you use Go, this is an opt-in flag!
+  "gopls": {
+    "ui.semanticTokens": true
+  },
+  "editor.tabSize": 2,
+  "terminal.integrated.fontFamily": "Maple Mono NF, monospace",
+  "terminal.integrated.fontSize": 14,
+  "editor.fontFamily": "Maple Mono NF, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 14,
+  "workbench.iconTheme": "catppuccin-frappe",
+  "workbench.colorTheme": "Catppuccin Frappé",
+  "workbench.settings.editor": "json",
+  "go.toolsManagement.autoUpdate": true,
+  "search.followSymlinks": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "gitlab.aiAssistedCodeSuggestions.enabled": true,
+  "[ruby]": {
+    "editor.defaultFormatter": "Shopify.ruby-lsp", // Use the Ruby LSP as the default formatter
+    "editor.formatOnSave": true, // Format files automatically when saving
+    "editor.tabSize": 2, // Use 2 spaces for indentation
+    "editor.insertSpaces": true, // Use spaces and not tabs for indentation
+    "editor.semanticHighlighting.enabled": true, // Enable semantic highlighting
+    "editor.formatOnType": true, // Enable formatting while typing
+  },
+  "rubyLsp.rubyVersionManager": {
+    "identifier": "mise"
+  },
+  "workbench.sideBar.location": "left",
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  },
+}
