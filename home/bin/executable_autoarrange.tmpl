@@ -108,68 +108,63 @@ workspace_stack 7
 # Holssi
 ####
 
-NUMBER_OF_SPACES=7
+NUMBER_OF_SPACES=5
 
 ensure_space_count $NUMBER_OF_SPACES
 
-# 1 display: 7 spaces
+# 1 display: 5 spaces
 if [ "$current_display_count" -eq "1" ]; then
     for i in $(seq $NUMBER_OF_SPACES); do
         yabai -m space $i --display 1
     done
 fi
 
-# 2 displays: 4 spaces / 3 spaces
+# 2 displays: 3 spaces / 2 spaces
 if [ "$current_display_count" -eq "2" ]; then
     for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo 2 || echo 1)
+        yabai -m space $i --display $([[ "$i" -ge "4" ]] && echo 2 || echo 1)
     done
 fi
 
-# 3 displays: 4 spaces / 2 spaces / 1 space
+# 3 displays: 3 spaces / 1 spaces / 1 space
 if [ "$current_display_count" -eq "3" ]; then
     for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo $([[ "$i" -ge "7" ]] && echo 3 || echo 2) || echo 1)
+        yabai -m space $i --display $([[ "$i" -ge "4" ]] && echo $([[ "$i" -ge "5" ]] && echo 3 || echo 2) || echo 1)
     done
 fi
 
 # 1: Web
+send_app_to_space "Google Chrome" 1
 send_app_to_space "Firefox" 1
 send_app_to_space "Lagrange" 1
 workspace_stack 1
 
-# 2: Misc. Productive
-send_app_to_space "Guitar Pro 8" 2
-send_app_to_space "Microsoft Word" 2
-send_app_to_space "Microsoft Excel" 2
-send_app_to_space "Microsoft PowerPoint" 2
-workspace_stack 2
+# 2: Comms
+send_app_to_space "Signal" 2
+send_app_to_space "LINE" 2
+send_app_to_space "KakaoTalk" 2
+send_app_to_space "WhatsApp" 2
+send_app_to_space "Messages" 2
+workspace_only_multi_bsp 2
 
 # 3: Code
 send_app_to_space "Code" 3
+send_app_to_space "Ghostty" 3
+send_app_to_space "Sublime Text" 3
 workspace_stack 3
 
-# 4: Comms
-send_app_to_space "Signal" 4
-send_app_to_space "LINE" 4
-send_app_to_space "KakaoTalk" 4
-send_app_to_space "WhatsApp" 4
-send_app_to_space "Messages" 4
+# 4: Productivity
+send_app_to_space "Mail" 4
+send_app_to_space "Reminders" 4
+send_app_to_space "Calendar" 4
+send_app_to_space "Notes" 4
 workspace_only_multi_bsp 4
 
-# 5: Productivity
-send_app_to_space "Reminders" 5
-send_app_to_space "Calendar" 5
-workspace_only_multi_bsp 5
-
-# 6: Email
-send_app_to_space "Superhuman" 6
-workspace_stack 6
-
-# 7: Music/Misc
-send_app_to_space "Music" 7
-send_app_to_space "Sonos" 7
-workspace_stack 7
+# 5: Music/Media/Misc
+send_app_to_space "Guitar Pro 8" 5
+send_app_to_space "Music" 5
+send_app_to_space "Sonos" 5
+workspace_stack 5
 {{- else }}
 echo "no known layout for host :("
 {{- end }}
