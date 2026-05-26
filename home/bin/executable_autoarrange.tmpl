@@ -1,170 +1,77 @@
 #!/usr/bin/env bash
 
-ensure_space_count() {
-    current_space_count=$(yabai -m query --spaces --space last | jq '.index')
-    to_destroy="$(($current_space_count-$1))"
-    to_create="$(($1-$current_space_count))"
-    if [ "$to_create" -gt "0" ]; then
-        for i in $(seq $to_create); do
-            yabai -m space --create
-        done
-    fi
-    if [ "$to_destroy" -gt "0" ]; then
-        for i in $(seq $to_destroy); do
-            yabai -m space $(yabai -m query --spaces --space last | jq '.index') --destroy > /dev/null 2>&1
-        done
-    fi
-}
-
-send_app_to_space () {
-    window_count=$(yabai -m query --windows | jq -re ".[] | select(.app == \"$1\") | .id | length")
+send_app_to_workspace () {
+    window_count=$(aerospace list-windows --json --all | jq -re "[ .[] | select(.\"app-name\" == \"$1\") ] | length")
     if [ "$window_count" -gt "0" ] > /dev/null 2>&1; then
-        yabai -m query --windows | jq -re ".[] | select(.app == \"$1\") | .id" | xargs -I % yabai -m window % --space $2 > /dev/null 2>&1
+        aerospace list-windows --json --all | jq -re ".[] | select(.\"app-name\" == \"$1\") | .\"window-id\"" | xargs -I % aerospace move-node-to-workspace --window-id % $2 > /dev/null 2>&1
+        if [ -n "$3" ]; then
+            aerospace list-windows --json --all | jq -re ".[] | select(.\"app-name\" == \"$1\") | .\"window-id\"" | xargs -I % aerospace layout --window-id % $3 > /dev/null 2>&1
+        fi
     fi
 }
 
-workspace_stack () {
-    yabai -m space $1 --layout stack
-}
-
-workspace_bsp () {
-    yabai -m space $1 --layout bsp
-}
-
-workspace_only_multi_bsp () {
-    current_display_count=$(yabai -m query --displays | jq length)
-    if [ "$current_display_count" -eq "1" ]; then
-        yabai -m space $1 --layout stack
-    else
-        yabai -m space $1 --layout bsp
-    fi
-}
-
-
-current_display_count=$(yabai -m query --displays | jq length)
+current_display_count=$(aerospace list-monitors --count)
 
 {{- if .corp }}
 ####
 # Corp
 ####
 
-NUMBER_OF_SPACES=7
-
-ensure_space_count $NUMBER_OF_SPACES
-
-# 1 display: 7 spaces
-if [ "$current_display_count" -eq "1" ]; then
-    for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display 1 > /dev/null 2>&1
-    done
-fi
-
-# 2 displays: 4 spaces / 3 spaces
-if [ "$current_display_count" -eq "2" ]; then
-    for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo 2 || echo 1) > /dev/null 2>&1
-    done
-fi
-
-# 3 displays: 4 spaces / 2 spaces / 1 space
-if [ "$current_display_count" -eq "3" ]; then
-    for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display $([[ "$i" -ge "5" ]] && echo $([[ "$i" -ge "7" ]] && echo 3 || echo 2) || echo 1) > /dev/null 2>&1
-    done
-fi
-
 # 1: Chrome (Work)
-send_app_to_space "Google Chrome" 1
-workspace_stack 1
+send_app_to_workspace "Google Chrome" 1 accordion
 
 # 2: DataGrip
-send_app_to_space "DataGrip" 2
-workspace_stack 2
+send_app_to_workspace "DataGrip" 2 accordion
 
 # 3: Code
-send_app_to_space "Code" 3
-workspace_stack 3
+send_app_to_workspace "Code" 3 accordion
 
 # 4: Firefox (Personal)
-send_app_to_space "Firefox" 4
-workspace_stack 4
+send_app_to_workspace "Firefox" 4 tiles
 
 # 5: Productivity
-send_app_to_space "Reminders" 5
-send_app_to_space "Calendar" 5
-workspace_only_multi_bsp 5
+send_app_to_workspace "Reminders" 5 tiles
+send_app_to_workspace "Calendar" 5 tiles
 
 # 6: Comms
-send_app_to_space "Slack" 6
-send_app_to_space "Mail" 6
-workspace_only_multi_bsp 6
+send_app_to_workspace "Slack" 6 tiles
+send_app_to_workspace "Mail" 6 tiles
 
 # 7: Music/Misc
-send_app_to_space "Music" 7
-send_app_to_space "Sonos" 7
-workspace_stack 7
+send_app_to_workspace "Music" 7 accordion
+send_app_to_workspace "Sonos" 7 accordion
 {{- else if eq .chezmoi.hostname "holssi" }}
 ####
 # Holssi
 ####
 
-NUMBER_OF_SPACES=5
-
-ensure_space_count $NUMBER_OF_SPACES
-
-# 1 display: 5 spaces
-if [ "$current_display_count" -eq "1" ]; then
-    for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display 1
-    done
-fi
-
-# 2 displays: 3 spaces / 2 spaces
-if [ "$current_display_count" -eq "2" ]; then
-    for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display $([[ "$i" -ge "4" ]] && echo 2 || echo 1)
-    done
-fi
-
-# 3 displays: 3 spaces / 1 spaces / 1 space
-if [ "$current_display_count" -eq "3" ]; then
-    for i in $(seq $NUMBER_OF_SPACES); do
-        yabai -m space $i --display $([[ "$i" -ge "4" ]] && echo $([[ "$i" -ge "5" ]] && echo 3 || echo 2) || echo 1)
-    done
-fi
-
 # 1: Web
-send_app_to_space "Google Chrome" 1
-send_app_to_space "Firefox" 1
-send_app_to_space "Lagrange" 1
-workspace_stack 1
+send_app_to_workspace "Google Chrome" 1 accordion
+send_app_to_workspace "Firefox" 1 accordion
+send_app_to_workspace "Lagrange" 1 accordion
 
 # 2: Comms
-send_app_to_space "Signal" 2
-send_app_to_space "LINE" 2
-send_app_to_space "KakaoTalk" 2
-send_app_to_space "WhatsApp" 2
-send_app_to_space "Messages" 2
-workspace_only_multi_bsp 2
+send_app_to_workspace "Signal" 2 tiles
+send_app_to_workspace "LINE" 2 tiles
+send_app_to_workspace "KakaoTalk" 2 tiles
+send_app_to_workspace "WhatsApp" 2 tiles
+send_app_to_workspace "Messages" 2 tiles
 
 # 3: Code
-send_app_to_space "Code" 3
-send_app_to_space "Ghostty" 3
-send_app_to_space "Sublime Text" 3
-workspace_stack 3
+send_app_to_workspace "Code" 3 accordion
+send_app_to_workspace "Ghostty" 3 accordion
+send_app_to_workspace "Sublime Text" 3 accordion
 
 # 4: Productivity
-send_app_to_space "Mail" 4
-send_app_to_space "Reminders" 4
-send_app_to_space "Calendar" 4
-send_app_to_space "Notes" 4
-workspace_only_multi_bsp 4
+send_app_to_workspace "Mail" 4 tiles
+send_app_to_workspace "Reminders" 4 tiles
+send_app_to_workspace "Calendar" 4 tiles
+send_app_to_workspace "Notes" 4 tiles
 
 # 5: Music/Media/Misc
-send_app_to_space "Guitar Pro 8" 5
-send_app_to_space "Music" 5
-send_app_to_space "Sonos" 5
-workspace_stack 5
+send_app_to_workspace "Guitar Pro 8" 5 accordion
+send_app_to_workspace "Music" 5 accordion
+send_app_to_workspace "Sonos" 5 accordion
 {{- else }}
 echo "no known layout for host :("
 {{- end }}

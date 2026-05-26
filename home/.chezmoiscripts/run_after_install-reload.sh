@@ -4,7 +4,6 @@ if command -v fc-cache > /dev/null 2>&1; then
     fc-cache
 fi
 
-if command -v skhd > /dev/null 2>&1; then
-    skhd --stop-service
-    skhd --start-service
+if command -v aerospace > /dev/null 2>&1; then
+    aerospace reload-config
 fi

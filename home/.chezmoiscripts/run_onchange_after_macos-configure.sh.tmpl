@@ -4,6 +4,9 @@
 set -eufo pipefail
 
 # defaults (system settings)
+# force restart Dock/UI with 
+#   $ killall SystemUIServer
+#
 defaults write NSGlobalDomain AppleInterfaceStyle Dark
 defaults write NSGlobalDomain AppleLanguages -array en-JP ja-JP
 defaults write NSGlobalDomain AppleLocale en_JP
@@ -16,12 +19,17 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -bool true
 
 defaults write com.apple.dock "autohide" -bool true
 defaults write com.apple.dock show-recents -bool false
-defaults write com.apple.dock "mru-spaces" -bool "false" && killall Dock
+defaults write com.apple.dock "mru-spaces" -bool false
+defaults write com.apple.dock expose-group-apps -bool true
+defaults write com.apple.dock mcx-expose-disabled -bool true
+killall Dock
+
+defaults write com.apple.WindowManager GloballyEnabled -bool false
 
 defaults write com.apple.finder CreateDesktop false
 
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
-
+defaults write com.apple.spaces spans-displays -bool true
 defaults write org.gpgtools.common UseKeychain -bool yes
 defaults write org.gpgtools.common DisableKeychain -bool no
 
