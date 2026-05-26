@@ -27,36 +27,6 @@ defaults write org.gpgtools.common DisableKeychain -bool no
 
 launchctl disable user/$UID/com.openssh.ssh-agent
 
-# GDK
-{{- if .corp }}
-if [[ ! -f /Library/LaunchDaemons/org.gitlab1.ifconfig.plist ]]; then
-    echo "Setting up GitLab ifconfig for GDK..."
-    echo '<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>org.gitlab1.ifconfig</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>Nice</key>
-    <integer>10</integer>
-    <key>ProgramArguments</key>
-    <array>
-      <string>/sbin/ifconfig</string>
-      <string>lo0</string>
-      <string>alias</string>
-      <string>172.16.123.1</string>
-    </array>
-</dict>
-</plist>
-' | sudo tee /Library/LaunchDaemons/org.gitlab1.ifconfig.plist >/dev/null
-    sudo chmod 0644 /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
-    sudo chown root:wheel /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
-    sudo launchctl load /Library/LaunchDaemons/org.gitlab1.ifconfig.plist
-fi
-{{- end }}
-
 if command -v dockutil > /dev/null 2>&1; then
     if dockutil --find "Podcasts" > /dev/null 2>&1; then
         echo "Fixing the dock..."

@@ -1,49 +1,6 @@
-.wallpapers/README.md
-
 .config/gh/private_hosts.yml
 .config/git/credentials
 
 {{- if not .corp -}}
 .ssh/ruby_gitlab_ed25519.pub
-{{- end -}}
-
-{{- if ne .chezmoi.os "darwin" -}}
-.ssh/ssh-askpass
-.config/packages/Brewfile
-.config/packages/Brewfile.bootstrap
-.config/skhd
-.config/yabai
-{{- end -}}
-
-{{- if and (ne .chezmoi.os "linux") (ne .chezmoi.os "openbsd") -}}
-.config/autorandr
-.config/bspwm
-.config/gtk-3.0
-.config/gtk-4.0
-.config/picom
-.config/polybar
-.config/rofi
-.config/sxhkd
-.fehbg
-.gnupg/scdaemon.conf
-.gtkrc
-.gtkrc-2.0
-.Xmodmap
-.Xresources
-.xinitrc
-bin/
-{{- end -}}
-
-{{- if ne .chezmoi.os "linux" -}}
-.config/packages/yay.txt
-.config/packages/xbps-install.txt
-.runit/runsvdir/pipewire
-.runit/runsvdir/wireplumber
-.runit/runsvdir/easyeffects
-{{- end -}}
-
-{{- if ne .chezmoi.os "openbsd" -}}
-.config/packages/pkg_add.txt
-.profile
-.xsession
 {{- end -}}

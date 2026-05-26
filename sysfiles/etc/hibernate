@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-su ruby -c /home/ruby/bin/xlock 

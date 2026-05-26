@@ -1,54 +1,10 @@
 #!/usr/bin/env bash
 
-# 1Password CLI (op)
-if [ ! "$(command -v op)" ]; then
-    OP_VERSION="2.30.0"
-    # todo: detect and support ARM
-    wget "https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/op_{{.chezmoi.os}}_amd64_v${OP_VERSION}.zip" -O /tmp/opcli.zip
-    unzip -d /tmp/opcli /tmp/opcli.zip 
-    if [ "$(command -v doas)" ]; then
-        doas mv /tmp/opcli/op /usr/local/bin/
-        doas groupadd -f onepassword-cli
-        doas chgrp onepassword-cli /usr/local/bin/op
-        doas chmod g+s /usr/local/bin/op
-    else
-        sudo mv /tmp/opcli/op /usr/local/bin/
-        sudo groupadd -f onepassword-cli
-        sudo chgrp onepassword-cli /usr/local/bin/op
-        sudo chmod g+s /usr/local/bin/op
-    fi
-    rm -r /tmp/opcli.zip /tmp/opcli
-fi
-
-{{- if ne .chezmoi.os "openbsd" }}
 # rustup
 if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
     echo "Installing rustup..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
-{{- end }}
-
-{{- if eq .chezmoi.os "openbsd" }}
-# gitstatusd
-if [ ! -f "$HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-romkatv-SLASH-powerlevel10k/gitstatus/usrbin/gitstatusd" ]; then
-    echo "Getting dependencies for and compiling gitstatusd..."
-    doas pkg_add cmake gmake gcc-11.2.0p13 g++-11.2.0p14 git wget
-    (cd $HOME/.cache/antidote/https-COLON--SLASH--SLASH-github.com-SLASH-romkatv-SLASH-powerlevel10k/gitstatus && bash ./build -w)
-fi
-
-# rbenv
-if [ ! -d "$HOME/.rbenv" ]; then
-    echo "Installing rbenv and dependencies..."
-    doas pkg_add git gcc-11.2.0p13 gmake libffi libyaml openssl-3.3.1p0v0
-    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-    git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-    export PATH="$HOME/.rbenv/bin:$PATH"
-    export PATH="$HOME/.rbenv/shims:$PATH"
-    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local"
-    eval "$(rbenv init -)"
-    rbenv install $(rbenv install -l | grep -v - | tail -1)
-fi
-{{- end }}
 
 {{- if eq .chezmoi.os "darwin" }}
 # libfido2 SK provider for macOS ssh-agent
@@ -60,11 +16,6 @@ if [ ! -f "/usr/local/lib/libsk-libfido2.dylib" ]; then
     fi
 fi
 {{- end }}
-
-# runit via busybox~
-if ! command -v sv > /dev/null 2>&1 && command -v busybox > /dev/null 2>&1; then
-    busybox --list | awk '/^runsv|^chpst$|^sv/' | xargs -I{} sudo ln -sv /usr/bin/busybox /usr/local/bin/{}
-fi
 
 # fonts!
 #
@@ -158,73 +109,8 @@ if [ ! -d "$FONT_DIR/MapleMono" ]; then
     rm /tmp/MapleMono-NF.zip
 fi
 
-
-unamestr=$(uname)
-
-if [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
-    if [ ! -d "$FONT_DIR/SanFrancisco" ]; then
-        echo "Installing San Francisco font..."
-        mkdir -p /tmp/sanfranciscofontdl
-        curl -sL -o /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/77f8a1e62803752013d4933dbaf11653ec3826f9.zip"
-        7z x /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip -aoa -bsp0 -bso0 -y -o/tmp/sanfranciscofontdl
-        rm /tmp/77f8a1e62803752013d4933dbaf11653ec3826f9.zip
-        mkdir -p $FONT_DIR/SanFrancisco
-        install -m644 /tmp/sanfranciscofontdl/SanFranciscoFont-77f8a1e62803752013d4933dbaf11653ec3826f9/*.otf $FONT_DIR/SanFrancisco
-        rm -rf /tmp/sanfranciscofontdl
-    fi
-
-    if [ ! -d "$FONT_DIR/HiraKakuGo" ]; then
-        echo "Installing Hiragino Kaku Gothic Pro (Japanese/Kana) font..."
-        mkdir -p /tmp/hirakakufontdl
-        curl -sL -o /tmp/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip "https://github.com/sideroad/capturing/archive/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip"
-        7z x /tmp/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip "capturing-be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68/.fonts/*" -aoa -bsp0 -bso0 -y -o/tmp/hirakakufontdl
-        rm /tmp/be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68.zip
-        mkdir -p $FONT_DIR/HiraKakuGo
-        install -m644 /tmp/hirakakufontdl/capturing-be9e7fc972b20bf8cd210a6d63f93d8a55bf7f68/.fonts/*.otf $FONT_DIR/HiraKakuGo
-        rm -rf /tmp/hirakakufontdl
-    fi
-
-    if [ ! -d "$FONT_DIR/AppleSDGothicNeo" ]; then
-        echo "Installing Apple SD Gothic Neo (Hangul) font..."
-        mkdir -p $FONT_DIR/AppleSDGothicNeo
-        mkdir -p /tmp/applesdfontdl
-        curl -sL -o /tmp/86137e950e321310309cfd7a239746ab1b5ba5ff.zip "https://github.com/adrinerDP/font-applesdgothicneo/archive/86137e950e321310309cfd7a239746ab1b5ba5ff.zip"
-        7z x /tmp/86137e950e321310309cfd7a239746ab1b5ba5ff.zip "font-applesdgothicneo-86137e950e321310309cfd7a239746ab1b5ba5ff/fonts/*" -aoa -bsp0 -bso0 -y -o/tmp/applesdfontdl
-        rm /tmp/86137e950e321310309cfd7a239746ab1b5ba5ff.zip
-        mkdir -p $FONT_DIR/AppleSDGothicNeo
-        install -m644 /tmp/applesdfontdl/font-applesdgothicneo-86137e950e321310309cfd7a239746ab1b5ba5ff/fonts/*.otf $FONT_DIR/AppleSDGothicNeo
-        rm -rf /tmp/applesdfontdl
-    fi
-
-    if [ ! -d "$FONT_DIR/AppleColorEmoji" ]; then
-        echo "Installing Apple Color Emoji font..."
-        mkdir -p $FONT_DIR/AppleColorEmoji
-        curl -sL -o $FONT_DIR/AppleColorEmoji/AppleColorEmoji.ttf https://github.com/samuelngs/apple-emoji-linux/releases/latest/download/AppleColorEmoji.ttf
-    fi
-fi
-
-if [[ "$unamestr" == "OpenBSD" ]]; then
-    echo "Copying fonts to system paths..."
-    doas mkdir -p /usr/local/share/fonts/
-    doas cp -R ~/.fonts/* /usr/local/share/fonts/
-    doas mkfontscale /usr/local/share/fonts/*
-    doas mkfontdir /usr/local/share/fonts/*
-elif [[ "$unamestr" == "Linux" || "$unamestr" == *"BSD" ]]; then
-    echo "Copying fonts to system paths..."
-    sudo cp -R ~/.fonts/* /usr/share/fonts/
-    sudo mkfontscale /usr/share/fonts/*
-    sudo mkfontdir /usr/share/fonts/*
-fi
-
 echo "Rebuilding font cache..."
 fc-cache -f
-
-# markdownlint if node available
-if command -v node > /dev/null 2>&1; then
-    if ! command -v markdownlint > /dev/null 2>&1; then
-        doas npm install -g markdownlint-cli
-    fi
-fi
 
 # macOS application bootstrap
 if [[ "$OSTYPE" == "darwin"* ]]; then

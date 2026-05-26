@@ -1,20 +1,10 @@
 {{/* boolean feature tags */}}
 {{- $corp := false -}}{{/* true if this machine is corp/work, false if personal */}}
-{{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
-{{- $headless := false -}}{{/* true if this machine does not have a screen and keyboard */}}
 {{- "" -}}
-
-{{- $dpi := "192" -}}{{/* default hidpi since this is almost always the case */}}
 
 {{- $osID := .chezmoi.os -}}
 {{- if hasKey .chezmoi.osRelease "id" -}}
 {{-   $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
-{{- end -}}
-
-{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, Multipass VMs, and Vagrant boxes */}}
-{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
-{{-   $ephemeral = true -}}
-{{-   $headless = true -}}
 {{- end -}}
 
 {{/* work around unreliable hostname on darwin */}}
@@ -30,39 +20,17 @@
 {{-   end -}}
 {{- end -}}
 
-{{- if eq .chezmoi.os "windows" -}}
-{{-   $ephemeral = true -}}
-{{- end -}}
-
-{{- if not $ephemeral -}}
-{{-   if eq $hostname "tanuki" -}}
-{{-     $corp = true -}}
-{{-   else if stdinIsATTY -}}
-{{-     $dpiOptions := list "96" "192" -}}
-{{-     $dpi := promptChoice "dpi?" $dpiOptions -}}
-{{-     $corp = promptBoolOnce . "corp" "corp" -}}
-{{-     $headless = promptBoolOnce . "headless" "headless" -}}
-{{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" -}}
-{{-   else -}}
-{{-     $corp = false -}}
-{{-     $ephemeral = true -}}
-{{-     $headless = true -}}
-{{-   end -}}
+{{- if eq $hostname "tanuki" -}}
+{{-   $corp = true -}}
+{{- else if stdinIsATTY -}}
+{{    $corp = promptBoolOnce . "corp" "corp" -}}
+{{- else -}}
+{{-   $corp = false -}}
 {{- end -}}
 
 [data]
-    colorscheme = "frappe"
-    {{- if eq .chezmoi.os "darwin" }}
-    {{/*defaultMonospaceFontFamily = "JetBrainsMono Nerd Font"*/}}
     defaultMonospaceFontFamily = "Maple Mono NF"
-    {{- else }}
-    {{/*defaultMonospaceFontFamily = "JetBrainsMono NF"*/}}
-    defaultMonospaceFontFamily = "Maple Mono NF"
-    {{- end }}
-    dpi = {{ $dpi | atoi | int64 }}
     corp = {{ $corp }}
-    ephemeral = {{ $ephemeral }}
-    headless = {{ $headless }}
     hostname = {{ $hostname | quote }}
     osid = {{ $osID | quote }}
 [diff]

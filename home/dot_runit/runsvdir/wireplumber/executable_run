@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-if command -v wireplumber > /dev/null 2>&1 && sv check "$HOME/.runit/runsvdir/pipewire"; then
-    exec wireplumber
-else
-    exit 1
-fi
-

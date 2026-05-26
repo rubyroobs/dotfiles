@@ -21,34 +21,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# LLVM (libclang) OpenBSD
-if [[ "$OSTYPE" == "openbsd"* ]]; then
-    export LIBCLANG_PATH=/usr/local/llvm17/lib
-fi
-
 # universal package update alias function thingy
 function pkgup() {
     if command -v brew > /dev/null 2>&1; then
         brew bundle --verbose --file=$HOME/.config/packages/Brewfile || true
         brew upgrade
-    elif command -v xbps-install > /dev/null 2>&1; then
-        sudo xbps-install -Syu
-        sudo xbps-install -Syu $(cat $HOME/.config/packages/xbps-install.txt)
-    elif command -v yay > /dev/null 2>&1; then
-        yay -Syu
-        yay -S --needed --noconfirm - < $HOME/.config/packages/yay.txt
-    elif command -v pacman > /dev/null 2>&1; then
-        sudo pacman -Syu
-        sudo pacman -S --needed --noconfirm - < $HOME/.config/packages/yay.txt
-    elif command -v pkg_add > /dev/null 2>&1; then
-        doas pkg_add -uvi
-        doas pkg_add -l $HOME/.config/packages/pkg_add.txt
     fi
-}
-
-# 
-function restartit() {
-    sv force-shutdown $HOME/.runit/runsvdir/*
 }
 
 ## 1Password
@@ -78,7 +56,77 @@ function __git_files () {
 MAGIC_ENTER_GIT_COMMAND='git status -u .'
 MAGIC_ENTER_OTHER_COMMAND='ll'
 
-{{ includeTemplate (print "colorschemes/" .colorscheme "/zsh-syntax-highlighting") . }}
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
+typeset -gA ZSH_HIGHLIGHT_STYLES
+
+# Main highlighter styling: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
+#
+## General
+### Diffs
+### Markup
+## Classes
+## Comments
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#626880'
+## Constants
+## Entitites
+## Functions/methods
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#a6d189,italic'
+ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#ef9f76,italic'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#ef9f76'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#ef9f76'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#ca9ee6'
+## Keywords
+## Built ins
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#a6d189'
+## Punctuation
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#e78284'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-unquoted]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#e78284'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#e78284'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#e78284'
+## Serializable / Configuration Languages
+## Storage
+## Strings
+ZSH_HIGHLIGHT_STYLES[command-substitution-quoted]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-quoted]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#e5c890'
+## Variables
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[assign]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#c6d0f5'
+## No category relevant in spec
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#c6d0f5,underline'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#e78284,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#c6d0f5,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#e78284,underline'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#ca9ee6'
+#ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
+#ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
+#ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
+#ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[default]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[cursor]='fg=#c6d0f5'
 
 autoload -Uz compinit
 compinit
@@ -128,10 +176,6 @@ elif command -v nvim > /dev/null 2>&1; then
     alias vim='nvim'
 elif command -v vim > /dev/null 2>&1; then
     alias vi='vim'
-fi
-
-if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "linux-gnu"* ]]; then
-    alias neovide='open --new -b com.neovide.neovide --args ${PWD}'
 fi
 
 # prefer doas (alias doas to sudo if no doas, alias sudo to doas if doas)
