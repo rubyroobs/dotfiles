@@ -20,9 +20,7 @@
 {{-   end -}}
 {{- end -}}
 
-{{- if eq $hostname "tanuki" -}}
-{{-   $corp = true -}}
-{{- else if stdinIsATTY -}}
+{{- if stdinIsATTY -}}
 {{    $corp = promptBoolOnce . "corp" "corp" -}}
 {{- else -}}
 {{-   $corp = false -}}
