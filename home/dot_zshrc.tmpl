@@ -217,4 +217,7 @@ fi
 export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
+# direnv
+eval "$(direnv hook zsh)"
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
