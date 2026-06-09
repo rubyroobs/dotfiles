@@ -41,3 +41,8 @@ fi
 if [ -d "$HOME/.local/bin" ]; then
     PATH="$PATH:$HOME/.local/bin"
 fi
+
+# load private/local-only zprofile if present
+if [ -f "$HOME/.zprofile_private" ]; then
+    . "$HOME/.zprofile_private"
+fi
