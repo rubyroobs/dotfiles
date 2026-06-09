@@ -206,6 +206,8 @@ if command -v ggrep > /dev/null 2>&1; then
     alias sgrep='ggrep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 fi
 
+alias refreshall='brew update; pkgup; gcloud components update; gcloud auth login; gcloud auth application-default login'
+
 # fzf for history search
 source <(fzf --zsh)
 
