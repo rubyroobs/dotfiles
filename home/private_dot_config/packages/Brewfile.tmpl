@@ -1,58 +1,136 @@
 # frozen_string_literal: true
 
-brew 'artginzburg/tap/sudo-touchid'
-brew 'FelixKratz/formulae/borders'
-brew 'autojump'
-brew 'bat'
-brew 'cmake'
-brew 'coreutils'
-brew 'direnv'
-brew 'dockutil'
-brew 'eza'
-brew 'fastfetch'
-brew 'fd'
-brew 'ffmpeg'
-brew 'fzf'
-brew 'gh'
-brew 'git'
-brew 'git-delta'
-brew 'git-lfs'
-brew 'gnu-units'
-brew 'gnupg'
-brew 'grep'
-brew 'helix'
-brew 'jesseduffield/lazygit/lazygit'
-brew 'jq'
-brew 'jump'
-brew 'kubectl'
-brew 'libsodium'
-brew 'markdownlint-cli'
-brew 'marked'
-brew 'marksman'
-brew 'michaelroosz/ssh/libsk-libfido2'
-brew 'openjdk'
-brew 'openssh'
-brew 'p7zip'
-brew 'pinentry-mac'
-brew 'pipx'
-brew 'python'
-brew 'rclone'
-brew 'ripgrep'
-brew 'ruby-build'
-brew 'tmux'
-brew 'vale'
-brew 'w3m'
-brew 'wget'
-brew 'xz'
-brew 'yazi'
-brew 'yt-dlp'
-cask '1password-cli'
-cask 'nikitabobko/tap/aerospace'
-cask 'mediosz/tap/swipeaerospace'
-cask 'contexts'
-cask 'font-sf-mono'
-cask 'font-sf-pro'
-cask 'ghostty'
-cask 'lagrange'
-cask 'sf-symbols'
-cask 'gcloud-cli'
+tap "artginzburg/tap", trusted: true
+tap "felixkratz/formulae", trusted: true
+tap "infisical/get-cli", trusted: true
+tap "jesseduffield/lazygit", trusted: true
+tap "mediosz/tap", trusted: true
+tap "michaelroosz/ssh", trusted: true
+tap "nikitabobko/tap", trusted: true
+tap "theseal/ssh-askpass", trusted: true
+
+# General-purpose data compression with high compression ratio
+brew "xz"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.14"
+# Shell extension to jump to frequently used directories
+brew "autojump"
+# Official Amazon AWS command-line interface
+brew "awscli"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Cross-platform make
+brew "cmake"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Load/unload environment variables based on $PWD
+brew "direnv"
+# Tool for managing dock items
+brew "dockutil"
+# Modern, maintained replacement for ls
+brew "eza"
+# Like neofetch, but much faster because written mostly in C
+brew "fastfetch"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Git extension for versioning large files
+brew "git-lfs"
+# GNU unit conversion tool
+brew "gnu-units"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# GNU grep, egrep and fgrep
+brew "grep"
+# Post-modern modal text editor
+brew "helix"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Helps you navigate your file system faster by learning your habits
+brew "jump"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Simple terminal UI for git commands
+brew "lazygit"
+# NaCl networking and cryptography library
+brew "libsodium"
+# Development kit for the Java programming language
+brew "openjdk"
+# Library for database change tracking
+brew "liquibase"
+# CLI for Node.js style checker and lint tool for Markdown files
+brew "markdownlint-cli"
+# Markdown parser and compiler built for speed
+brew "marked"
+# Language Server Protocol for Markdown
+brew "marksman"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Development kit for the Java programming language
+brew "openjdk@17"
+# OpenBSD freely-licensed SSH connectivity tools
+brew "openssh"
+# 7-Zip (high compression file archiver) implementation
+brew "p7zip"
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
+# Execute binaries from Python packages in isolated environments
+brew "pipx"
+# Python version management
+brew "pyenv"
+# Rsync for cloud storage
+brew "rclone"
+# Persistent key-value database, with built-in net interface
+brew "redis", restart_service: :changed
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Install various Ruby versions and implementations
+brew "ruby-build"
+# Terminal multiplexer
+brew "tmux"
+# Syntax-aware linter for prose
+brew "vale"
+# Pager/text based browser
+brew "w3m"
+# Internet file retriever
+brew "wget"
+# Blazing fast terminal file manager written in Rust, based on async I/O
+brew "yazi"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
+# libsk-libfido2 for MacOS Yubikey support for SSH
+brew "michaelroosz/ssh/libsk-libfido2"
+
+# Command-line interface for 1Password
+cask "1password-cli"
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "nikitabobko/tap/aerospace"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
+# Allows switching between application windows
+cask "contexts"
+cask "font-sf-mono"
+cask "font-sf-pro"
+# Set of tools to manage resources and applications hosted on Google Cloud
+cask "gcloud-cli"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Desktop GUI client for browsing Geminispace
+cask "lagrange"
+# libsk-libfido2 for MacOS Yubikey support for SSH
+cask "michaelroosz/ssh/libsk-libfido2-install"
+# Tool that provides consistent, highly configurable symbols for apps
+cask "sf-symbols"
+# SwipeAeroSpace is a tool to switch AeroSpace worksapces by swiping.
+cask "mediosz/tap/swipeaerospace"
