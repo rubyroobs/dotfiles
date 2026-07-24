@@ -150,7 +150,7 @@ on-mode-changed = []
 
 [workspace-to-monitor-force-assignment]
     1 = 'main'
-    2 = 'main'
+    2 = ['Studio Display', 'main']
     3 = 'main'
     4 = 'main'
     5 = 'main'
