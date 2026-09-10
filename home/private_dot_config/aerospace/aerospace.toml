@@ -83,7 +83,7 @@ on-mode-changed = []
     alt-q = 'layout tiles horizontal vertical'
     alt-w = 'layout accordion horizontal vertical'
     alt-e = 'balance-sizes'
-    alt-shift-space = 'layout floating tiling'
+    alt-r = 'layout floating tiling'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     alt-h = 'focus --ignore-floating left'

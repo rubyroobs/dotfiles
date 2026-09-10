@@ -1,13 +1,25 @@
 #!/usr/bin/env bash
 
-send_app_to_workspace () {
-    window_count=$(aerospace list-windows --json --all | jq -re "[ .[] | select(.\"app-name\" == \"$1\") ] | length")
-    if [ "$window_count" -gt "0" ] > /dev/null 2>&1; then
-        aerospace list-windows --json --all | jq -re ".[] | select(.\"app-name\" == \"$1\") | .\"window-id\"" | xargs -I % aerospace move-node-to-workspace --window-id % $2 > /dev/null 2>&1
-        if [ -n "$3" ]; then
-            aerospace list-windows --json --all | jq -re ".[] | select(.\"app-name\" == \"$1\") | .\"window-id\"" | xargs -I % aerospace layout --window-id % $3 > /dev/null 2>&1
+send_matching_windows_to_workspace () {
+    local window_ids window_id
+    window_ids=$(aerospace list-windows --json --all | jq -r --arg field "$1" --arg pattern "$2" \
+        '.[] | select((.[$field] // "") | test($pattern)) | ."window-id"') || return
+    [ -n "$window_ids" ] || return 0
+
+    while IFS= read -r window_id; do
+        aerospace move-node-to-workspace --window-id "$window_id" "$3" > /dev/null 2>&1
+        if [ -n "${4:-}" ]; then
+            aerospace layout --window-id "$window_id" "$4" > /dev/null 2>&1
         fi
-    fi
+    done <<< "$window_ids"
+}
+
+send_app_name_to_workspace () {
+    send_matching_windows_to_workspace "app-name" "$@"
+}
+
+send_window_title_to_workspace () {
+    send_matching_windows_to_workspace "window-title" "$@"
 }
 
 current_display_count=$(aerospace list-monitors --count)
@@ -18,65 +30,74 @@ current_display_count=$(aerospace list-monitors --count)
 ####
 
 # 1: Chrome (Work)
-send_app_to_workspace "Google Chrome" 1 accordion
+send_window_title_to_workspace ' - Google Chrome - Ruby \(WRITER\)$' 1 accordion
 
-# 2: DataGrip
-send_app_to_workspace "DataGrip" 2 accordion
+# 2: Agentic/LLMs
+send_app_name_to_workspace '^ChatGPT$' 2 accordion
 
-# 3: Code
-send_app_to_workspace "Code" 3 accordion
+# 3: Code/IDE
+send_app_name_to_workspace '^Code$' 3 accordion
+send_app_name_to_workspace '^Ghostty$' 3 accordion
+send_app_name_to_workspace '^Xcode$' 3 accordion
+send_app_name_to_workspace '^DataGrip$' 3 accordion
+send_app_name_to_workspace '^IntelliJ IDEA$' 3 accordion
+send_app_name_to_workspace '^Sublime Text$' 3 accordion
 
-# 4: Firefox (Personal)
-send_app_to_workspace "Firefox" 4 tiles
+# 4: Chrome (Personal)
+send_window_title_to_workspace ' - Google Chrome - Ruby$' 4 accordion
 
 # 5: Productivity
-send_app_to_workspace "Reminders" 5 tiles
-send_app_to_workspace "Calendar" 5 tiles
+send_app_name_to_workspace '^Reminders$' 5 tiles
+send_app_name_to_workspace '^Calendar$' 5 tiles
 
 # 6: Music/Misc
-send_app_to_workspace "Music" 7 accordion
-send_app_to_workspace "Sonos" 7 accordion
+send_app_name_to_workspace '^Music$' 7 accordion
+send_app_name_to_workspace '^Sonos$' 7 accordion
 
 # 9: Comms
-send_app_to_workspace "Slack" 6 tiles
+send_app_name_to_workspace '^Slack$' 6 tiles
 {{- else if eq .chezmoi.hostname "holssi" }}
 ####
 # Holssi
 ####
 
 # 1: Web
-send_app_to_workspace "Google Chrome" 1 accordion
-send_app_to_workspace "Firefox" 1 accordion
-send_app_to_workspace "Lagrange" 1 accordion
+send_app_name_to_workspace '^Google Chrome$' 1 accordion
+send_app_name_to_workspace '^Firefox$' 1 accordion
+send_app_name_to_workspace '^Lagrange$' 1 accordion
 
-# 2: Music Production/DJ
-send_app_to_workspace "Guitar Pro 8" 2 accordion
-send_app_to_workspace "Live" 2 accordion
-send_app_to_workspace "rekordbox" 2 accordion
+# 2: Agentic/LLMs
+send_app_name_to_workspace '^ChatGPT$' 2 accordion
 
 # 3: Code
-send_app_to_workspace "Code" 3 accordion
-send_app_to_workspace "Ghostty" 3 accordion
-send_app_to_workspace "Sublime Text" 3 accordion
+send_app_name_to_workspace '^Code$' 3 accordion
+send_app_name_to_workspace '^Ghostty$' 3 accordion
+send_app_name_to_workspace '^Xcode$' 3 accordion
+send_app_name_to_workspace '^DataGrip$' 3 accordion
+send_app_name_to_workspace '^IntelliJ IDEA$' 3 accordion
+send_app_name_to_workspace '^Sublime Text$' 3 accordion
 
-# 4: Skipped
+# 4: Music Production/DJ
+send_app_name_to_workspace '^Guitar Pro 8$' 4 accordion
+send_app_name_to_workspace '^Live$' 4 accordion
+send_app_name_to_workspace '^rekordbox$' 4 accordion
 
 # 5: Productivity
-send_app_to_workspace "Mail" 5 tiles
-send_app_to_workspace "Reminders" 5 tiles
-send_app_to_workspace "Calendar" 5 tiles
-send_app_to_workspace "Notes" 5 tiles
+send_app_name_to_workspace '^Mail$' 5 tiles
+send_app_name_to_workspace '^Reminders$' 5 tiles
+send_app_name_to_workspace '^Calendar$' 5 tiles
+send_app_name_to_workspace '^Notes$' 5 tiles
 
 # 6: Music
-send_app_to_workspace "Music" 6 accordion
-send_app_to_workspace "Sonos" 6 accordion
+send_app_name_to_workspace '^Music$' 6 accordion
+send_app_name_to_workspace '^Sonos$' 6 accordion
 
 # 9: Comms
-send_app_to_workspace "Signal" 9 tiles
-send_app_to_workspace "LINE" 9 tiles
-send_app_to_workspace "KakaoTalk" 9 tiles
-send_app_to_workspace "WhatsApp" 9 tiles
-send_app_to_workspace "Messages" 9 tiles
+send_app_name_to_workspace '^Signal$' 9 tiles
+send_app_name_to_workspace '^LINE$' 9 tiles
+send_app_name_to_workspace '^KakaoTalk$' 9 tiles
+send_app_name_to_workspace '^WhatsApp$' 9 tiles
+send_app_name_to_workspace '^Messages$' 9 tiles
 {{- else }}
 echo "no known layout for host :("
 {{- end }}
