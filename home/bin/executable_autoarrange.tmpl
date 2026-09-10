@@ -55,7 +55,7 @@ send_app_name_to_workspace '^Music$' 7 accordion
 send_app_name_to_workspace '^Sonos$' 7 accordion
 
 # 9: Comms
-send_app_name_to_workspace '^Slack$' 6 tiles
+send_app_name_to_workspace '^Slack$' 6 accordion
 {{- else if eq .chezmoi.hostname "holssi" }}
 ####
 # Holssi
@@ -93,11 +93,11 @@ send_app_name_to_workspace '^Music$' 6 accordion
 send_app_name_to_workspace '^Sonos$' 6 accordion
 
 # 9: Comms
-send_app_name_to_workspace '^Signal$' 9 tiles
-send_app_name_to_workspace '^LINE$' 9 tiles
-send_app_name_to_workspace '^KakaoTalk$' 9 tiles
-send_app_name_to_workspace '^WhatsApp$' 9 tiles
-send_app_name_to_workspace '^Messages$' 9 tiles
+send_app_name_to_workspace '^Signal$' 9 accordion
+send_app_name_to_workspace '^LINE$' 9 accordion
+send_app_name_to_workspace '^KakaoTalk$' 9 accordion
+send_app_name_to_workspace '^WhatsApp$' 9 accordion
+send_app_name_to_workspace '^Messages$' 9 accordion
 {{- else }}
 echo "no known layout for host :("
 {{- end }}
