@@ -26,6 +26,11 @@ if [ -d "/opt/homebrew" ]; then
     fi
 fi
 
+# Standalone tools (prefer these over any older Homebrew installations).
+if [ -d "$HOME/.local/bin" ]; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
 # mise
 if [ "$(command -v mise)" ]; then
     eval "$(mise activate zsh)"
@@ -35,11 +40,6 @@ fi
 # rustup/cargo
 if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
-fi
-
-# pipx?
-if [ -d "$HOME/.local/bin" ]; then
-    PATH="$PATH:$HOME/.local/bin"
 fi
 
 # load private/local-only zprofile if present

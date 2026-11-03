@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
-# rustup
+if [ ! -x "$HOME/.local/bin/codex" ]; then
+    echo "Installing Codex..."
+    (set -o pipefail; curl -fsSL https://chatgpt.com/codex/install.sh | sh) || exit 1
+fi
+
+if [ ! -x "$HOME/.local/bin/mise" ]; then
+    echo "Installing mise..."
+    (set -o pipefail; curl -fsSL https://mise.run | sh) || exit 1
+fi
+
 if [ ! -f "$HOME/.cargo/bin/rustup" ]; then
     echo "Installing rustup..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -116,6 +125,17 @@ fc-cache -f
 if [[ "$OSTYPE" == "darwin"* ]]; then
     if [ ! -f "/Applications/Ghostty.app/Contents/MacOS/Ghostty" ]; then
         echo "Installing bootstrap applications (to stop this in future applies, make sure ghostty is installed)..."
-        brew bundle --verbose --file=$HOME/.config/packages/Brewfile.bootstrap
+        bootstrap_brewfile="$HOME/.config/packages/Brewfile.bootstrap"
+        brew bundle --verbose --file="$bootstrap_brewfile" || exit 1
+
+        # Leave the applications installed, but stop Homebrew managing their upgrades.
+        bootstrap_casks=$(brew bundle list --cask --file="$bootstrap_brewfile") || exit 1
+        caskroom=$(brew --caskroom) || exit 1
+        [[ "$caskroom" == /* && "$caskroom" != / ]] || exit 1
+        while IFS= read -r cask; do
+            cask="${cask##*/}"
+            [[ -n "$cask" && "$cask" != . && "$cask" != .. ]] || continue
+            rm -rf -- "$caskroom/$cask" || exit 1
+        done <<< "$bootstrap_casks"
     fi
 fi
