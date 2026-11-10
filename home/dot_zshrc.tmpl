@@ -48,6 +48,33 @@ function op_download_ssh_key() {
     chmod 0600 "$HOME/.ssh/id_ed25519_sk_$1_notouch"
 }
 
+# gcb (replacement for git checkout -b in worktree)
+function gcb() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: gcb <new-branch-name>" >&2
+    return 1
+  fi
+
+  local default_branch
+  default_branch=$(
+    git ls-remote --symref origin HEAD |
+      awk '$1 == "ref:" && $3 == "HEAD" {
+        sub(/^refs\/heads\//, "", $2)
+        print $2
+        exit
+      }'
+  )
+
+  if [[ -z "$default_branch" ]]; then
+    echo "Could not determine origin's default branch." >&2
+    return 1
+  fi
+
+  git fetch origin \
+    "+refs/heads/$default_branch:refs/remotes/origin/$default_branch" &&
+    git switch --no-track -c "$1" "origin/$default_branch"
+}
+
 # for git plugins
 function __git_files () {
     _wanted files expl 'local files' _files  
