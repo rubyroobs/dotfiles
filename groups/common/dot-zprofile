@@ -5,6 +5,10 @@ export FZF_DEFAULT_OPTS=" \
 
 PATH="$PATH:$HOME/bin"
 
+if [ -x "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
+    PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
+
 # /opt/homebrew (managed by mise brew: or Homebrew)
 if [ -d "/opt/homebrew" ]; then
     if [ -x "/opt/homebrew/bin/brew" ]; then
