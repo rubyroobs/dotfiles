@@ -1,0 +1,44 @@
+[bootstrap.directories]
+"~/.ssh" = { mode = "0700" }
+"~/.gnupg" = { mode = "0700" }
+"~/.omp/agent" = { mode = "0700" }
+
+[dotfile_groups.common]
+root = "common"
+target = "~"
+mode = "copy"
+dot_prefix = true
+exclude = [".DS_Store"]
+
+[dotfile_groups.common.entries]
+"~/.omp/agent/config.yml" = { mode = "copy", permissions = "0600" }
+"~/.ssh/config" = { mode = "copy", permissions = "0600" }
+"~/.ssh/authorized_keys" = { mode = "copy", permissions = "0600" }
+"~/.ssh/5AN_009_queen.pub" = { mode = "copy", permissions = "0600" }
+"~/.ssh/5AN_562_fox.pub" = { mode = "copy", permissions = "0600" }
+"~/.ssh/5AT_825_mona.pub" = { mode = "copy", permissions = "0600" }
+"~/.ssh/5CN_104_skull.pub" = { mode = "copy", permissions = "0600" }
+"~/.ssh/5CNF_636_joker.pub" = { mode = "copy", permissions = "0600" }
+"~/.ssh/5CTF_544_panther.pub" = { mode = "copy", permissions = "0600" }
+"~/.gnupg/dirmngr.conf" = { mode = "copy", permissions = "0600" }
+"~/.gnupg/gpg-agent.conf" = { mode = "copy", permissions = "0600" }
+"~/.gnupg/gpg.conf" = { mode = "copy", permissions = "0600" }
+"~/.gnupg/scdaemon.conf" = { mode = "copy", permissions = "0600" }
+"~/.gnupg/sshcontrol" = { mode = "copy", permissions = "0600" }
+
+[dotfile_groups.corp]
+root = "corp"
+target = "~"
+mode = "copy"
+dot_prefix = true
+exclude = [".DS_Store"]
+
+[dotfile_groups.personal]
+root = "personal"
+target = "~"
+mode = "copy"
+dot_prefix = true
+exclude = [".DS_Store"]
+
+[dotfiles]
+"~/.codex/config.toml/theme" = { source = "../../../edits/codex-theme.toml", merge = true, permissions = "0600" }

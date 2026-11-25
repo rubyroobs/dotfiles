@@ -1,0 +1,5 @@
+[user]
+  email = ruby@writer.com
+  signingkey = ~/.ssh/5CNF_636_joker.pub
+[gpg]
+  format = ssh

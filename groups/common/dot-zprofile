@@ -1,0 +1,54 @@
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
+--color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
+--color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
+
+PATH="$PATH:$HOME/bin"
+
+# /opt/homebrew (managed by mise brew: or Homebrew)
+if [ -d "/opt/homebrew" ]; then
+    if [ -x "/opt/homebrew/bin/brew" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        export HOMEBREW_PREFIX="/opt/homebrew"
+        PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+    fi
+
+    if [ -d "$HOMEBREW_PREFIX/opt/grep/libexec/gnubin" ]; then
+        PATH="$HOMEBREW_PREFIX/opt/grep/libexec/gnubin:$PATH"
+    fi
+
+    if [ -d "$HOMEBREW_PREFIX/opt/openssh/bin" ]; then
+        PATH="$HOMEBREW_PREFIX/opt/openssh/bin:$PATH"
+    fi
+fi
+
+# Google Cloud SDK (native install preferred, Homebrew fallback)
+if [ -d "$HOME/.local/share/google-cloud-sdk" ]; then
+    source "$HOME/.local/share/google-cloud-sdk/path.zsh.inc"
+    source "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"
+elif [ -n "${HOMEBREW_PREFIX:-}" ] && [ -d "$HOMEBREW_PREFIX/share/google-cloud-sdk" ]; then
+    source "$HOMEBREW_PREFIX/share/google-cloud-sdk/path.zsh.inc"
+    source "$HOMEBREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc"
+fi
+
+# Standalone tools (prefer these over any older Homebrew installations).
+if [ -d "$HOME/.local/bin" ]; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+# mise
+if [ "$(command -v mise)" ]; then
+    eval "$(mise activate zsh)"
+    eval "$(mise hook-env)"
+fi
+
+# rustup/cargo
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
+
+# load private/local-only zprofile if present
+if [ -f "$HOME/.zprofile_private" ]; then
+    . "$HOME/.zprofile_private"
+fi

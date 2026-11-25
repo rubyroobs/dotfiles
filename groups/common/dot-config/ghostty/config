@@ -1,0 +1,18 @@
+# vim:fileencoding=utf-8:ft=conf:foldmethod=marker
+
+font-family = "Maple Mono NF, monospace, emoji"
+font-size = 14
+theme = Catppuccin Frappe
+
+initial-window = false
+quit-after-last-window-closed = false
+keybind = global:alt+enter=new_window
+keybind = global:alt+shift+enter=toggle_quick_terminal
+keybind = global:alt+shift+space=toggle_quick_terminal
+keybind = all:cmd+q=close_all_windows
+quick-terminal-animation-duration = 0
+quick-terminal-position = center
+macos-window-shadow = false
+macos-secure-input-indication = true
+scrollback-limit = 4294967295
+copy-on-select = false

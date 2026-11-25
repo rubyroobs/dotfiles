@@ -1,0 +1,36 @@
+Match Exec "gpg --card-status 2>/dev/null | grep -Pq '(?<=Serial number).*\K[0-9]{5}009$'"
+    PreferredAuthentications    publickey
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/5AN_009_queen.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+
+Match Exec "gpg --card-status 2>/dev/null | grep -Pq '(?<=Serial number).*\K[0-9]{5}104$'"
+    PreferredAuthentications    publickey
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/5CN_104_skull.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+
+Match Exec "gpg --card-status 2>/dev/null | grep -Pq '(?<=Serial number).*\K[0-9]{5}544$'"
+    PreferredAuthentications    publickey
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/5CTF_544_panther.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+
+Match Exec "gpg --card-status 2>/dev/null | grep -Pq '(?<=Serial number).*\K[0-9]{5}562$'"
+    PreferredAuthentications    publickey
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/5AN_562_fox.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+
+Match Exec "gpg --card-status 2>/dev/null | grep -Pq '(?<=Serial number).*\K[0-9]{5}636$'"
+    PreferredAuthentications    publickey
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/5CNF_636_joker.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+
+Match Exec "gpg --card-status 2>/dev/null | grep -Pq '(?<=Serial number).*\K[0-9]{5}825$'"
+    PreferredAuthentications    publickey
+    IdentitiesOnly              yes
+    IdentityFile                ~/.ssh/5AT_825_mona.pub
+    IdentityAgent               ~/.gnupg/S.gpg-agent.ssh
+

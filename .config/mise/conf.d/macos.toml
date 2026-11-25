@@ -1,0 +1,92 @@
+[bootstrap.files."/etc/pam.d/sudo_local"]
+content = """
+# TouchID for sudo
+auth       sufficient     pam_tid.so
+"""
+mode = "0644"
+owner = "root"
+group = "wheel"
+
+[bootstrap.settings.macos.dock]
+autohide = true
+show_recents = false
+mru_spaces = false
+
+[bootstrap.settings.macos.keyboard]
+initial_key_repeat = 25
+key_repeat = 2
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "AppleInterfaceStyle"
+value = "Dark"
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "AppleLanguages"
+value = ["en-JP", "ja-JP"]
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "AppleLocale"
+value = "en_JP"
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSLinguisticDataAssetsRequested"
+value = ["en", "ja"]
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSAutomaticWindowAnimationsEnabled"
+value = false
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSWindowResizeTime"
+value = 0.001
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "AppleKeyboardUIMode"
+value = true
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "expose-group-apps"
+value = true
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "mcx-expose-disabled"
+value = true
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "com.apple.WindowManager"
+key = "GloballyEnabled"
+value = false
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "com.apple.finder"
+key = "CreateDesktop"
+value = false
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "com.apple.systempreferences"
+key = "NSQuitAlwaysKeepsWindows"
+value = false
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "com.apple.spaces"
+key = "spans-displays"
+value = true
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "org.gpgtools.common"
+key = "UseKeychain"
+value = true
+
+[[bootstrap.settings.macos.defaults_entries]]
+domain = "org.gpgtools.common"
+key = "DisableKeychain"
+value = false

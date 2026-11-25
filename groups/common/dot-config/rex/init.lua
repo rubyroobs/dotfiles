@@ -1,0 +1,6 @@
+-- Rex configuration (~/.config/rex/init.lua)
+-- Validate with `rex config check` and apply with `rex config reload`.
+--
+-- Use `rex.bind("<keys>", "<action>", { ... })` and `rex.unbind("<keys>")`
+-- to customize keybindings. Run `rex actions` and `rex keymap` to inspect
+-- available actions and current bindings.

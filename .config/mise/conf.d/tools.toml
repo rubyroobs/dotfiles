@@ -1,0 +1,26 @@
+[tools]
+# Core runtimes (mise built-ins; core:rust bootstraps and delegates to rustup)
+python = "3.14"
+ruby = "3.4"
+rust = "latest"
+
+# Precompiled CLI tools (aqua / github backends only; no vfox or asdf plugins)
+awscli = "latest"
+bat = "latest"
+delta = "latest"
+fastfetch = "latest"
+fd = "latest"
+fzf = "latest"
+gh = "latest"
+helix = "latest"
+jq = "latest"
+kubectl = "latest"
+lazygit = "latest"
+marksman = "latest"
+rclone = "latest"
+ripgrep = "latest"
+uv = "latest"
+vale = "latest"
+yazi = "latest"
+yt-dlp = "latest"
+zoxide = "latest"

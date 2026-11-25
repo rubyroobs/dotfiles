@@ -1,0 +1,274 @@
+export LC_ALL=en_US.UTF-8  
+export LC_DATE=ja_JP.UTF-8
+export LANG=en_US.UTF-8
+export EDITOR=hx
+HISTSIZE=10000000
+SAVEHIST=10000000
+HISTFILE=~/.zsh_history
+setopt share_history
+setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt print_eight_bit
+
+export GPG_TTY=$TTY
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# universal package update alias function thingy
+function pkgup() {
+    if command -v mise > /dev/null 2>&1; then
+        mise run upgrade
+    fi
+}
+
+## 1Password
+# update file from template
+function op_update_secret_from_template() {
+    if [[ ! -f "$1.1ptpl" ]]; then
+        echo "template does not exist: $1.1ptpl" >&2
+        return 1
+    fi
+    op --account my.1password.com inject -i "$1.1ptpl" -o "$1"
+    chmod 0600 $1
+}
+
+function autoarrange() {
+    echo "reminder: alt-shift-r does this now!"
+    aerospace run-callback --for-every-window on-window-detected
+}
+
+# gcb (replacement for git checkout -b in worktree)
+function gcb() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: gcb <new-branch-name>" >&2
+    return 1
+  fi
+
+  local default_branch
+  default_branch=$(
+    git ls-remote --symref origin HEAD |
+      awk '$1 == "ref:" && $3 == "HEAD" {
+        sub(/^refs\/heads\//, "", $2)
+        print $2
+        exit
+      }'
+  )
+
+  if [[ -z "$default_branch" ]]; then
+    echo "Could not determine origin's default branch." >&2
+    return 1
+  fi
+
+  git fetch origin \
+    "+refs/heads/$default_branch:refs/remotes/origin/$default_branch" &&
+    git switch --no-track -c "$1" "origin/$default_branch"
+}
+
+# for git plugins
+function __git_files () {
+    _wanted files expl 'local files' _files  
+}
+
+MAGIC_ENTER_GIT_COMMAND='git status -u .'
+MAGIC_ENTER_OTHER_COMMAND='ll'
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
+typeset -gA ZSH_HIGHLIGHT_STYLES
+
+# Main highlighter styling: https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
+#
+## General
+### Diffs
+### Markup
+## Classes
+## Comments
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#626880'
+## Constants
+## Entitites
+## Functions/methods
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#a6d189,italic'
+ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#ef9f76,italic'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#ef9f76'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#ef9f76'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#ca9ee6'
+## Keywords
+## Built ins
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#a6d189'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#a6d189'
+## Punctuation
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#e78284'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-unquoted]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#e78284'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#e78284'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#e78284'
+## Serializable / Configuration Languages
+## Storage
+## Strings
+ZSH_HIGHLIGHT_STYLES[command-substitution-quoted]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-quoted]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#e5c890'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#e5c890'
+## Variables
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[assign]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#c6d0f5'
+## No category relevant in spec
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#c6d0f5,underline'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#e78284,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#c6d0f5,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#e78284,underline'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#ca9ee6'
+#ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
+#ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
+#ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
+#ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#ea999c'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[default]='fg=#c6d0f5'
+ZSH_HIGHLIGHT_STYLES[cursor]='fg=#c6d0f5'
+
+if [ -f "$HOME/.antidote/antidote.zsh" ]; then
+    source ~/.antidote/antidote.zsh
+
+    if command -v mise > /dev/null 2>&1; then
+        mkdir -p ~/.local/share/zsh/site-functions
+        if [[ ! -f ~/.local/share/zsh/site-functions/_mise || "${commands[mise]}" -nt ~/.local/share/zsh/site-functions/_mise ]]; then
+            mise completion zsh > ~/.local/share/zsh/site-functions/_mise
+        fi
+        fpath=(~/.local/share/zsh/site-functions $fpath)
+    fi
+
+    zsh_completions_dir="$(antidote path zsh-users/zsh-completions 2>/dev/null)/src"
+    [[ -d "$zsh_completions_dir" ]] && fpath=("$zsh_completions_dir" $fpath)
+    unset zsh_completions_dir
+
+    () {
+        setopt local_options extended_glob
+        autoload -Uz compinit
+        if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+            compinit
+        else
+            compinit -C
+        fi
+    }
+
+    antidote load
+
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[OA' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey '^[OB' history-substring-search-down
+    bindkey "^R" history-incremental-search-backward
+    HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+else
+    autoload -Uz compinit
+    compinit
+fi
+
+# Aliases (after antidote as ohmyzsh/common-aliases overwrites some like l)
+
+# servers/services
+alias goyangi='ssh goyangi.bun-mermaid.ts.net'
+alias tokki='ssh tokki.bun-mermaid.ts.net'
+alias smol='ssh smol.bun-mermaid.ts.net'
+alias syno='ssh syno.bun-mermaid.ts.net'
+alias sdf='ssh -t tty.sdf.org'
+
+# delta
+if command -v delta > /dev/null 2>&1; then
+    alias vimdiff='delta'
+fi
+
+# helix, neovim and neovide
+if command -v helix > /dev/null 2>&1; then
+    alias hx='helix'
+fi
+
+if command -v hx > /dev/null 2>&1; then
+    alias vi='hx'
+    alias vim='hx'
+    alias nvim='hx'
+elif command -v nvim > /dev/null 2>&1; then
+    alias vi='nvim'
+    alias vim='nvim'
+elif command -v vim > /dev/null 2>&1; then
+    alias vi='vim'
+fi
+
+# prefer doas (alias doas to sudo if no doas, alias sudo to doas if doas)
+if command -v doas > /dev/null 2>&1 && doas -C /etc/doas.conf; then
+    alias sudo='doas'
+    alias sudoedit='doas nvim'
+elif command -v sudo > /dev/null 2>&1; then
+    alias doas='sudo'
+fi
+
+# prefer eza
+if command -v eza > /dev/null 2>&1; then
+    alias ls='eza --color=always --group-directories-first --icons auto'
+    alias ll='eza -la --icons auto --octal-permissions --group-directories-first'
+    alias l='eza -bGF --header --git --color=always --group-directories-first --icons auto'
+    alias llm='eza -lbGd --header --git --sort=modified --color=always --group-directories-first --icons auto' 
+    alias la='eza --long --all --group --group-directories-first'
+    alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale --color=always --group-directories-first --icons auto'
+
+    alias lS='eza -1 --color=always --group-directories-first --icons auto'
+    alias lt='eza --tree --level=2 --color=always --group-directories-first --icons auto'
+    alias l.="eza -a | grep -E '^\.'"
+fi
+
+# prefer ggrep
+if command -v ggrep > /dev/null 2>&1; then
+    alias grep='ggrep --color'
+    alias sgrep='ggrep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
+fi
+
+alias refreshall='pkgup; gcloud auth login; gcloud auth application-default login'
+
+# fzf for history search
+if command -v fzf > /dev/null 2>&1; then
+    source <(fzf --zsh)
+fi
+
+# zoxide
+if command -v zoxide > /dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
+# GPG for SSH
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+gpg-connect-agent updatestartuptty /bye >/dev/null
+
+# direnv
+if command -v direnv > /dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -1,0 +1,22 @@
+{
+  "enabledPlugins": {
+    "ruby-lsp@claude-plugins-official": true,
+    "codex@openai-codex": true,
+    "pstack@cursor-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "cursor-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "cursor/plugins"
+      }
+    }
+  },
+  "theme": "custom:catppuccin-frappe"
+}

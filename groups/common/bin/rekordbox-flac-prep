@@ -1,0 +1,727 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "mutagen>=1.48",
+# ]
+# ///
+"""Convert a FLAC tree to Rekordbox-friendly AIFF files."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import os
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
+from collections import Counter
+from dataclasses import dataclass, field
+from pathlib import Path
+
+try:
+    from mutagen import id3
+    from mutagen.aiff import AIFF
+    from mutagen.flac import FLAC
+except ModuleNotFoundError as exc:
+    MUTAGEN_IMPORT_ERROR = exc
+else:
+    MUTAGEN_IMPORT_ERROR = None
+
+
+LOGGER_NAME = "rekordbox-flac-prep"
+
+FRAME_BY_TOKEN = {
+    "album": "TALB",
+    "albumartist": "TPE2",
+    "albumartists": "TPE2",
+    "artist": "TPE1",
+    "artists": "TPE1",
+    "bpm": "TBPM",
+    "composer": "TCOM",
+    "conductor": "TPE3",
+    "copyright": "TCOP",
+    "date": "TDRC",
+    "genre": "TCON",
+    "initialkey": "TKEY",
+    "isrc": "TSRC",
+    "key": "TKEY",
+    "label": "TPUB",
+    "organization": "TPUB",
+    "publisher": "TPUB",
+    "remixer": "TPE4",
+    "title": "TIT2",
+    "year": "TDRC",
+}
+
+COMMENT_TOKENS = {"comment", "comments"}
+TRACK_TOKENS = {"track", "tracknumber"}
+TRACK_TOTAL_TOKENS = {"totaltrack", "totaltracks", "trackcount", "tracktotal"}
+DISC_TOKENS = {"disc", "discnumber", "disk", "disknumber"}
+DISC_TOTAL_TOKENS = {"disccount", "disctotal", "diskcount", "disktotal", "totaldisc", "totaldiscs"}
+
+
+@dataclass
+class TagPlan:
+    text_frames: dict[str, list[str]] = field(default_factory=dict)
+    comments: list[str] = field(default_factory=list)
+    txxx_frames: dict[str, list[str]] = field(default_factory=dict)
+
+
+@dataclass
+class ExpectedAudio:
+    bits_per_sample: int
+    channels: int
+    sample_rate: int
+
+
+@dataclass
+class Counts:
+    converted_ok: int = 0
+    skipped_ok: int = 0
+    skipped_mismatch: int = 0
+    failed: int = 0
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Recursively convert FLAC files from SOURCE_DIR to AIFF files under "
+            "OUTPUT_DIR, copying metadata with Mutagen and embedding normalized cover.jpg art."
+        )
+    )
+    parser.add_argument("source_dir", help="Directory tree containing FLAC files")
+    parser.add_argument("output_dir", help="Directory tree where AIFF files will be written")
+    return parser.parse_args()
+
+
+def die(message: str, exit_code: int = 2) -> int:
+    print(f"error: {message}", file=sys.stderr)
+    return exit_code
+
+
+def key_token(key: str) -> str:
+    return re.sub(r"[\s_.-]+", "", key).lower()
+
+
+def clean_values(values: object) -> list[str]:
+    if values is None:
+        return []
+    if isinstance(values, str):
+        raw_values = [values]
+    else:
+        try:
+            raw_values = list(values)  # type: ignore[arg-type]
+        except TypeError:
+            raw_values = [values]
+
+    cleaned: list[str] = []
+    for value in raw_values:
+        text = str(value).replace("\x00", " ").strip()
+        if text:
+            cleaned.append(text)
+    return cleaned
+
+
+def append_unique(mapping: dict[str, list[str]], key: str, values: list[str]) -> None:
+    bucket = mapping.setdefault(key, [])
+    for value in values:
+        if value not in bucket:
+            bucket.append(value)
+
+
+def append_unique_values(bucket: list[str], values: list[str]) -> None:
+    for value in values:
+        if value not in bucket:
+            bucket.append(value)
+
+
+def source_tags_by_key(flac: FLAC) -> dict[str, list[str]]:
+    if flac.tags is None:
+        return {}
+    tags: dict[str, list[str]] = {}
+    for key, values in flac.tags.items():
+        cleaned = clean_values(values)
+        if cleaned:
+            tags[str(key)] = cleaned
+    return tags
+
+
+def values_for_tokens(source_tags: dict[str, list[str]], tokens: set[str]) -> tuple[list[str], list[str]]:
+    keys: list[str] = []
+    values: list[str] = []
+    for key, tag_values in source_tags.items():
+        if key_token(key) in tokens:
+            keys.append(key)
+            values.extend(tag_values)
+    return keys, values
+
+
+def combine_counted_value(value: str, total: str | None) -> str:
+    if not total or "/" in value:
+        return value
+    return f"{value}/{total}"
+
+
+def build_tag_plan(flac: FLAC) -> TagPlan:
+    source_tags = source_tags_by_key(flac)
+    plan = TagPlan()
+    consumed: set[str] = set()
+
+    track_keys, track_values = values_for_tokens(source_tags, TRACK_TOKENS)
+    track_total_keys, track_total_values = values_for_tokens(source_tags, TRACK_TOTAL_TOKENS)
+    if track_values:
+        total = track_total_values[0] if track_total_values else None
+        append_unique(
+            plan.text_frames,
+            "TRCK",
+            [combine_counted_value(value, total) for value in track_values],
+        )
+        consumed.update(track_keys)
+        consumed.update(track_total_keys)
+
+    disc_keys, disc_values = values_for_tokens(source_tags, DISC_TOKENS)
+    disc_total_keys, disc_total_values = values_for_tokens(source_tags, DISC_TOTAL_TOKENS)
+    if disc_values:
+        total = disc_total_values[0] if disc_total_values else None
+        append_unique(
+            plan.text_frames,
+            "TPOS",
+            [combine_counted_value(value, total) for value in disc_values],
+        )
+        consumed.update(disc_keys)
+        consumed.update(disc_total_keys)
+
+    for key, values in source_tags.items():
+        if key in consumed:
+            continue
+
+        token = key_token(key)
+        if token in COMMENT_TOKENS:
+            append_unique_values(plan.comments, values)
+            consumed.add(key)
+            continue
+
+        frame_id = FRAME_BY_TOKEN.get(token)
+        if frame_id:
+            append_unique(plan.text_frames, frame_id, values)
+            consumed.add(key)
+            continue
+
+        append_unique(plan.txxx_frames, key, values)
+
+    return plan
+
+
+def expected_audio_from_flac(flac: FLAC) -> ExpectedAudio:
+    source_bits = int(flac.info.bits_per_sample)
+    if source_bits <= 16:
+        target_bits = 16
+    elif source_bits <= 24:
+        target_bits = 24
+    elif source_bits <= 32:
+        target_bits = 32
+    else:
+        raise ValueError(f"unsupported FLAC bit depth: {source_bits}")
+
+    return ExpectedAudio(
+        bits_per_sample=target_bits,
+        channels=int(flac.info.channels),
+        sample_rate=int(flac.info.sample_rate),
+    )
+
+
+def codec_for_bits(bits_per_sample: int) -> str:
+    return {
+        16: "pcm_s16be",
+        24: "pcm_s24be",
+        32: "pcm_s32be",
+    }[bits_per_sample]
+
+
+def run_command(cmd: list[str], action: str, logger: logging.Logger) -> subprocess.CompletedProcess[str]:
+    logger.debug("%s command: %s", action, shlex.join(cmd))
+    proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if proc.stdout.strip():
+        logger.debug("%s stdout: %s", action, proc.stdout.strip())
+    if proc.stderr.strip():
+        logger.debug("%s stderr: %s", action, proc.stderr.strip())
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"{action} failed with exit code {proc.returncode}\n"
+            f"command: {shlex.join(cmd)}\n"
+            f"stdout: {proc.stdout.strip()}\n"
+            f"stderr: {proc.stderr.strip()}"
+        )
+    return proc
+
+
+def ffprobe_stream(path: Path, stream_selector: str, entries: str, logger: logging.Logger) -> dict[str, object]:
+    proc = run_command(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-select_streams",
+            stream_selector,
+            "-show_entries",
+            entries,
+            "-of",
+            "json",
+            str(path),
+        ],
+        f"ffprobe {path}",
+        logger,
+    )
+    data = json.loads(proc.stdout)
+    streams = data.get("streams") or []
+    if not streams:
+        raise RuntimeError(f"ffprobe found no {stream_selector} stream in {path}")
+    return streams[0]
+
+
+def normalize_cover(source_cover: Path, output_cover: Path, logger: logging.Logger) -> None:
+    output_cover.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(
+        prefix=f".{output_cover.name}.",
+        suffix=".tmp.jpg",
+        dir=str(output_cover.parent),
+    )
+    os.close(fd)
+    tmp_cover = Path(tmp_name)
+
+    try:
+        run_command(
+            [
+                "ffmpeg",
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-y",
+                "-i",
+                str(source_cover),
+                "-vf",
+                "scale=800:800:force_original_aspect_ratio=increase,crop=800:800",
+                "-frames:v",
+                "1",
+                "-c:v",
+                "mjpeg",
+                str(tmp_cover),
+            ],
+            f"normalize cover {source_cover}",
+            logger,
+        )
+        if not verify_cover_file(tmp_cover, logger):
+            raise RuntimeError(f"normalized cover did not verify: {tmp_cover}")
+        os.replace(tmp_cover, output_cover)
+        logger.info("WROTE_COVER %s", output_cover)
+    except Exception:
+        tmp_cover.unlink(missing_ok=True)
+        raise
+
+
+def convert_flac_to_aiff(source: Path, target_tmp: Path, expected_audio: ExpectedAudio, logger: logging.Logger) -> None:
+    run_command(
+        [
+            "ffmpeg",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-y",
+            "-i",
+            str(source),
+            "-map",
+            "0:a:0",
+            "-vn",
+            "-map_metadata",
+            "-1",
+            "-c:a",
+            codec_for_bits(expected_audio.bits_per_sample),
+            str(target_tmp),
+        ],
+        f"convert {source}",
+        logger,
+    )
+
+
+def new_temp_aiff(target: Path) -> Path:
+    fd, tmp_name = tempfile.mkstemp(
+        prefix=f".{target.stem}.",
+        suffix=".tmp.aiff",
+        dir=str(target.parent),
+    )
+    os.close(fd)
+    return Path(tmp_name)
+
+
+def clear_id3_tags(tags: object) -> None:
+    for key in list(tags.keys()):  # type: ignore[attr-defined]
+        del tags[key]  # type: ignore[index]
+
+
+def write_aiff_tags(target: Path, tag_plan: TagPlan, cover_path: Path | None, logger: logging.Logger) -> None:
+    audio = AIFF(str(target))
+    if audio.tags is None:
+        audio.add_tags()
+    tags = audio.tags
+    clear_id3_tags(tags)
+
+    for frame_id, values in sorted(tag_plan.text_frames.items()):
+        frame_class = getattr(id3, frame_id)
+        tags.add(frame_class(encoding=id3.Encoding.UTF8, text=values))
+
+    if tag_plan.comments:
+        tags.add(id3.COMM(encoding=id3.Encoding.UTF8, lang="eng", desc="", text=tag_plan.comments))
+
+    for desc, values in sorted(tag_plan.txxx_frames.items(), key=lambda item: item[0].lower()):
+        tags.add(id3.TXXX(encoding=id3.Encoding.UTF8, desc=desc, text=values))
+
+    if cover_path is not None:
+        cover_data = cover_path.read_bytes()
+        tags.add(
+            id3.APIC(
+                encoding=id3.Encoding.UTF8,
+                mime="image/jpeg",
+                type=id3.PictureType.COVER_FRONT,
+                desc="cover",
+                data=cover_data,
+            )
+        )
+
+    audio.save()
+    logger.debug("wrote Mutagen AIFF tags: %s", target)
+
+
+def normalized_counter(values: list[str]) -> Counter[str]:
+    return Counter(clean_values(values))
+
+
+def frame_text_values(tags: object, frame_id: str) -> list[str]:
+    values: list[str] = []
+    for frame in tags.getall(frame_id):  # type: ignore[attr-defined]
+        values.extend(str(value) for value in getattr(frame, "text", []))
+    return clean_values(values)
+
+
+def comment_values(tags: object) -> list[str]:
+    values: list[str] = []
+    for frame in tags.getall("COMM"):  # type: ignore[attr-defined]
+        if getattr(frame, "lang", None) == "eng" and getattr(frame, "desc", None) == "":
+            values.extend(str(value) for value in getattr(frame, "text", []))
+    return clean_values(values)
+
+
+def txxx_values(tags: object, desc: str) -> list[str]:
+    values: list[str] = []
+    for frame in tags.getall("TXXX"):  # type: ignore[attr-defined]
+        if getattr(frame, "desc", None) == desc:
+            values.extend(str(value) for value in getattr(frame, "text", []))
+    return clean_values(values)
+
+
+def log_mismatch(
+    logger: logging.Logger,
+    target: Path,
+    field_name: str,
+    expected: object,
+    actual: object,
+) -> None:
+    logger.error(
+        "VERIFY_MISMATCH target=%s field=%s expected=%r actual=%r",
+        target,
+        field_name,
+        expected,
+        actual,
+    )
+
+
+def compare_values(
+    logger: logging.Logger,
+    target: Path,
+    field_name: str,
+    expected: list[str],
+    actual: list[str],
+) -> bool:
+    if normalized_counter(expected) == normalized_counter(actual):
+        return True
+    log_mismatch(logger, target, field_name, expected, actual)
+    return False
+
+
+def verify_cover_file(cover_path: Path, logger: logging.Logger) -> bool:
+    ok = True
+    header = cover_path.read_bytes()[:3]
+    if header != b"\xff\xd8\xff":
+        log_mismatch(logger, cover_path, "cover.file_signature", "JPEG", header)
+        ok = False
+
+    stream = ffprobe_stream(
+        cover_path,
+        "v:0",
+        "stream=codec_name,width,height",
+        logger,
+    )
+    expected = {"codec_name": "mjpeg", "width": 800, "height": 800}
+    for key, expected_value in expected.items():
+        actual_value = stream.get(key)
+        if actual_value != expected_value:
+            log_mismatch(logger, cover_path, f"cover.{key}", expected_value, actual_value)
+            ok = False
+    return ok
+
+
+def verify_aiff(
+    target: Path,
+    expected_audio: ExpectedAudio,
+    tag_plan: TagPlan,
+    cover_path: Path | None,
+    logger: logging.Logger,
+) -> bool:
+    ok = True
+    audio = AIFF(str(target))
+
+    actual_audio = {
+        "bits_per_sample": int(audio.info.bits_per_sample),
+        "channels": int(audio.info.channels),
+        "sample_rate": int(audio.info.sample_rate),
+    }
+    expected_audio_fields = {
+        "bits_per_sample": expected_audio.bits_per_sample,
+        "channels": expected_audio.channels,
+        "sample_rate": expected_audio.sample_rate,
+    }
+    for key, expected_value in expected_audio_fields.items():
+        actual_value = actual_audio.get(key)
+        if actual_value != expected_value:
+            log_mismatch(logger, target, f"audio.{key}", expected_value, actual_value)
+            ok = False
+
+    tags = audio.tags
+    if tags is None:
+        log_mismatch(logger, target, "metadata.tags", "ID3 tags present", None)
+        return False
+
+    for frame_id, expected_values in sorted(tag_plan.text_frames.items()):
+        ok = compare_values(logger, target, f"metadata.{frame_id}", expected_values, frame_text_values(tags, frame_id)) and ok
+
+    if tag_plan.comments:
+        ok = compare_values(logger, target, "metadata.COMM", tag_plan.comments, comment_values(tags)) and ok
+
+    for desc, expected_values in sorted(tag_plan.txxx_frames.items(), key=lambda item: item[0].lower()):
+        ok = compare_values(logger, target, f"metadata.TXXX:{desc}", expected_values, txxx_values(tags, desc)) and ok
+
+    if cover_path is not None:
+        cover_bytes = cover_path.read_bytes()
+        apic_frames = [
+            frame
+            for frame in tags.getall("APIC")
+            if getattr(frame, "type", None) == id3.PictureType.COVER_FRONT
+        ]
+        if not apic_frames:
+            log_mismatch(logger, target, "cover.APIC", "front cover frame", None)
+            ok = False
+        elif not any(
+            getattr(frame, "mime", None) == "image/jpeg" and getattr(frame, "data", b"") == cover_bytes
+            for frame in apic_frames
+        ):
+            actual = [
+                {
+                    "mime": getattr(frame, "mime", None),
+                    "bytes": len(getattr(frame, "data", b"")),
+                }
+                for frame in apic_frames
+            ]
+            log_mismatch(
+                logger,
+                target,
+                "cover.APIC",
+                {"mime": "image/jpeg", "bytes": len(cover_bytes), "data": "matches cover.jpg"},
+                actual,
+            )
+            ok = False
+
+    return ok
+
+
+def find_album_dirs(source_root: Path) -> dict[Path, list[Path]]:
+    albums: dict[Path, list[Path]] = {}
+    for path in source_root.rglob("*"):
+        if path.is_file() and path.suffix.lower() == ".flac":
+            albums.setdefault(path.parent, []).append(path)
+    return {album: sorted(paths) for album, paths in sorted(albums.items())}
+
+
+def is_relative_to(path: Path, base: Path) -> bool:
+    try:
+        path.relative_to(base)
+    except ValueError:
+        return False
+    return True
+
+
+def setup_logging(output_root: Path) -> logging.Logger:
+    logger = logging.getLogger(LOGGER_NAME)
+    logger.handlers.clear()
+    logger.setLevel(logging.DEBUG)
+    logger.propagate = False
+
+    log_path = output_root / "rekordbox-flac-prep.log"
+    file_handler = logging.FileHandler(log_path, mode="w", encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(logging.Formatter("%(message)s"))
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+    logger.info("LOG %s", log_path)
+    return logger
+
+
+def process_flac(
+    source_flac: Path,
+    target_aiff: Path,
+    cover_path: Path | None,
+    logger: logging.Logger,
+) -> tuple[str, bool]:
+    flac = FLAC(str(source_flac))
+    tag_plan = build_tag_plan(flac)
+    expected_audio = expected_audio_from_flac(flac)
+
+    if target_aiff.exists():
+        logger.info("SKIP_EXISTS %s", target_aiff)
+        verified = verify_aiff(target_aiff, expected_audio, tag_plan, cover_path, logger)
+        return "skipped", verified
+
+    tmp_aiff = new_temp_aiff(target_aiff)
+    try:
+        convert_flac_to_aiff(source_flac, tmp_aiff, expected_audio, logger)
+        write_aiff_tags(tmp_aiff, tag_plan, cover_path, logger)
+        verified = verify_aiff(tmp_aiff, expected_audio, tag_plan, cover_path, logger)
+        if not verified:
+            raise RuntimeError(f"verification failed before writing final AIFF: {tmp_aiff}")
+        os.replace(tmp_aiff, target_aiff)
+        logger.info("CONVERTED_OK %s", target_aiff)
+        return "converted", True
+    except Exception:
+        tmp_aiff.unlink(missing_ok=True)
+        raise
+
+
+def process_album(
+    album_dir: Path,
+    flac_files: list[Path],
+    source_root: Path,
+    output_root: Path,
+    logger: logging.Logger,
+) -> Counts:
+    counts = Counts()
+    relative_album = album_dir.relative_to(source_root)
+    output_album = output_root / relative_album
+    output_album.mkdir(parents=True, exist_ok=True)
+    logger.info("ALBUM %s", album_dir)
+
+    cover_path: Path | None = None
+    source_cover = album_dir / "cover.jpg"
+    if source_cover.is_file():
+        cover_path = output_album / "cover.jpg"
+        try:
+            normalize_cover(source_cover, cover_path, logger)
+        except Exception:
+            counts.failed += len(flac_files)
+            logger.exception(
+                "COVER_FAILED album=%s source_cover=%s output_cover=%s",
+                album_dir,
+                source_cover,
+                cover_path,
+            )
+            return counts
+
+    for source_flac in flac_files:
+        target_aiff = output_album / f"{source_flac.stem}.aiff"
+        try:
+            status, verified = process_flac(source_flac, target_aiff, cover_path, logger)
+            if status == "converted":
+                counts.converted_ok += 1
+            elif verified:
+                counts.skipped_ok += 1
+                logger.info("SKIPPED_OK %s", target_aiff)
+            else:
+                counts.skipped_mismatch += 1
+                logger.error("SKIPPED_WITH_MISMATCH source=%s target=%s", source_flac, target_aiff)
+        except Exception:
+            counts.failed += 1
+            logger.exception("FAILED source=%s target=%s", source_flac, target_aiff)
+
+    return counts
+
+
+def validate_dependencies() -> int | None:
+    if MUTAGEN_IMPORT_ERROR is not None:
+        script_path = shlex.quote(sys.argv[0])
+        return die(
+            "missing Python package 'mutagen'. Run this command directly so its uv script "
+            "metadata can create an isolated environment, or use: uv run --script "
+            f"{script_path} SOURCE_DIR OUTPUT_DIR"
+        )
+
+    missing = [tool for tool in ("ffmpeg", "ffprobe") if shutil.which(tool) is None]
+    if missing:
+        return die(
+            f"missing required command(s): {', '.join(missing)}. Install them with: brew install ffmpeg"
+        )
+    return None
+
+
+def main() -> int:
+    args = parse_args()
+
+    dependency_error = validate_dependencies()
+    if dependency_error is not None:
+        return dependency_error
+
+    source_root = Path(args.source_dir).expanduser().resolve()
+    output_root = Path(args.output_dir).expanduser().resolve()
+
+    if not source_root.is_dir():
+        return die(f"source directory does not exist: {source_root}")
+
+    if output_root == source_root or is_relative_to(output_root, source_root):
+        return die("output directory must not be the source directory or inside the source directory")
+
+    output_root.mkdir(parents=True, exist_ok=True)
+    logger = setup_logging(output_root)
+    logger.debug("source_root=%s", source_root)
+    logger.debug("output_root=%s", output_root)
+
+    albums = find_album_dirs(source_root)
+    if not albums:
+        logger.info("NO_FLAC_FILES %s", source_root)
+        return 0
+
+    total = Counts()
+    for album_dir, flac_files in albums.items():
+        counts = process_album(album_dir, flac_files, source_root, output_root, logger)
+        total.converted_ok += counts.converted_ok
+        total.skipped_ok += counts.skipped_ok
+        total.skipped_mismatch += counts.skipped_mismatch
+        total.failed += counts.failed
+
+    logger.info(
+        "SUMMARY converted_ok=%d skipped_ok=%d skipped_mismatch=%d failed=%d",
+        total.converted_ok,
+        total.skipped_ok,
+        total.skipped_mismatch,
+        total.failed,
+    )
+    return 1 if total.failed or total.skipped_mismatch else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

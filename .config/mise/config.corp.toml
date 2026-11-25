@@ -1,0 +1,34 @@
+[env]
+POWERLEVEL9K_CONTEXT_TEMPLATE = "%n@WRITER"
+
+[tools]
+go = "latest"
+
+[bootstrap]
+dotfile_groups = ["common", "corp"]
+
+[bootstrap.packages]
+"brew:colima" = "latest"
+"brew:docker" = "latest"
+"brew:docker-buildx" = "latest"
+"brew:docker-compose" = "latest"
+"brew:docker-credential-helper" = "latest"
+"brew:infisical/get-cli/infisical" = "latest"
+"brew:pango" = "latest"
+"brew:pulumi" = "latest"
+"brew-cask:session-manager-plugin" = "latest"
+
+[dotfiles]
+"~/.docker/config.json/defaults" = { source = "../../edits/docker-config.json", merge = "missing", permissions = "0600" }
+
+[tasks.native-tools]
+description = "Install native CLIs and the GKE authentication plugin"
+run = [
+    "~/.dotfiles/scripts/install-native-tools.sh",
+    '''
+sdk_bin="$HOME/.local/share/google-cloud-sdk/bin"
+if [ ! -x "$sdk_bin/gke-gcloud-auth-plugin" ]; then
+    "$sdk_bin/gcloud" components install gke-gcloud-auth-plugin --quiet
+fi
+''',
+]

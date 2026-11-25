@@ -1,0 +1,46 @@
+min_version = "2026.11.12"
+
+[settings]
+dotfiles.root = "~/.dotfiles/groups"
+
+[tasks.native-tools]
+description = "Install self-updating native CLIs (codex, claude, agy, omp, gcloud) if missing"
+run = "~/.dotfiles/scripts/install-native-tools.sh"
+
+[tasks.update-native-tools]
+description = "Update native CLIs and shell/tmux/omp plugins"
+run = "~/.dotfiles/scripts/update-native-tools.sh"
+
+[tasks.upgrade]
+alias = "pkgup"
+description = "Self-update mise, upgrade packages/tools/repos, and update native CLIs and plugins"
+run = [
+    "mise bootstrap --self-update --update --upgrade --yes",
+    "~/.dotfiles/scripts/update-native-tools.sh",
+]
+
+[tasks.fonts]
+description = "Install custom fonts if missing"
+run = "~/.dotfiles/scripts/install-fonts.sh"
+
+[tasks.clean-dock]
+description = "Remove default Apple apps from macOS Dock"
+run = "~/.dotfiles/scripts/clean-dock.sh"
+
+[tasks.reload]
+description = "Refresh font cache and reload AeroSpace, Rex, and Ghostty"
+run = """
+if command -v fc-cache >/dev/null 2>&1; then fc-cache || true; fi
+if command -v aerospace >/dev/null 2>&1; then aerospace reload-config || true; fi
+if command -v rex >/dev/null 2>&1; then rex config reload || true; fi
+if pgrep -x ghostty >/dev/null 2>&1; then pkill -USR2 -x ghostty || true; fi
+"""
+
+[tasks.bootstrap]
+description = "Post-bootstrap native installers, macOS setup, and reloads"
+depends = ["native-tools", "fonts", "clean-dock", "reload"]
+run = """
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    launchctl disable "user/$UID/com.openssh.ssh-agent" || true
+fi
+"""
