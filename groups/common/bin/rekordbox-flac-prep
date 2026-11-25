@@ -5,7 +5,7 @@
 #   "mutagen>=1.48",
 # ]
 # ///
-"""Convert a FLAC tree to Rekordbox-friendly AIFF files."""
+"""Prepare a Rekordbox library by converting FLACs to AIFF and copying MP3s."""
 
 from __future__ import annotations
 
@@ -21,7 +21,9 @@ import sys
 import tempfile
 from collections import Counter
 from dataclasses import dataclass, field
+from io import BytesIO
 from pathlib import Path
+from typing import BinaryIO
 
 try:
     from mutagen import id3
@@ -82,6 +84,7 @@ class ExpectedAudio:
 @dataclass
 class Counts:
     converted_ok: int = 0
+    copied_ok: int = 0
     skipped_ok: int = 0
     skipped_mismatch: int = 0
     failed: int = 0
@@ -90,12 +93,13 @@ class Counts:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Recursively convert FLAC files from SOURCE_DIR to AIFF files under "
-            "OUTPUT_DIR, copying metadata with Mutagen and embedding normalized cover.jpg art."
+            "Recursively convert FLACs to AIFF and copy MP3s, embedding 800×800 album art "
+            "when available. In source albums without cover.jpg, rename cover.jpeg or "
+            "convert cover.png to cover.jpg and remove the converted PNG."
         )
     )
-    parser.add_argument("source_dir", help="Directory tree containing FLAC files")
-    parser.add_argument("output_dir", help="Directory tree where AIFF files will be written")
+    parser.add_argument("source_dir", help="Directory tree containing FLAC and MP3 files")
+    parser.add_argument("output_dir", help="Directory tree where AIFF and MP3 files will be written")
     return parser.parse_args()
 
 
@@ -284,16 +288,12 @@ def ffprobe_stream(path: Path, stream_selector: str, entries: str, logger: loggi
     return streams[0]
 
 
-def normalize_cover(source_cover: Path, output_cover: Path, logger: logging.Logger) -> None:
-    output_cover.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp_name = tempfile.mkstemp(
-        prefix=f".{output_cover.name}.",
-        suffix=".tmp.jpg",
-        dir=str(output_cover.parent),
-    )
-    os.close(fd)
-    tmp_cover = Path(tmp_name)
-
+def write_jpeg(source_cover: Path, output_cover: Path, logger: logging.Logger, *, normalize: bool) -> None:
+    tmp_cover = new_temp_file(output_cover)
+    if normalize:
+        options = ["-vf", "scale=800:800:force_original_aspect_ratio=increase,crop=800:800"]
+    else:
+        options = ["-q:v", "2"]
     try:
         run_command(
             [
@@ -301,27 +301,47 @@ def normalize_cover(source_cover: Path, output_cover: Path, logger: logging.Logg
                 "-hide_banner",
                 "-loglevel",
                 "error",
+                "-xerror",
                 "-y",
                 "-i",
                 str(source_cover),
-                "-vf",
-                "scale=800:800:force_original_aspect_ratio=increase,crop=800:800",
+                *options,
                 "-frames:v",
                 "1",
                 "-c:v",
                 "mjpeg",
                 str(tmp_cover),
             ],
-            f"normalize cover {source_cover}",
+            f"convert cover {source_cover}",
             logger,
         )
-        if not verify_cover_file(tmp_cover, logger):
-            raise RuntimeError(f"normalized cover did not verify: {tmp_cover}")
+        if not verify_cover_file(tmp_cover, logger, normalized=normalize):
+            raise RuntimeError(f"converted cover did not verify: {tmp_cover}")
         os.replace(tmp_cover, output_cover)
         logger.info("WROTE_COVER %s", output_cover)
     except Exception:
         tmp_cover.unlink(missing_ok=True)
         raise
+
+
+def prepare_album_cover(album_dir: Path, output_album: Path, logger: logging.Logger) -> Path | None:
+    jpg = album_dir / "cover.jpg"
+    if not jpg.is_file():
+        jpeg = album_dir / "cover.jpeg"
+        png = album_dir / "cover.png"
+        if jpeg.is_file():
+            jpeg.rename(jpg)
+            logger.info("RENAMED_COVER %s -> %s", jpeg, jpg)
+        elif png.is_file():
+            write_jpeg(png, jpg, logger, normalize=False)
+            png.unlink()
+            logger.info("REMOVED_CONVERTED_PNG %s", png)
+        else:
+            return None
+
+    output_cover = output_album / "cover.jpg"
+    write_jpeg(jpg, output_cover, logger, normalize=True)
+    return output_cover
 
 
 def convert_flac_to_aiff(source: Path, target_tmp: Path, expected_audio: ExpectedAudio, logger: logging.Logger) -> None:
@@ -348,10 +368,10 @@ def convert_flac_to_aiff(source: Path, target_tmp: Path, expected_audio: Expecte
     )
 
 
-def new_temp_aiff(target: Path) -> Path:
+def new_temp_file(target: Path) -> Path:
     fd, tmp_name = tempfile.mkstemp(
         prefix=f".{target.stem}.",
-        suffix=".tmp.aiff",
+        suffix=f".tmp{target.suffix}",
         dir=str(target.parent),
     )
     os.close(fd)
@@ -361,6 +381,27 @@ def new_temp_aiff(target: Path) -> Path:
 def clear_id3_tags(tags: object) -> None:
     for key in list(tags.keys()):  # type: ignore[attr-defined]
         del tags[key]  # type: ignore[index]
+
+
+def set_front_cover(tags: id3.ID3, data: bytes) -> bool:
+    fronts = [pic for pic in tags.getall("APIC") if pic.type == id3.PictureType.COVER_FRONT]
+    if len(fronts) == 1 and fronts[0].mime == "image/jpeg" and fronts[0].data == data:
+        return False
+    for pic in fronts:
+        del tags[pic.HashKey]
+    desc = "cover"
+    while f"APIC:{desc}" in tags:
+        desc += " "
+    tags.add(
+        id3.APIC(
+            encoding=id3.Encoding.UTF8,
+            mime="image/jpeg",
+            type=id3.PictureType.COVER_FRONT,
+            desc=desc,
+            data=data,
+        )
+    )
+    return True
 
 
 def write_aiff_tags(target: Path, tag_plan: TagPlan, cover_path: Path | None, logger: logging.Logger) -> None:
@@ -381,16 +422,7 @@ def write_aiff_tags(target: Path, tag_plan: TagPlan, cover_path: Path | None, lo
         tags.add(id3.TXXX(encoding=id3.Encoding.UTF8, desc=desc, text=values))
 
     if cover_path is not None:
-        cover_data = cover_path.read_bytes()
-        tags.add(
-            id3.APIC(
-                encoding=id3.Encoding.UTF8,
-                mime="image/jpeg",
-                type=id3.PictureType.COVER_FRONT,
-                desc="cover",
-                data=cover_data,
-            )
-        )
+        set_front_cover(tags, cover_path.read_bytes())
 
     audio.save()
     logger.debug("wrote Mutagen AIFF tags: %s", target)
@@ -452,7 +484,7 @@ def compare_values(
     return False
 
 
-def verify_cover_file(cover_path: Path, logger: logging.Logger) -> bool:
+def verify_cover_file(cover_path: Path, logger: logging.Logger, *, normalized: bool) -> bool:
     ok = True
     header = cover_path.read_bytes()[:3]
     if header != b"\xff\xd8\xff":
@@ -465,7 +497,9 @@ def verify_cover_file(cover_path: Path, logger: logging.Logger) -> bool:
         "stream=codec_name,width,height",
         logger,
     )
-    expected = {"codec_name": "mjpeg", "width": 800, "height": 800}
+    expected: dict[str, object] = {"codec_name": "mjpeg"}
+    if normalized:
+        expected.update(width=800, height=800)
     for key, expected_value in expected.items():
         actual_value = stream.get(key)
         if actual_value != expected_value:
@@ -550,7 +584,7 @@ def verify_aiff(
 def find_album_dirs(source_root: Path) -> dict[Path, list[Path]]:
     albums: dict[Path, list[Path]] = {}
     for path in source_root.rglob("*"):
-        if path.is_file() and path.suffix.lower() == ".flac":
+        if path.is_file() and path.suffix.lower() in {".flac", ".mp3"}:
             albums.setdefault(path.parent, []).append(path)
     return {album: sorted(paths) for album, paths in sorted(albums.items())}
 
@@ -599,7 +633,7 @@ def process_flac(
         verified = verify_aiff(target_aiff, expected_audio, tag_plan, cover_path, logger)
         return "skipped", verified
 
-    tmp_aiff = new_temp_aiff(target_aiff)
+    tmp_aiff = new_temp_file(target_aiff)
     try:
         convert_flac_to_aiff(source_flac, tmp_aiff, expected_audio, logger)
         write_aiff_tags(tmp_aiff, tag_plan, cover_path, logger)
@@ -614,9 +648,65 @@ def process_flac(
         raise
 
 
+def mp3_cover_tag(source: Path, cover_path: Path) -> tuple[int, bytes]:
+    """Build a replacement ID3v2 tag and report how many source bytes it replaces."""
+    try:
+        tags = id3.ID3(source, translate=False, load_v1=False)
+    except id3.ID3NoHeaderError:
+        tags = id3.ID3()
+    if not set_front_cover(tags, cover_path.read_bytes()):
+        return 0, b""
+
+    version = tags.version[1]
+    if version < 3:
+        tags.update_to_v24()
+        version = 4
+    header = BytesIO()
+    tags.save(header, v2_version=version, v23_sep=None)
+    return tags.size, header.getvalue()
+
+
+def mp3_matches(target: Path, header: bytes, source_payload: BinaryIO) -> bool:
+    with target.open("rb") as existing:
+        if existing.read(len(header)) != header:
+            return False
+        while chunk := source_payload.read(1024 * 1024):
+            if existing.read(len(chunk)) != chunk:
+                return False
+        return not existing.read(1)
+
+
+def process_mp3(source: Path, target: Path, cover_path: Path | None, logger: logging.Logger) -> tuple[str, bool]:
+    offset, header = 0, b""
+    if cover_path is not None:
+        try:
+            offset, header = mp3_cover_tag(source, cover_path)
+        except Exception:
+            logger.warning("MP3_COVER_FAILED copying original %s", source, exc_info=True)
+
+    # Only the leading ID3v2 tag changes. Copy the MPEG frames and any trailing tags verbatim.
+    with source.open("rb") as payload:
+        payload.seek(offset)
+        if target.exists():
+            logger.info("SKIP_EXISTS %s", target)
+            return "skipped", mp3_matches(target, header, payload)
+
+        tmp_mp3 = new_temp_file(target)
+        try:
+            with tmp_mp3.open("wb") as output:
+                output.write(header)
+                shutil.copyfileobj(payload, output)
+            shutil.copystat(source, tmp_mp3)
+            os.replace(tmp_mp3, target)
+        finally:
+            tmp_mp3.unlink(missing_ok=True)
+    logger.info("COPIED_OK %s", target)
+    return "copied", True
+
+
 def process_album(
     album_dir: Path,
-    flac_files: list[Path],
+    tracks: list[Path],
     source_root: Path,
     output_root: Path,
     logger: logging.Logger,
@@ -627,37 +717,36 @@ def process_album(
     output_album.mkdir(parents=True, exist_ok=True)
     logger.info("ALBUM %s", album_dir)
 
-    cover_path: Path | None = None
-    source_cover = album_dir / "cover.jpg"
-    if source_cover.is_file():
-        cover_path = output_album / "cover.jpg"
-        try:
-            normalize_cover(source_cover, cover_path, logger)
-        except Exception:
-            counts.failed += len(flac_files)
-            logger.exception(
-                "COVER_FAILED album=%s source_cover=%s output_cover=%s",
-                album_dir,
-                source_cover,
-                cover_path,
-            )
-            return counts
+    try:
+        cover_path = prepare_album_cover(album_dir, output_album, logger)
+    except Exception:
+        logger.exception("COVER_FAILED album=%s", album_dir)
+        mp3s = [track for track in tracks if track.suffix.lower() == ".mp3"]
+        counts.failed += len(tracks) - len(mp3s)
+        tracks = mp3s
+        cover_path = None
 
-    for source_flac in flac_files:
-        target_aiff = output_album / f"{source_flac.stem}.aiff"
+    for source in tracks:
+        target = output_album / source.name
         try:
-            status, verified = process_flac(source_flac, target_aiff, cover_path, logger)
+            if source.suffix.lower() == ".mp3":
+                status, verified = process_mp3(source, target, cover_path, logger)
+            else:
+                target = target.with_suffix(".aiff")
+                status, verified = process_flac(source, target, cover_path, logger)
             if status == "converted":
                 counts.converted_ok += 1
+            elif status == "copied":
+                counts.copied_ok += 1
             elif verified:
                 counts.skipped_ok += 1
-                logger.info("SKIPPED_OK %s", target_aiff)
+                logger.info("SKIPPED_OK %s", target)
             else:
                 counts.skipped_mismatch += 1
-                logger.error("SKIPPED_WITH_MISMATCH source=%s target=%s", source_flac, target_aiff)
+                logger.error("SKIPPED_WITH_MISMATCH source=%s target=%s", source, target)
         except Exception:
             counts.failed += 1
-            logger.exception("FAILED source=%s target=%s", source_flac, target_aiff)
+            logger.exception("FAILED source=%s target=%s", source, target)
 
     return counts
 
@@ -702,20 +791,22 @@ def main() -> int:
 
     albums = find_album_dirs(source_root)
     if not albums:
-        logger.info("NO_FLAC_FILES %s", source_root)
+        logger.info("NO_AUDIO_FILES %s", source_root)
         return 0
 
     total = Counts()
-    for album_dir, flac_files in albums.items():
-        counts = process_album(album_dir, flac_files, source_root, output_root, logger)
+    for album_dir, tracks in albums.items():
+        counts = process_album(album_dir, tracks, source_root, output_root, logger)
         total.converted_ok += counts.converted_ok
+        total.copied_ok += counts.copied_ok
         total.skipped_ok += counts.skipped_ok
         total.skipped_mismatch += counts.skipped_mismatch
         total.failed += counts.failed
 
     logger.info(
-        "SUMMARY converted_ok=%d skipped_ok=%d skipped_mismatch=%d failed=%d",
+        "SUMMARY converted_ok=%d copied_ok=%d skipped_ok=%d skipped_mismatch=%d failed=%d",
         total.converted_ok,
+        total.copied_ok,
         total.skipped_ok,
         total.skipped_mismatch,
         total.failed,
