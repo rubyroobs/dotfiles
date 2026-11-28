@@ -1,0 +1,10 @@
+#!/bin/sh
+# AeroSpace can start at login with only the macOS system paths.
+export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
+
+rex_id=com.superlogical.rex
+if [ "$(aerospace list-windows --focused --format '%{app-bundle-id}')" = "$rex_id" ]; then
+    exec aerospace focus-back-and-forth
+fi
+
+exec /usr/bin/open -b "$rex_id"
